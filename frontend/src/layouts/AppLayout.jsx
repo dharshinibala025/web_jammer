@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 import StudentBottomNavBar from '../components/student/BottomNavBar';
@@ -9,6 +10,7 @@ import { useAuth } from '../contexts/AuthContext';
 export const AppLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { role } = useAuth();
+  const location = useLocation();
 
   const renderMobileBottomNav = () => {
     switch (role) {
@@ -38,11 +40,6 @@ export const AppLayout = ({ children }) => {
         <main className="flex-1 lg:ml-64 p-4 sm:p-6 lg:p-8 pb-24 lg:pb-12 max-w-7xl mx-auto w-full transition-all">
           {children}
         </main>
-      </div>
-
-      {/* Mobile Bottom Navigation for quick touch access */}
-      <div className="lg:hidden">
-        {renderMobileBottomNav()}
       </div>
     </div>
   );

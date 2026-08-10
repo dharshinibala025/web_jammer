@@ -6,9 +6,9 @@ export const StaffBottomNavBar = () => {
   const location = useLocation();
 
   const tabs = [
-    { to: '/staff/dashboard', label: 'Overview', icon: FiGrid },
-    { to: '/staff/students', label: 'Students', icon: FiUsers },
+    { to: '/staff/dashboard', label: 'Dashboard', icon: FiGrid },
     { to: '/staff/devices', label: 'Devices', icon: FiSmartphone },
+    { to: '/staff/students', label: 'Students', icon: FiUsers },
     { to: '/staff/settings', label: 'Settings', icon: FiSettings },
   ];
 

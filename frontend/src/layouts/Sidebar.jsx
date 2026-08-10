@@ -38,11 +38,10 @@ export const Sidebar = ({ isOpen, onClose }) => {
   ];
 
   const staffLinks = [
-    { to: '/staff/dashboard', label: 'Dashboard Overview', icon: FiGrid },
-    { to: '/staff/students', label: 'Student Directory', icon: FiUsers },
-    { to: '/staff/devices', label: 'Monitored Devices', icon: FiSmartphone },
-    { to: '/staff/notifications', label: 'Alerts & Logs', icon: FiBell },
-    { to: '/staff/settings', label: 'Settings & Profile', icon: FiSettings },
+    { to: '/staff/dashboard', label: 'Dashboard', icon: FiGrid },
+    { to: '/staff/devices', label: 'Devices', icon: FiSmartphone },
+    { to: '/staff/students', label: 'Students', icon: FiUsers },
+    { to: '/staff/settings', label: 'Settings', icon: FiSettings },
   ];
 
   const adminLinks = [
