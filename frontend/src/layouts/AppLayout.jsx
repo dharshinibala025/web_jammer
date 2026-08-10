@@ -31,7 +31,7 @@ export const AppLayout = ({ children }) => {
         isSidebarOpen={sidebarOpen}
       />
 
-      <div className="flex flex-1">
+      <div className="flex flex-1 pt-16">
         <Sidebar
           isOpen={sidebarOpen}
           onClose={() => setSidebarOpen(false)}
@@ -41,6 +41,8 @@ export const AppLayout = ({ children }) => {
           {children}
         </main>
       </div>
+
+      {renderMobileBottomNav()}
     </div>
   );
 };
