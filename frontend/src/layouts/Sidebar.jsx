@@ -30,10 +30,6 @@ export const Sidebar = ({ isOpen, onClose }) => {
     { to: '/student/dashboard', label: 'Dashboard', icon: FiHome },
     { to: '/student/blocked-apps', label: 'Blocked Apps', icon: FiSmartphone },
     { to: '/student/notifications', label: 'Notifications', icon: FiBell },
-    { to: '/student/activity', label: 'Activity Timeline', icon: FiActivity },
-    { to: '/student/sync', label: 'Sync Status', icon: FiRefreshCw },
-    { to: '/student/device-info', label: 'Device Specs', icon: FiSmartphone },
-    { to: '/student/restriction-info', label: 'Policy Rules', icon: FiHelpCircle },
     { to: '/student/profile', label: 'My Profile', icon: FiUser },
   ];
 
@@ -66,12 +62,12 @@ export const Sidebar = ({ isOpen, onClose }) => {
 
       {/* Sidebar container */}
       <aside
-        className={`fixed top-16 bottom-0 left-0 z-40 w-64 bg-white border-r border-slate-200 shadow-sm flex flex-col justify-between transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+        className={`fixed top-16 bottom-0 left-0 z-40 w-64 bg-white border-r border-slate-200/80 shadow-xs flex flex-col justify-between transition-transform duration-300 ease-in-out lg:translate-x-0 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div className="px-3 py-4 overflow-y-auto flex-1 space-y-1">
-          <div className="px-3 pb-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+          <div className="px-3 pb-2 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
             {role.toUpperCase()} MENU
           </div>
           
@@ -84,9 +80,9 @@ export const Sidebar = ({ isOpen, onClose }) => {
                 to={item.to}
                 onClick={onClose}
                 className={({ isActive }) =>
-                  `flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+                  `flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
                     isActive
-                      ? 'bg-blue-50 text-blue-600 shadow-2xs font-bold'
+                      ? 'bg-blue-50/80 text-blue-600 font-semibold shadow-2xs'
                       : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                   }`
                 }
@@ -102,12 +98,12 @@ export const Sidebar = ({ isOpen, onClose }) => {
         <div className="p-3 border-t border-slate-100 bg-slate-50/50">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-rose-600 hover:bg-rose-50 transition-colors"
+            className="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
           >
             <FiLogOut className="w-5 h-5 text-rose-500" />
             <span>Log Out</span>
           </button>
-          <div className="mt-3 px-3 text-[11px] text-slate-400 font-medium text-center">
+          <div className="mt-2.5 px-3 text-[11px] text-slate-400 font-normal text-center">
             FocusSync Web v1.0.0
           </div>
         </div>

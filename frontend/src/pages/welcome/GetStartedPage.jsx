@@ -56,7 +56,7 @@ export const GetStartedPage = () => {
             : 'bg-transparent py-5'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        <div className="w-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           
           {/* Logo & Brand */}
           <Link to="/" className="flex items-center space-x-3 group">
@@ -116,15 +116,15 @@ export const GetStartedPage = () => {
             className="lg:col-span-7 space-y-6 text-left"
           >
             {/* Tagline Badge */}
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-blue-700 text-xs font-bold shadow-2xs">
+            <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-blue-700 text-xs font-semibold shadow-2xs">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
               <span>Stay Focused. Learn Better.</span>
               <span className="text-slate-300">•</span>
-              <span className="text-slate-600 font-semibold">Smart Classroom System</span>
+              <span className="text-slate-600 font-medium">Smart Classroom System</span>
             </div>
 
             {/* Big Heading */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.15]">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 tracking-tight leading-[1.15]">
               Smart Classroom <br />
               <span className="bg-gradient-to-r from-blue-600 via-blue-700 to-emerald-500 bg-clip-text text-transparent">
                 Mobile Usage
@@ -133,7 +133,7 @@ export const GetStartedPage = () => {
             </h1>
 
             {/* Description */}
-            <p className="text-base sm:text-lg text-slate-600 font-medium leading-relaxed max-w-2xl">
+            <p className="text-base sm:text-lg text-slate-600 font-normal leading-relaxed max-w-2xl">
               FocusSync helps educational institutions monitor, manage, and automate mobile usage restrictions during academic hours with real-time monitoring, scheduled restrictions, and intelligent classroom control.
             </p>
 

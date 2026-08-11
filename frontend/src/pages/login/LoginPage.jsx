@@ -83,19 +83,19 @@ export const LoginPage = () => {
 
         {/* Header Section */}
         <div className="flex flex-col items-center text-center mb-6">
-          <div className="w-16 h-16 rounded-2xl bg-white border border-slate-100 p-2 shadow-md mb-3 flex items-center justify-center">
+          <div className="w-16 h-16 rounded-2xl bg-white border border-slate-100 p-2 shadow-xs mb-3 flex items-center justify-center">
             <img src={logo} alt="Logo" className="w-full h-full object-contain" />
           </div>
-          <h2 className="text-2xl font-extrabold text-slate-900">FocusSync</h2>
-          <p className="text-xs font-semibold text-slate-500 mt-0.5">Department Mobile Controller</p>
+          <h2 className="text-2xl font-bold tracking-tight text-slate-900">FocusSync</h2>
+          <p className="text-xs font-medium text-slate-500 mt-0.5">Department Mobile Controller</p>
         </div>
 
-        <div className="h-px bg-slate-200 my-4" />
+        <div className="h-px bg-slate-100 my-4" />
 
         {/* Welcome Section */}
         <div className="text-left mb-4">
-          <h3 className="text-xl font-extrabold text-slate-900">Welcome Back</h3>
-          <p className="text-xs font-medium text-slate-500 mt-1">
+          <h3 className="text-lg font-semibold text-slate-900">Welcome Back</h3>
+          <p className="text-xs font-normal text-slate-500 mt-1">
             Sign in using your institutional account.
           </p>
         </div>

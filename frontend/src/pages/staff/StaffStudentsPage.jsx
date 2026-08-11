@@ -26,60 +26,66 @@ export const StaffStudentsPage = () => {
   const sorted = [...filtered].sort((a, b) => a.name.localeCompare(b.name));
 
   return (
-    <div className="space-y-6 text-left max-w-3xl mx-auto">
-      {/* Sticky flat header */}
-      <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-        <h2 className="text-2xl font-extrabold text-slate-900">Student Supervision</h2>
-        <p className="text-xs font-semibold text-slate-500 mt-1">
+    <div className="space-y-6 text-left w-full">
+      {/* Top Header */}
+      <div>
+        <h2 className="text-2xl font-bold tracking-tight text-slate-900">Student Supervision</h2>
+        <p className="text-xs font-normal text-slate-500 mt-1">
           Real-time status updates and app access attempts for your class ({mentorClass}).
         </p>
       </div>
 
-      {/* Search and Filters */}
-      <div className="space-y-4">
-        <div className="max-w-md w-full">
-          <input
-            type="text"
-            placeholder="Search by student name or roll number..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-white border border-slate-200 rounded-xl h-11 px-4 text-xs font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500"
-          />
-        </div>
-
-        {/* Filter Badges Row */}
-        <div className="flex flex-wrap gap-2">
-          {['all', 'active', 'blocked', 'offline'].map((filter) => {
-            const count = filter === 'all' 
-              ? students.length 
-              : students.filter(s => s.status === filter).length;
-            const isActive = statusFilter === filter;
-            return (
-              <button
-                key={filter}
-                onClick={() => setStatusFilter(filter)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer border ${
-                  isActive 
-                    ? 'bg-blue-50 border-blue-200 text-blue-700 font-extrabold' 
-                    : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300'
-                }`}
-              >
-                {filter.toUpperCase()} ({count})
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Flat List Container */}
-      <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
-        <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider text-slate-400">My Class Students</h3>
+      {/* Unified Master Panel Card */}
+      <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs space-y-6">
         
-        {sorted.length === 0 ? (
-          <div className="py-8 text-center text-slate-400 font-semibold">
-            No students match your filter or search query.
+        {/* Search & Filters Toolbar */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+          <div className="max-w-md w-full">
+            <div className="relative">
+              <FiSearch className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
+              <input
+                type="text"
+                placeholder="Search student name or roll number..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-200/80 rounded-xl h-10 pl-10 pr-4 text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500"
+              />
+            </div>
           </div>
-        ) : (
+
+          {/* Filter Badges Row */}
+          <div className="flex flex-wrap gap-1.5">
+            {['all', 'active', 'blocked', 'offline'].map((filter) => {
+              const count = filter === 'all' 
+                ? students.length 
+                : students.filter(s => s.status === filter).length;
+              const isActive = statusFilter === filter;
+              return (
+                <button
+                  key={filter}
+                  onClick={() => setStatusFilter(filter)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer border ${
+                    isActive 
+                      ? 'bg-blue-50 border-blue-200 text-blue-700 font-bold' 
+                      : 'bg-slate-50 border-slate-200/80 text-slate-600 hover:bg-white hover:border-slate-300'
+                  }`}
+                >
+                  {filter.toUpperCase()} ({count})
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Directory List Section */}
+        <div className="space-y-4">
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400">My Class Students</h3>
+          
+          {sorted.length === 0 ? (
+            <div className="py-8 text-center text-slate-400 font-normal text-xs">
+              No students match your filter or search query.
+            </div>
+          ) : (
           <div className="divide-y divide-slate-100">
             {sorted.map((student) => {
               const isBlocked = student.status === 'blocked';
@@ -88,31 +94,19 @@ export const StaffStudentsPage = () => {
                 <button
                   key={student.id}
                   onClick={() => setSelectedStudent(student)}
-                  className="w-full py-4 text-left flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-50/50 transition-colors cursor-pointer group"
+                  className="w-full py-3.5 text-left flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-50/50 transition-colors cursor-pointer group"
                 >
                   <div className="flex items-start space-x-3">
-                    <div className="w-10 h-10 rounded-full bg-blue-50 text-blue-700 font-extrabold text-xs flex items-center justify-center shrink-0 border border-blue-100 mt-0.5">
+                    <div className="w-9 h-9 rounded-full bg-blue-50 text-blue-700 font-semibold text-xs flex items-center justify-center shrink-0 border border-blue-100 mt-0.5">
                       {student.name.substring(0, 2).toUpperCase()}
                     </div>
-                    <div className="space-y-1">
-                      <h4 className="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">{student.name}</h4>
-                      <p className="text-xs text-slate-500 font-semibold leading-none">{student.rollNo}</p>
+                    <div className="space-y-0.5">
+                      <h4 className="text-sm font-medium text-slate-900 group-hover:text-blue-600 transition-colors">{student.name}</h4>
+                      <p className="text-xs text-slate-500 font-normal leading-none">{student.rollNo}</p>
                       
-                      {/* Device Metadata */}
-                      <div className="flex items-center space-x-3 text-[10px] text-slate-400 font-semibold pt-1">
-                        <span className="flex items-center space-x-1">
-                          <FiSmartphone className="w-3.5 h-3.5 text-slate-400" />
-                          <span>{student.device}</span>
-                        </span>
-                        <span className="flex items-center space-x-1">
-                          <FiClock className="w-3.5 h-3.5 text-slate-400" />
-                          <span>Active: {student.screenTime}</span>
-                        </span>
-                      </div>
-
                       {/* Warnings row */}
                       {isBlocked && student.attempts > 0 && (
-                        <div className="flex items-center space-x-1 text-[10px] text-rose-600 font-bold pt-1.5">
+                        <div className="flex items-center space-x-1 text-[10px] text-rose-600 font-medium pt-1">
                           <FiAlertCircle className="w-3.5 h-3.5 text-rose-500 shrink-0" />
                           <span>{student.attempts} attempts to open restricted apps today</span>
                         </div>
@@ -121,7 +115,7 @@ export const StaffStudentsPage = () => {
                   </div>
 
                   <div className="flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2">
-                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold tracking-wider ${
+                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-semibold tracking-wider ${
                       isBlocked 
                         ? 'bg-rose-100 text-rose-700' 
                         : isOffline 
@@ -136,11 +130,12 @@ export const StaffStudentsPage = () => {
             })}
           </div>
         )}
+        </div>
       </div>
 
       {/* Device Monitoring Details Modal */}
       {selectedStudent && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl max-w-md w-full p-6 space-y-5 relative shadow-2xl animate-in fade-in zoom-in-95 duration-200">
             
             {/* Close Button */}
@@ -152,75 +147,67 @@ export const StaffStudentsPage = () => {
             </button>
 
             {/* Modal Title */}
-            <h3 className="text-base font-extrabold text-slate-900 text-left border-b border-slate-100 pb-2">Device Monitoring Details</h3>
+            <h3 className="text-sm font-semibold text-slate-900 text-left border-b border-slate-100 pb-2">Device Monitoring Details</h3>
 
             {/* Modal Header */}
             <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 rounded-full bg-blue-100 text-blue-700 font-extrabold text-sm flex items-center justify-center border border-blue-200">
+              <div className="w-11 h-11 rounded-full bg-blue-100 text-blue-700 font-semibold text-sm flex items-center justify-center border border-blue-200">
                 {selectedStudent.name.substring(0, 2).toUpperCase()}
               </div>
               <div>
-                <h3 className="text-base font-extrabold text-slate-900">{selectedStudent.name}</h3>
-                <p className="text-xs text-slate-500 font-bold">Roll No: {selectedStudent.rollNo}</p>
+                <h3 className="text-base font-semibold text-slate-900">{selectedStudent.name}</h3>
+                <p className="text-xs text-slate-500 font-normal">Roll No: {selectedStudent.rollNo}</p>
               </div>
             </div>
 
             {/* Info Table */}
             <div className="border border-slate-200/80 rounded-2xl p-4 bg-slate-50/50 space-y-3">
-              <div className="flex justify-between text-xs font-semibold">
-                <span className="text-slate-400">DEVICE MODEL</span>
-                <span className="text-slate-800 font-extrabold">{selectedStudent.device}</span>
-              </div>
-              <div className="flex justify-between text-xs font-semibold">
+              <div className="flex justify-between text-xs font-medium">
                 <span className="text-slate-400">DEVICE STATUS</span>
-                <span className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold ${
+                <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${
                   selectedStudent.status === 'blocked' ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'
                 }`}>
                   {selectedStudent.status === 'blocked' ? 'BLOCKED' : 'UNBLOCKED'}
                 </span>
               </div>
-              <div className="flex justify-between text-xs font-semibold">
-                <span className="text-slate-400">ACTIVE SCREEN TIME</span>
-                <span className="text-slate-800 font-extrabold">{selectedStudent.screenTime}</span>
-              </div>
-              <div className="flex justify-between text-xs font-semibold">
+              <div className="flex justify-between text-xs font-medium">
                 <span className="text-slate-400">RESTRICTION ATTEMPTS</span>
-                <span className="text-rose-600 font-extrabold">{selectedStudent.attempts} blocks today</span>
+                <span className="text-rose-600 font-semibold">{selectedStudent.attempts} blocks today</span>
               </div>
             </div>
 
             {/* Blue Info Alert Pill */}
-            <div className="p-3 bg-blue-50/80 rounded-2xl border border-blue-100 flex items-start space-x-2 text-[10px] text-blue-700 font-semibold leading-relaxed">
+            <div className="p-3 bg-blue-50/80 rounded-2xl border border-blue-100 flex items-start space-x-2 text-[10px] text-blue-700 font-medium leading-relaxed">
               <FiShield className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
               <span>Read-Only Monitoring Access. In accordance with classroom policy, only Administrators and HODs can modify restrictions.</span>
             </div>
 
             {/* Device App Categories Status Section */}
             <div className="space-y-3">
-              <h4 className="text-xs font-extrabold text-slate-800 uppercase tracking-wider">Device App Categories Status</h4>
+              <h4 className="text-xs font-semibold text-slate-700 uppercase tracking-wider">Device App Categories Status</h4>
               <div className="space-y-2">
-                <div className="flex justify-between items-center text-xs font-bold p-2.5 bg-slate-50 border border-slate-100 rounded-xl">
+                <div className="flex justify-between items-center text-xs font-medium p-2.5 bg-slate-50 border border-slate-100 rounded-xl">
                   <span className="text-slate-600">Social Media (Instagram, Facebook)</span>
-                  <span className="text-rose-600 uppercase text-[10px] font-extrabold">Blocked</span>
+                  <span className="text-rose-600 uppercase text-[10px] font-semibold">Blocked</span>
                 </div>
-                <div className="flex justify-between items-center text-xs font-bold p-2.5 bg-slate-50 border border-slate-100 rounded-xl">
+                <div className="flex justify-between items-center text-xs font-medium p-2.5 bg-slate-50 border border-slate-100 rounded-xl">
                   <span className="text-slate-600">Messaging (WhatsApp, Telegram)</span>
-                  <span className="text-rose-600 uppercase text-[10px] font-extrabold">Blocked</span>
+                  <span className="text-rose-600 uppercase text-[10px] font-semibold">Blocked</span>
                 </div>
-                <div className="flex justify-between items-center text-xs font-bold p-2.5 bg-slate-50 border border-slate-100 rounded-xl">
+                <div className="flex justify-between items-center text-xs font-medium p-2.5 bg-slate-50 border border-slate-100 rounded-xl">
                   <span className="text-slate-600">Gaming Apps (Free Fire, PUBG)</span>
-                  <span className="text-rose-600 uppercase text-[10px] font-extrabold">Blocked</span>
+                  <span className="text-rose-600 uppercase text-[10px] font-semibold">Blocked</span>
                 </div>
-                <div className="flex justify-between items-center text-xs font-bold p-2.5 bg-slate-50 border border-slate-100 rounded-xl">
+                <div className="flex justify-between items-center text-xs font-medium p-2.5 bg-slate-50 border border-slate-100 rounded-xl">
                   <span className="text-slate-600">Educational & College Apps</span>
-                  <span className="text-emerald-600 uppercase text-[10px] font-extrabold">Allowed</span>
+                  <span className="text-emerald-600 uppercase text-[10px] font-semibold">Allowed</span>
                 </div>
               </div>
             </div>
 
             <button
               onClick={() => setSelectedStudent(null)}
-              className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-xs cursor-pointer transition-colors"
+              className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-xs cursor-pointer transition-colors"
             >
               Close Report
             </button>
