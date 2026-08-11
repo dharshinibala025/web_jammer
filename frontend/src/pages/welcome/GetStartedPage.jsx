@@ -2,31 +2,54 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
-  FiArrowRight, 
   FiSmartphone, 
   FiActivity, 
   FiClock, 
   FiShield, 
-  FiCheckCircle, 
   FiUsers, 
   FiLock, 
-  FiCpu, 
-  FiServer,
-  FiChevronRight,
   FiZap,
-  FiBarChart2
+  FiBarChart2,
+  FiChevronLeft,
+  FiChevronRight,
+  FiCheckCircle,
+  FiArrowRight,
+  FiCheck,
+  FiMenu,
+  FiX
 } from 'react-icons/fi';
 import logo from '../../assets/logo.png';
-import schoolIllustration from '../../assets/school_illustration.png';
+import MagicRings from '../../components/MagicRings';
 
 export const GetStartedPage = () => {
   const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
+
+      const navItems = ['home', 'features', 'why-focussync', 'portals', 'contact'];
+      const scrollPos = window.scrollY + 200;
+
+      if (window.scrollY < 150) {
+        setActiveSection('home');
+        return;
+      }
+
+      for (let i = navItems.length - 1; i >= 0; i--) {
+        const id = navItems[i];
+        if (id === 'home') continue;
+        const el = document.getElementById(id);
+        if (el && el.offsetTop <= scrollPos) {
+          setActiveSection(id);
+          break;
+        }
+      }
     };
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -39,500 +62,618 @@ export const GetStartedPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-blue-600 selection:text-white relative overflow-x-hidden">
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-blue-600 selection:text-white overflow-x-hidden relative z-0">
       
-      {/* Ambient Background Gradient Circles */}
-      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-blue-400/10 rounded-full blur-3xl pointer-events-none -z-10 animate-pulse" />
-      <div className="absolute top-1/3 right-10 w-[500px] h-[500px] bg-emerald-400/10 rounded-full blur-3xl pointer-events-none -z-10" />
-      <div className="absolute bottom-1/4 left-10 w-[700px] h-[700px] bg-indigo-400/10 rounded-full blur-3xl pointer-events-none -z-10" />
+      {/* Background WebGL Magic Rings Canvas (Subtle & Elegant) */}
+      <div className="fixed inset-0 -z-10 pointer-events-none opacity-45">
+        <MagicRings
+          color="#93c5fd"
+          colorTwo="#3b82f6"
+          ringCount={5}
+          speed={0.6}
+          attenuation={11}
+          lineThickness={1.4}
+          baseRadius={0.42}
+          radiusStep={0.13}
+          scaleRate={0.07}
+          opacity={0.4}
+          blur={1}
+          noiseAmount={0.01}
+          rotation={0}
+          ringGap={1.4}
+          fadeIn={0.7}
+          fadeOut={0.5}
+          followMouse={true}
+          mouseInfluence={0.12}
+          hoverScale={1.08}
+          parallax={0.03}
+        />
+      </div>
+
+      {/* Ambient Soft Radial Mesh Glows */}
+      <div className="fixed top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[500px] bg-glow-light-blue pointer-events-none -z-10 rounded-full blur-3xl opacity-60"></div>
+      <div className="fixed bottom-1/3 right-10 w-[500px] h-[400px] bg-glow-light-emerald pointer-events-none -z-10 rounded-full blur-3xl opacity-50"></div>
 
       {/* ==========================================
-          STICKY HEADER
+          FLOATING PILL NAVBAR (LANDING PAGE ONLY)
          ========================================== */}
-      <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? 'bg-white/85 backdrop-blur-md border-b border-slate-200/80 shadow-xs py-3'
-            : 'bg-transparent py-5'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          
-          {/* Logo & Brand */}
-          <Link to="/" className="flex items-center space-x-3 group">
-            <div className="w-11 h-11 rounded-2xl bg-white border border-slate-200 p-1.5 shadow-md flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
+      <header className="fixed top-3 sm:top-5 inset-x-0 z-50 flex justify-center px-3 sm:px-6 pointer-events-none">
+        <motion.div
+          initial={{ y: -30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+          className={`pointer-events-auto max-w-6xl w-full flex items-center justify-between px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full transition-all duration-300 ${
+            scrolled
+              ? 'bg-white/90 backdrop-blur-xl border border-slate-200/90 shadow-xl shadow-slate-900/10'
+              : 'bg-white/80 backdrop-blur-lg border border-slate-200/80 shadow-lg shadow-slate-900/5 hover:bg-white/90'
+          }`}
+        >
+          {/* Logo & Brand Pill Badge */}
+          <Link
+            to="/"
+            onClick={(e) => {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+              setActiveSection('home');
+            }}
+            className="flex items-center space-x-2.5 group bg-slate-100/80 hover:bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200/70 transition-all cursor-pointer"
+          >
+            <div className="w-8 h-8 rounded-full bg-white border border-slate-200/80 p-0.5 flex items-center justify-center group-hover:scale-105 transition-transform shadow-2xs">
               <img src={logo} alt="FocusSync Logo" className="w-full h-full object-contain" />
             </div>
-            <div className="flex flex-col">
-              <span className="text-2xl font-extrabold tracking-tight text-blue-900 leading-none">
+            <div className="flex items-center space-x-1.5 pr-1">
+              <span className="text-base font-extrabold tracking-tight text-slate-900 leading-none font-heading">
                 Focus<span className="text-emerald-500">Sync</span>
               </span>
-              <span className="text-[10px] font-semibold text-slate-500 tracking-wider uppercase mt-0.5">
-                Dept Mobile Controller
+              <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 text-[9px] font-bold text-blue-700 bg-blue-50 border border-blue-200/70 rounded-full uppercase tracking-wider">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                Enforcer
               </span>
             </div>
           </Link>
 
-          {/* Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-8 text-sm font-semibold text-slate-600">
-            <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-blue-600 transition-colors cursor-pointer">
-              Home
-            </button>
-            <button onClick={() => scrollToSection('features')} className="hover:text-blue-600 transition-colors cursor-pointer">
-              Features
-            </button>
-            <button onClick={() => scrollToSection('why-focussync')} className="hover:text-blue-600 transition-colors cursor-pointer">
-              Why FocusSync
-            </button>
-            <button onClick={() => scrollToSection('contact')} className="hover:text-blue-600 transition-colors cursor-pointer">
-              Contact
-            </button>
+          {/* Navigation Links inside Central Pill Bar */}
+          <nav className="hidden md:flex items-center bg-slate-100/80 p-1.5 rounded-full border border-slate-200/70 shadow-xs space-x-1 relative">
+            {[
+              { id: 'home', label: 'Home' },
+              { id: 'features', label: 'Features' },
+              { id: 'why-focussync', label: 'Why FocusSync' },
+              { id: 'portals', label: 'Portals' },
+              { id: 'contact', label: 'Contact' },
+            ].map((navItem) => {
+              const isActive = activeSection === navItem.id;
+              return (
+                <button
+                  key={navItem.id}
+                  onClick={() => {
+                    if (navItem.id === 'home') {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    } else {
+                      scrollToSection(navItem.id);
+                    }
+                    setActiveSection(navItem.id);
+                  }}
+                  className={`relative px-4 py-1.5 text-xs font-bold transition-colors duration-200 cursor-pointer rounded-full ${
+                    isActive
+                      ? 'text-blue-600 font-extrabold'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'
+                  }`}
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="landingNavbarPill"
+                      className="absolute inset-0 bg-white rounded-full shadow-xs border border-slate-200/80 -z-10"
+                      transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                    />
+                  )}
+                  <span className="relative z-10">{navItem.label}</span>
+                </button>
+              );
+            })}
           </nav>
 
-          {/* Login CTA Button */}
-          <div className="flex items-center space-x-3">
+          {/* Right Action Button Pill & Mobile Menu Toggle */}
+          <div className="flex items-center space-x-2 sm:space-x-3">
             <button
               onClick={() => navigate('/login')}
-              className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md shadow-blue-500/25 hover:shadow-lg hover:shadow-blue-500/35 transition-all cursor-pointer flex items-center space-x-2"
+              className="px-4 sm:px-5 py-2 text-white font-extrabold text-xs rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-md shadow-blue-600/20 hover:shadow-lg hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center space-x-2 border border-blue-500/20"
             >
-              <span>Sign In</span>
-              <FiArrowRight className="w-4 h-4" />
+              <span>Access Portal</span>
+              <FiArrowRight className="w-3.5 h-3.5" />
+            </button>
+
+            {/* Mobile Menu Toggle Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors cursor-pointer border border-slate-200/80"
+              aria-label="Toggle Menu"
+            >
+              {mobileMenuOpen ? <FiX className="w-4.5 h-4.5" /> : <FiMenu className="w-4.5 h-4.5" />}
             </button>
           </div>
-        </div>
+        </motion.div>
+
+        {/* Mobile Dropdown Pill Container */}
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+            className="md:hidden absolute top-16 inset-x-4 pointer-events-auto bg-white/95 backdrop-blur-2xl rounded-3xl p-4 border border-slate-200/90 shadow-2xl space-y-1.5 text-center"
+          >
+            {[
+              { id: 'home', label: 'Home' },
+              { id: 'features', label: 'Features' },
+              { id: 'why-focussync', label: 'Why FocusSync' },
+              { id: 'portals', label: 'Portals' },
+              { id: 'contact', label: 'Contact' },
+            ].map((navItem) => (
+              <button
+                key={navItem.id}
+                onClick={() => {
+                  if (navItem.id === 'home') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  } else {
+                    scrollToSection(navItem.id);
+                  }
+                  setActiveSection(navItem.id);
+                  setMobileMenuOpen(false);
+                }}
+                className={`w-full py-2.5 px-4 rounded-full text-xs font-extrabold transition-all cursor-pointer ${
+                  activeSection === navItem.id
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-600/25'
+                    : 'text-slate-700 hover:bg-slate-100'
+                }`}
+              >
+                {navItem.label}
+              </button>
+            ))}
+          </motion.div>
+        )}
       </header>
 
       {/* ==========================================
-          HERO SECTION (TWO COLUMN DESKTOP LAYOUT)
+          HERO SECTION WITH MOBILE MOCKUP
          ========================================== */}
-      <section className="pt-32 pb-20 md:pt-40 md:pb-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+      <section className="relative w-full pt-32 pb-24 md:pt-40 md:pb-32 overflow-hidden">
+        
+        {/* Left Carousel Arrow (Decorative) */}
+        <motion.div 
+          whileHover={{ scale: 1.08 }}
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 hidden lg:flex items-center justify-center w-11 h-11 rounded-full bg-white text-slate-400 shadow-md border border-slate-200 hover:text-blue-600 cursor-pointer transition-all"
+        >
+          <FiChevronLeft className="w-5 h-5" />
+        </motion.div>
+        
+        {/* Right Carousel Arrow (Decorative) */}
+        <motion.div 
+          whileHover={{ scale: 1.08 }}
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 hidden lg:flex items-center justify-center w-11 h-11 rounded-full bg-white text-slate-400 shadow-md border border-slate-200 hover:text-blue-600 cursor-pointer transition-all"
+        >
+          <FiChevronRight className="w-5 h-5" />
+        </motion.div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
           
-          {/* LEFT CONTENT COLUMN */}
+          {/* LEFT CONTENT */}
           <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7 }}
+            initial={{ opacity: 0, y: 25 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
             className="lg:col-span-7 space-y-6 text-left"
           >
-            {/* Tagline Badge */}
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-blue-700 text-xs font-bold shadow-2xs">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-              <span>Stay Focused. Learn Better.</span>
-              <span className="text-slate-300">•</span>
-              <span className="text-slate-600 font-semibold">Smart Classroom System</span>
+            {/* Status Capsule */}
+            <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-xs font-bold text-blue-700 shadow-2xs">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              <span>KSR College of Engineering • Dept. of CSE</span>
             </div>
 
-            {/* Big Heading */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.15]">
+            {/* Headline */}
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.14] font-heading">
               Smart Classroom <br />
-              <span className="bg-gradient-to-r from-blue-600 via-blue-700 to-emerald-500 bg-clip-text text-transparent">
-                Mobile Usage
-              </span> <br />
-              Control System
+              <span className="text-blue-600">Mobile Usage</span> <span className="text-emerald-500">Control</span> <br />
+              System.
             </h1>
 
-            {/* Description */}
-            <p className="text-base sm:text-lg text-slate-600 font-medium leading-relaxed max-w-2xl">
-              FocusSync helps educational institutions monitor, manage, and automate mobile usage restrictions during academic hours with real-time monitoring, scheduled restrictions, and intelligent classroom control.
+            {/* Paragraph */}
+            <p className="text-base sm:text-lg text-slate-600 font-medium leading-relaxed max-w-xl">
+              FocusSync helps educational institutions monitor, manage, and automate mobile usage restrictions during academic hours. Ensure digital discipline with real-time tracking and automated schedules.
             </p>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-3 sm:space-y-0 sm:space-x-4 pt-2">
+            <div className="flex flex-wrap items-center gap-4 pt-2">
               <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
                 onClick={() => navigate('/login')}
-                className="px-8 py-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-base shadow-xl shadow-blue-500/30 flex items-center justify-center space-x-3 transition-all cursor-pointer"
+                className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-sm rounded-xl shadow-lg shadow-blue-600/25 transition-all cursor-pointer flex items-center space-x-2"
               >
                 <span>Get Started</span>
-                <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center">
-                  <FiArrowRight className="w-4 h-4 text-white" />
-                </div>
+                <FiArrowRight className="w-4 h-4" />
               </motion.button>
-
+              
               <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
                 onClick={() => scrollToSection('features')}
-                className="px-7 py-4 rounded-2xl bg-white hover:bg-slate-100 text-slate-800 font-bold text-base border border-slate-300 shadow-sm flex items-center justify-center space-x-2 transition-all cursor-pointer"
+                className="px-8 py-4 bg-white text-slate-700 font-bold text-sm rounded-xl border border-slate-200 shadow-sm hover:bg-slate-50 transition-all cursor-pointer"
               >
-                <span>Learn More</span>
-                <FiChevronRight className="w-4 h-4 text-slate-500" />
+                Learn More
               </motion.button>
             </div>
 
-            {/* Key Trust Highlights */}
-            <div className="pt-6 border-t border-slate-200/70 grid grid-cols-3 gap-4 text-xs font-bold text-slate-700">
-              <div className="flex items-center space-x-2">
-                <FiCheckCircle className="w-4 h-4 text-emerald-500 shrink-0" />
-                <span>Real-Time Monitoring</span>
+            {/* Metrics Divider */}
+            <div className="pt-6 border-t border-slate-200/80 flex items-center space-x-8 text-left">
+              <div>
+                <p className="text-2xl font-extrabold text-slate-900 font-heading">480</p>
+                <p className="text-xs font-semibold text-slate-500">Online Students</p>
               </div>
-              <div className="flex items-center space-x-2">
-                <FiCheckCircle className="w-4 h-4 text-blue-600 shrink-0" />
-                <span>Department Controlled</span>
+              <div className="w-px h-8 bg-slate-200"></div>
+              <div>
+                <p className="text-2xl font-extrabold text-emerald-500 font-heading">Active</p>
+                <p className="text-xs font-semibold text-slate-500">Status Control</p>
               </div>
-              <div className="flex items-center space-x-2">
-                <FiCheckCircle className="w-4 h-4 text-emerald-500 shrink-0" />
-                <span>Automated Schedule</span>
+              <div className="w-px h-8 bg-slate-200"></div>
+              <div>
+                <p className="text-2xl font-extrabold text-blue-600 font-heading">99%</p>
+                <p className="text-xs font-semibold text-slate-500">Policy Sync</p>
               </div>
             </div>
+
           </motion.div>
 
-          {/* RIGHT ILLUSTRATION COLUMN WITH FLOATING UI CARDS */}
+          {/* RIGHT COLUMN: ELEGANT SMARTPHONE SHOWCASE */}
           <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="lg:col-span-5 relative flex items-center justify-center"
+            className="lg:col-span-5 flex justify-center lg:justify-end"
           >
-            {/* Background Glow Ring */}
-            <div className="absolute w-[360px] h-[360px] sm:w-[420px] sm:h-[420px] bg-gradient-to-tr from-blue-500/20 to-emerald-400/20 rounded-full blur-2xl -z-10 animate-pulse" />
-
-            {/* Large School Illustration */}
-            <motion.div
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-              className="relative w-full max-w-md sm:max-w-lg"
+            {/* Phone Frame */}
+            <motion.div 
+              whileHover={{ y: -6 }}
+              transition={{ duration: 0.3 }}
+              className="relative w-[300px] h-[590px] bg-white rounded-[45px] shadow-2xl shadow-blue-900/15 border-4 border-slate-200 p-3 flex flex-col z-20"
             >
-              <img
-                src={schoolIllustration}
-                alt="FocusSync School Classroom Illustration"
-                className="w-full h-auto object-contain filter drop-shadow-2xl"
-              />
-            </motion.div>
-
-            {/* FLOATING CARD 1: Restriction Active (Top Left) */}
-            <motion.div
-              animate={{ y: [0, -8, 0] }}
-              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
-              className="absolute -top-4 -left-4 sm:top-2 sm:-left-6 bg-white/90 backdrop-blur-md p-3.5 rounded-2xl border border-slate-200/80 shadow-xl flex items-center space-x-3"
-            >
-              <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold">
-                <FiShield className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="flex items-center space-x-1.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-                  <p className="text-xs font-extrabold text-slate-900">Restriction Active</p>
+              
+              {/* Phone Top Notch */}
+              <div className="absolute top-0 inset-x-0 h-6 flex justify-center z-30 pointer-events-none">
+                <div className="w-24 h-4 bg-slate-100 rounded-b-xl flex items-center justify-center space-x-2 border-b border-slate-200">
+                  <div className="w-1.5 h-1.5 rounded-full bg-slate-300"></div>
+                  <div className="w-8 h-1 rounded-full bg-slate-300"></div>
                 </div>
-                <p className="text-[11px] font-semibold text-slate-500">09:00 AM – 04:00 PM</p>
+              </div>
+
+              {/* Phone Home Indicator Button */}
+              <div className="absolute bottom-4 inset-x-0 flex justify-center z-30 pointer-events-none">
+                <div className="w-12 h-12 rounded-full border-2 border-slate-200 bg-slate-50"></div>
+              </div>
+
+              {/* Inner Screen Content */}
+              <div className="relative w-full h-[calc(100%-60px)] mt-2 bg-slate-50 rounded-md overflow-hidden flex flex-col border border-slate-100">
+                
+                {/* Screen Header */}
+                <div className="h-40 bg-white flex flex-col items-center justify-center pt-4 border-b border-slate-200">
+                  <div className="w-16 h-16 rounded-2xl bg-white border border-slate-100 p-2 mb-2 shadow-xs flex items-center justify-center">
+                    <img src={logo} alt="FocusSync" className="w-full h-full object-contain" />
+                  </div>
+                  <h3 className="text-slate-900 font-extrabold text-sm tracking-tight font-heading">FocusSync</h3>
+                  <p className="text-slate-500 text-[10px] font-semibold">Academic Enforcer</p>
+                </div>
+                
+                {/* Stats Bar */}
+                <div className="grid grid-cols-3 bg-slate-200 gap-px text-center border-b border-slate-200">
+                  <div className="bg-white py-3">
+                    <p className="text-blue-600 font-extrabold text-sm font-heading">480</p>
+                    <p className="text-slate-500 text-[9px] font-semibold uppercase mt-0.5">Online</p>
+                  </div>
+                  <div className="bg-white py-3">
+                    <p className="text-emerald-500 font-extrabold text-sm font-heading">Active</p>
+                    <p className="text-slate-500 text-[9px] font-semibold uppercase mt-0.5">Status</p>
+                  </div>
+                  <div className="bg-white py-3">
+                    <p className="text-blue-600 font-extrabold text-sm font-heading">99%</p>
+                    <p className="text-slate-500 text-[9px] font-semibold uppercase mt-0.5">Sync</p>
+                  </div>
+                </div>
+
+                {/* Dashboard Grid */}
+                <div className="flex-1 bg-slate-100 grid grid-cols-3 gap-px p-px">
+                  <div className="bg-white flex flex-col items-center justify-center text-slate-600 hover:text-blue-600 transition-colors cursor-pointer p-2">
+                    <FiShield className="w-5 h-5 mb-1 text-blue-600" />
+                    <span className="text-[8px] font-bold">Policy</span>
+                  </div>
+                  <div className="bg-white flex flex-col items-center justify-center text-slate-600 hover:text-blue-600 transition-colors cursor-pointer p-2">
+                    <FiUsers className="w-5 h-5 mb-1 text-emerald-500" />
+                    <span className="text-[8px] font-bold">Students</span>
+                  </div>
+                  <div className="bg-white flex flex-col items-center justify-center text-slate-600 hover:text-blue-600 transition-colors cursor-pointer p-2">
+                    <FiActivity className="w-5 h-5 mb-1 text-purple-600" />
+                    <span className="text-[8px] font-bold">Monitor</span>
+                  </div>
+                  <div className="bg-white flex flex-col items-center justify-center text-slate-600 hover:text-blue-600 transition-colors cursor-pointer p-2">
+                    <FiClock className="w-5 h-5 mb-1 text-amber-500" />
+                    <span className="text-[8px] font-bold">Schedule</span>
+                  </div>
+                  <div className="bg-white flex flex-col items-center justify-center text-slate-600 hover:text-blue-600 transition-colors cursor-pointer p-2">
+                    <FiBarChart2 className="w-5 h-5 mb-1 text-blue-600" />
+                    <span className="text-[8px] font-bold">Reports</span>
+                  </div>
+                  <div className="bg-white flex flex-col items-center justify-center text-slate-600 hover:text-blue-600 transition-colors cursor-pointer p-2">
+                    <FiLock className="w-5 h-5 mb-1 text-rose-500" />
+                    <span className="text-[8px] font-bold">Overrides</span>
+                  </div>
+                </div>
+
               </div>
             </motion.div>
-
-            {/* FLOATING CARD 2: Students Online (Top Right) */}
-            <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-              className="absolute top-10 -right-2 sm:-right-6 bg-white/90 backdrop-blur-md p-3.5 rounded-2xl border border-slate-200/80 shadow-xl flex items-center space-x-3"
-            >
-              <div className="w-9 h-9 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center font-bold">
-                <FiUsers className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="text-xs font-extrabold text-slate-900">480 Students</p>
-                <p className="text-[11px] font-semibold text-emerald-600 flex items-center space-x-1">
-                  <FiCheckCircle className="w-3 h-3" />
-                  <span>Monitored Online</span>
-                </p>
-              </div>
-            </motion.div>
-
-            {/* FLOATING CARD 3: Today's Schedule (Bottom Left) */}
-            <motion.div
-              animate={{ y: [0, -6, 0] }}
-              transition={{ duration: 4.2, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }}
-              className="absolute -bottom-4 -left-2 sm:bottom-4 sm:-left-4 bg-white/90 backdrop-blur-md p-3.5 rounded-2xl border border-slate-200/80 shadow-xl flex items-center space-x-3"
-            >
-              <div className="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold">
-                <FiClock className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="text-xs font-extrabold text-slate-900">Academic Session</p>
-                <p className="text-[11px] font-semibold text-slate-500">Auto Restrictions Active</p>
-              </div>
-            </motion.div>
-
-            {/* FLOATING CARD 4: Real-time Monitoring (Bottom Right) */}
-            <motion.div
-              animate={{ y: [0, 6, 0] }}
-              transition={{ duration: 3.8, repeat: Infinity, ease: 'easeInOut', delay: 0.8 }}
-              className="absolute -bottom-6 -right-2 sm:bottom-0 sm:-right-4 bg-white/90 backdrop-blur-md p-3.5 rounded-2xl border border-slate-200/80 shadow-xl flex items-center space-x-3"
-            >
-              <div className="w-9 h-9 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center font-bold">
-                <FiActivity className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="text-xs font-extrabold text-slate-900">Live Heartbeat</p>
-                <p className="text-[11px] font-semibold text-rose-600">Violations Filtered</p>
-              </div>
-            </motion.div>
-
           </motion.div>
+
         </div>
       </section>
 
       {/* ==========================================
-          FEATURE SECTION
+          FLOATING FEATURE BADGES STRIP
          ========================================== */}
-      <section id="features" className="py-20 bg-white border-y border-slate-200/80">
+      <div className="max-w-4xl mx-auto relative -mt-24 z-30 hidden md:block">
+        <div className="flex justify-center space-x-12">
+          
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.4, type: 'spring' }}
+            whileHover={{ y: -4 }}
+            className="w-28 h-28 rounded-full border-4 border-white bg-white flex flex-col items-center justify-center text-slate-900 shadow-xl shadow-slate-200/60"
+          >
+            <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mb-1">
+              <FiShield className="w-4 h-4" />
+            </div>
+            <span className="text-xs font-bold font-heading">Secure</span>
+            <span className="text-[10px] text-slate-500 font-medium">Auth</span>
+          </motion.div>
+          
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.5, type: 'spring' }}
+            whileHover={{ y: -4 }}
+            className="w-32 h-32 rounded-full border-4 border-white bg-white flex flex-col items-center justify-center text-slate-900 shadow-xl shadow-slate-200/60 -translate-y-4"
+          >
+            <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mb-1">
+              <FiClock className="w-5 h-5" />
+            </div>
+            <span className="text-sm font-bold font-heading">Automated</span>
+            <span className="text-xs text-slate-500 font-medium">Schedule</span>
+          </motion.div>
+
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.6, type: 'spring' }}
+            whileHover={{ y: -4 }}
+            className="w-28 h-28 rounded-full border-4 border-white bg-white flex flex-col items-center justify-center text-slate-900 shadow-xl shadow-slate-200/60"
+          >
+            <div className="w-8 h-8 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mb-1">
+              <FiActivity className="w-4 h-4" />
+            </div>
+            <span className="text-xs font-bold font-heading">Real-Time</span>
+            <span className="text-[10px] text-slate-500 font-medium">Tracking</span>
+          </motion.div>
+          
+        </div>
+      </div>
+
+      {/* ==========================================
+          FEATURES SECTION
+         ========================================== */}
+      <section id="features" className="py-24 bg-transparent relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
-          {/* Section Header */}
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-            <span className="px-3.5 py-1 rounded-full text-xs font-extrabold bg-blue-100 text-blue-700 border border-blue-200 uppercase tracking-wider">
-              Core Platform Capabilities
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-              Designed for Educational Excellence
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight font-heading">
+              Designed for Excellence
             </h2>
-            <p className="text-base text-slate-600 font-medium">
+            <div className="w-20 h-1.5 bg-blue-600 mx-auto rounded-full"></div>
+            <p className="text-base text-slate-500 font-medium pt-2">
               Comprehensive tools empowering faculty and protecting student academic focus during class hours.
             </p>
           </div>
 
-          {/* 4 Feature Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            
-            {/* Card 1 */}
-            <motion.div
-              whileHover={{ y: -6 }}
-              className="bg-slate-50/80 hover:bg-white p-6 rounded-3xl border border-slate-200 hover:border-blue-300 shadow-sm hover:shadow-xl transition-all duration-300 space-y-4"
-            >
-              <div className="w-14 h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center text-2xl shadow-lg shadow-blue-500/25">
-                <FiSmartphone />
-              </div>
-              <h3 className="text-xl font-bold text-slate-900">Mobile Usage Control</h3>
-              <p className="text-sm font-medium text-slate-600 leading-relaxed">
-                Restrict non-essential mobile applications like social media, gaming, and streaming automatically during lecture hours.
-              </p>
-            </motion.div>
-
-            {/* Card 2 */}
-            <motion.div
-              whileHover={{ y: -6 }}
-              className="bg-slate-50/80 hover:bg-white p-6 rounded-3xl border border-slate-200 hover:border-emerald-300 shadow-sm hover:shadow-xl transition-all duration-300 space-y-4"
-            >
-              <div className="w-14 h-14 rounded-2xl bg-emerald-500 text-white flex items-center justify-center text-2xl shadow-lg shadow-emerald-500/25">
-                <FiActivity />
-              </div>
-              <h3 className="text-xl font-bold text-slate-900">Real-Time Monitoring</h3>
-              <p className="text-sm font-medium text-slate-600 leading-relaxed">
-                Live dashboard for staff and HODs tracking active device compliance, policy sync, and attempt violation logs.
-              </p>
-            </motion.div>
-
-            {/* Card 3 */}
-            <motion.div
-              whileHover={{ y: -6 }}
-              className="bg-slate-50/80 hover:bg-white p-6 rounded-3xl border border-slate-200 hover:border-amber-300 shadow-sm hover:shadow-xl transition-all duration-300 space-y-4"
-            >
-              <div className="w-14 h-14 rounded-2xl bg-amber-500 text-white flex items-center justify-center text-2xl shadow-lg shadow-amber-500/25">
-                <FiClock />
-              </div>
-              <h3 className="text-xl font-bold text-slate-900">Smart Scheduling</h3>
-              <p className="text-sm font-medium text-slate-600 leading-relaxed">
-                Automated restriction windows (09:00 AM – 04:00 PM) synchronized with department timetables and academic calendars.
-              </p>
-            </motion.div>
-
-            {/* Card 4 */}
-            <motion.div
-              whileHover={{ y: -6 }}
-              className="bg-slate-50/80 hover:bg-white p-6 rounded-3xl border border-slate-200 hover:border-purple-300 shadow-sm hover:shadow-xl transition-all duration-300 space-y-4"
-            >
-              <div className="w-14 h-14 rounded-2xl bg-purple-600 text-white flex items-center justify-center text-2xl shadow-lg shadow-purple-500/25">
-                <FiShield />
-              </div>
-              <h3 className="text-xl font-bold text-slate-900">Department Security</h3>
-              <p className="text-sm font-medium text-slate-600 leading-relaxed">
-                Multi-tier role access control for Students, Faculty Class Advisors, and Department Head Administrators.
-              </p>
-            </motion.div>
-
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <FeatureCard 
+              icon={<FiSmartphone />} 
+              title="Usage Control" 
+              desc="Restrict non-essential mobile applications like social media during lecture hours." 
+              colorClass="text-blue-600 bg-blue-50 border-blue-100"
+            />
+            <FeatureCard 
+              icon={<FiActivity />} 
+              title="Live Monitor" 
+              desc="Live dashboard tracking active device compliance and policy sync." 
+              colorClass="text-emerald-500 bg-emerald-50 border-emerald-100"
+            />
+            <FeatureCard 
+              icon={<FiClock />} 
+              title="Smart Schedule" 
+              desc="Automated restriction windows synchronized with department timetables." 
+              colorClass="text-amber-500 bg-amber-50 border-amber-100"
+            />
+            <FeatureCard 
+              icon={<FiShield />} 
+              title="Dept Security" 
+              desc="Multi-tier role access control for Students, Advisors, and HODs." 
+              colorClass="text-purple-600 bg-purple-50 border-purple-100"
+            />
           </div>
+
         </div>
       </section>
 
       {/* ==========================================
           WHY FOCUSSYNC SECTION
          ========================================== */}
-      <section id="why-focussync" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          
-          {/* Left Title & Intro */}
-          <div className="lg:col-span-5 space-y-6">
-            <span className="px-3.5 py-1 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200 uppercase tracking-wider">
-              Institutional Benefits
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
-              Why Top Departments Choose FocusSync
-            </h2>
-            <p className="text-base text-slate-600 font-medium leading-relaxed">
-              FocusSync replaces manual phone collection with an automated, respectful, and digitally enforced academic environment.
-            </p>
-            <div className="pt-2">
-              <button
-                onClick={() => navigate('/login')}
-                className="px-6 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm shadow-md transition-all cursor-pointer flex items-center space-x-2"
-              >
-                <span>Access Department Portal</span>
-                <FiArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-
-          {/* Right Icon + Text Grid */}
-          <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <section id="why-focussync" className="py-20 bg-white border-y border-slate-200/80 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
-            {/* Item 1 */}
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-start space-x-4">
-              <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 border border-blue-100 flex items-center justify-center shrink-0">
-                <FiBarChart2 className="w-6 h-6" />
-              </div>
-              <div>
-                <h4 className="text-base font-bold text-slate-900">Department-wise Control</h4>
-                <p className="text-xs font-medium text-slate-500 mt-1 leading-relaxed">
-                  HODs can broadcast policy updates or trigger manual class overrides instantly.
-                </p>
-              </div>
+            <div className="lg:col-span-5 space-y-6">
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight font-heading">
+                Why Departments Choose Us
+              </h2>
+              <div className="w-16 h-1.5 bg-emerald-500 rounded-full"></div>
+              <p className="text-base text-slate-600 font-medium leading-relaxed">
+                FocusSync replaces manual phone collection with an automated, respectful, and digitally enforced academic environment.
+              </p>
+              <motion.button
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
+                onClick={() => navigate('/login')}
+                className="px-6 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm rounded-xl shadow-md transition-all mt-4 cursor-pointer"
+              >
+                Access Portal
+              </motion.button>
             </div>
 
-            {/* Item 2 */}
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-start space-x-4">
-              <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center shrink-0">
-                <FiUsers className="w-6 h-6" />
-              </div>
-              <div>
-                <h4 className="text-base font-bold text-slate-900">Live Student Status</h4>
-                <p className="text-xs font-medium text-slate-500 mt-1 leading-relaxed">
-                  Class advisors get immediate visibility into active student sessions and violations.
-                </p>
-              </div>
+            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <WhyCard icon={<FiBarChart2 />} title="Department Control" desc="HODs can broadcast updates or trigger manual class overrides instantly." colorClass="text-blue-600 bg-blue-50" />
+              <WhyCard icon={<FiUsers />} title="Live Status" desc="Immediate visibility into active student sessions and violations." colorClass="text-emerald-600 bg-emerald-50" />
+              <WhyCard icon={<FiZap />} title="Auto Enforce" desc="Seamless background enforcement without manual intervention." colorClass="text-amber-600 bg-amber-50" />
+              <WhyCard icon={<FiLock />} title="Secure Auth" desc="Institutional email login with encrypted tokens." colorClass="text-purple-600 bg-purple-50" />
             </div>
-
-            {/* Item 3 */}
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-start space-x-4">
-              <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 border border-amber-100 flex items-center justify-center shrink-0">
-                <FiZap className="w-6 h-6" />
-              </div>
-              <div>
-                <h4 className="text-base font-bold text-slate-900">Automated Restrictions</h4>
-                <p className="text-xs font-medium text-slate-500 mt-1 leading-relaxed">
-                  Seamless background enforcement without requiring constant manual intervention.
-                </p>
-              </div>
-            </div>
-
-            {/* Item 4 */}
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-start space-x-4">
-              <div className="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 border border-purple-100 flex items-center justify-center shrink-0">
-                <FiLock className="w-6 h-6" />
-              </div>
-              <div>
-                <h4 className="text-base font-bold text-slate-900">Secure Authentication</h4>
-                <p className="text-xs font-medium text-slate-500 mt-1 leading-relaxed">
-                  Institutional email login with encrypted tokens and role protection across all portals.
-                </p>
-              </div>
-            </div>
-
           </div>
         </div>
       </section>
 
       {/* ==========================================
-          CALL TO ACTION (CTA)
+          PORTAL SELECTION CARDS
          ========================================== */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900 rounded-3xl p-8 sm:p-14 text-center text-white shadow-2xl relative overflow-hidden">
-          
-          <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-400/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl pointer-events-none" />
-
-          <div className="relative z-10 max-w-2xl mx-auto space-y-6">
-            <span className="px-3.5 py-1 rounded-full text-xs font-bold bg-white/10 text-emerald-300 border border-white/20 uppercase tracking-wider">
-              Get Started Today
-            </span>
-
-            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight">
-              Ready to Modernize Your Classroom?
+      <section id="portals" className="py-20 bg-slate-50 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
+            <h2 className="text-3xl font-extrabold text-slate-900 font-heading tracking-tight">
+              Access Institutional Portals
             </h2>
-
-            <p className="text-sm sm:text-base text-blue-100 font-medium leading-relaxed">
-              Launch the FocusSync Department Mobile Controller to log in as a Student, Staff Advisor, or Department HOD Admin.
+            <p className="text-sm text-slate-600 font-medium">
+              Select your role to sign into your customized department workspace.
             </p>
-
-            <div className="pt-4 flex justify-center">
-              <motion.button
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.96 }}
-                onClick={() => navigate('/login')}
-                className="px-8 py-4 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-base shadow-xl shadow-emerald-500/25 flex items-center space-x-3 transition-all cursor-pointer"
-              >
-                <span>Launch FocusSync</span>
-                <FiArrowRight className="w-5 h-5 text-slate-950" />
-              </motion.button>
-            </div>
           </div>
 
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <motion.div 
+              whileHover={{ y: -5 }}
+              className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between"
+            >
+              <div>
+                <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl mb-5">
+                  <FiSmartphone />
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 font-heading">Student Portal</h3>
+                <p className="text-xs text-slate-500 font-medium mt-2 leading-relaxed">
+                  View active timetable restrictions, device sync state, and submit emergency override requests.
+                </p>
+              </div>
+              <button
+                onClick={() => navigate('/student/login')}
+                className="mt-6 w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-all flex items-center justify-center space-x-2 cursor-pointer shadow-sm"
+              >
+                <span>Student Login</span>
+                <FiArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </motion.div>
+
+            <motion.div 
+              whileHover={{ y: -5 }}
+              className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between"
+            >
+              <div>
+                <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl mb-5">
+                  <FiUsers />
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 font-heading">Faculty Portal</h3>
+                <p className="text-xs text-slate-500 font-medium mt-2 leading-relaxed">
+                  Live classroom compliance tracking, student rosters, broadcast updates, and lecture overrides.
+                </p>
+              </div>
+              <button
+                onClick={() => navigate('/staff/login')}
+                className="mt-6 w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition-all flex items-center justify-center space-x-2 cursor-pointer shadow-sm"
+              >
+                <span>Staff Login</span>
+                <FiArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </motion.div>
+
+            <motion.div 
+              whileHover={{ y: -5 }}
+              className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between"
+            >
+              <div>
+                <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl mb-5">
+                  <FiShield />
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 font-heading">Admin Panel</h3>
+                <p className="text-xs text-slate-500 font-medium mt-2 leading-relaxed">
+                  Department policy rules, timetable synchronization, device logs, and system configuration.
+                </p>
+              </div>
+              <button
+                onClick={() => navigate('/admin/login')}
+                className="mt-6 w-full py-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs transition-all flex items-center justify-center space-x-2 cursor-pointer shadow-sm"
+              >
+                <span>Admin Login</span>
+                <FiArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </motion.div>
+          </div>
         </div>
       </section>
 
       {/* ==========================================
           FOOTER
          ========================================== */}
-      <footer id="contact" className="bg-white border-t border-slate-200 py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+      <footer id="contact" className="bg-white py-12 px-4 sm:px-6 lg:px-8 border-t border-slate-200/80 relative z-10">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-12 relative z-10">
           
-          {/* Col 1: Brand Info */}
           <div className="md:col-span-2 space-y-4">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-2xl bg-white border border-slate-200 p-1 shadow-xs flex items-center justify-center">
+              <div className="w-10 h-10 bg-white border border-slate-200 p-1 rounded-xl flex items-center justify-center shadow-sm">
                 <img src={logo} alt="FocusSync Logo" className="w-full h-full object-contain" />
               </div>
-              <span className="text-2xl font-extrabold tracking-tight text-blue-900">
+              <span className="text-2xl font-extrabold tracking-tight text-slate-900 font-heading">
                 Focus<span className="text-emerald-500">Sync</span>
               </span>
             </div>
-            <p className="text-xs font-semibold text-slate-500 max-w-sm leading-relaxed">
+            <p className="text-xs font-medium text-slate-500 max-w-sm leading-relaxed">
               Smart Classroom Mobile Usage Control System. Departmental digital discipline platform designed for engineering and degree colleges.
             </p>
           </div>
 
-          {/* Col 2: Quick Links */}
           <div className="space-y-3">
-            <h4 className="text-xs font-extrabold text-slate-900 uppercase tracking-wider">Quick Portals</h4>
-            <ul className="space-y-2 text-xs font-semibold text-slate-600">
-              <li>
-                <Link to="/student/login" className="hover:text-blue-600 transition-colors">Student Portal</Link>
-              </li>
-              <li>
-                <Link to="/staff/login" className="hover:text-blue-600 transition-colors">Staff Advisor Portal</Link>
-              </li>
-              <li>
-                <Link to="/admin/login" className="hover:text-blue-600 transition-colors">HOD Admin Panel</Link>
-              </li>
+            <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider font-heading">Quick Portals</h4>
+            <ul className="space-y-2 text-sm font-semibold text-slate-500">
+              <li><Link to="/student/login" className="hover:text-blue-600 transition-colors">Student Portal</Link></li>
+              <li><Link to="/staff/login" className="hover:text-blue-600 transition-colors">Staff Portal</Link></li>
+              <li><Link to="/admin/login" className="hover:text-blue-600 transition-colors">Admin Panel</Link></li>
             </ul>
           </div>
 
-          {/* Col 3: Institutional Contact */}
           <div className="space-y-3">
-            <h4 className="text-xs font-extrabold text-slate-900 uppercase tracking-wider">Contact & Support</h4>
-            <p className="text-xs font-semibold text-slate-600">Department of Computer Science & Engineering</p>
-            <p className="text-xs font-medium text-slate-500">KSR College of Engineering</p>
-            <p className="text-xs font-bold text-blue-600 mt-1">support@focussync.edu</p>
+            <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider font-heading">Contact</h4>
+            <p className="text-sm font-semibold text-slate-600">Dept. of CSE</p>
+            <p className="text-xs text-slate-500">KSR College of Engineering</p>
+            <p className="text-sm font-bold text-blue-600 mt-1">support@focussync.edu</p>
           </div>
 
         </div>
 
-        {/* Bottom Bar */}
-        <div className="max-w-7xl mx-auto pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between text-xs font-semibold text-slate-400">
-          <p>© 2026 FocusSync System. Department Mobile Controller. All rights reserved.</p>
-          <div className="flex space-x-6 mt-4 sm:mt-0">
-            <span>Privacy Policy</span>
-            <span>Terms of Service</span>
-            <span>v1.0.0 Web Edition</span>
+        <div className="max-w-7xl mx-auto pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between text-xs font-medium text-slate-400">
+          <p>© 2026 FocusSync System. All rights reserved.</p>
+          <div className="flex space-x-6 mt-4 sm:mt-0 font-semibold">
+            <span className="hover:text-slate-600 cursor-pointer">Privacy</span>
+            <span className="hover:text-slate-600 cursor-pointer">Terms</span>
           </div>
         </div>
       </footer>
@@ -540,5 +681,34 @@ export const GetStartedPage = () => {
     </div>
   );
 };
+
+// Helper Components
+const FeatureCard = ({ icon, title, desc, colorClass }) => (
+  <motion.div
+    whileHover={{ y: -5 }}
+    className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 text-center flex flex-col items-center group"
+  >
+    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform ${colorClass}`}>
+      {icon}
+    </div>
+    <h3 className="text-lg font-bold text-slate-900 tracking-tight font-heading">{title}</h3>
+    <p className="text-sm font-medium text-slate-500 mt-2 leading-relaxed">{desc}</p>
+  </motion.div>
+);
+
+const WhyCard = ({ icon, title, desc, colorClass }) => (
+  <motion.div 
+    whileHover={{ y: -3 }}
+    className="bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition-all border border-slate-200 flex items-start space-x-4"
+  >
+    <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${colorClass}`}>
+      {icon}
+    </div>
+    <div>
+      <h4 className="text-sm font-bold text-slate-900 font-heading">{title}</h4>
+      <p className="text-xs font-medium text-slate-500 mt-1 leading-relaxed">{desc}</p>
+    </div>
+  </motion.div>
+);
 
 export default GetStartedPage;
