@@ -1,122 +1,145 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import adminService from '../../services/adminService';
 import StatsCard from '../../components/admin/StatsCard';
-import StatusBadge from '../../components/admin/StatusBadge';
-import { FiUsers, FiBookOpen, FiSmartphone, FiShield, FiCheckCircle, FiClock, FiAlertTriangle } from 'react-icons/fi';
+import ExcelImportModal from '../../components/admin/ExcelImportModal';
+import {
+  FiUsers,
+  FiUserCheck,
+  FiSmartphone,
+  FiSlash,
+  FiActivity,
+  FiUpload,
+  FiLayers,
+  FiShield,
+  FiSettings
+} from 'react-icons/fi';
 
 export const AdminDashboardPage = () => {
-  const [globalPolicyActive, setGlobalPolicyActive] = useState(true);
+  const navigate = useNavigate();
+  const [stats, setStats] = useState(adminService.getStats());
+  const [isExcelModalOpen, setIsExcelModalOpen] = useState(false);
+
+  useEffect(() => {
+    const updateStats = () => setStats(adminService.getStats());
+    updateStats();
+    const unsubscribe = adminService.subscribe(updateStats);
+    return () => unsubscribe();
+  }, []);
+
+  const handleImportSuccess = (validStudents) => {
+    return adminService.importStudents(validStudents);
+  };
+
+  const quickActions = [
+    { title: 'Manage Students', subtitle: 'View, filter, & edit CSE students', icon: FiUsers, onClick: () => navigate('/admin/students') },
+    { title: 'Manage Staff', subtitle: 'Manage CSE faculty directory', icon: FiUserCheck, onClick: () => navigate('/admin/staff') },
+    { title: 'Upload Student Excel', subtitle: 'Import Google Form export file', icon: FiUpload, onClick: () => setIsExcelModalOpen(true) },
+    { title: 'Manage Sections', subtitle: 'Add or remove department sections', icon: FiLayers, onClick: () => navigate('/admin/sections') },
+    { title: 'Block Applications', subtitle: 'Toggle app restriction status', icon: FiShield, onClick: () => navigate('/admin/applications') },
+    { title: 'Settings', subtitle: 'Department & system preferences', icon: FiSettings, onClick: () => navigate('/admin/settings') },
+  ];
 
   return (
     <div className="space-y-6">
-      {/* Top HOD Banner */}
-      <div className="bg-purple-950 text-white rounded-3xl p-6 sm:p-8 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6">
+      {/* Top Banner */}
+      <div className="bg-[#FFFFFF] border border-[#E5E7EB] rounded-2xl p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-purple-500/20 text-purple-300 border border-purple-400/30">
-            HOD Administration Panel
+          <span className="px-3 py-1 rounded-full text-xs font-bold bg-[#EFF6FF] text-[#3B82F6] border border-[#60A5FA]/30">
+            Computer Science and Engineering (CSE)
           </span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold mt-2">Computer Science & Engineering</h2>
-          <p className="text-xs font-semibold text-purple-300 mt-1">Smart Classroom Mobile Usage Control System Master Control</p>
+          <h2 className="text-2xl font-extrabold text-[#111827] mt-2">CSE Department Admin</h2>
+          <p className="text-xs font-semibold text-[#6B7280] mt-0.5">
+            Welcome, Admin • admin@ksrce.ac.in
+          </p>
         </div>
 
-        <div className="bg-purple-900/60 p-4 rounded-2xl border border-purple-800 flex items-center space-x-4">
-          <div>
-            <p className="text-[10px] font-bold text-purple-300 uppercase">Department Master Policy</p>
-            <p className="text-xs font-extrabold text-white">{globalPolicyActive ? '09:00 AM - 04:00 PM (Active)' : 'Override Disabled'}</p>
-          </div>
-          <button
-            onClick={() => setGlobalPolicyActive(!globalPolicyActive)}
-            className={`px-4 py-2.5 rounded-xl font-extrabold text-xs shadow-md transition-all cursor-pointer ${
-              globalPolicyActive
-                ? 'bg-rose-600 hover:bg-rose-700 text-white'
-                : 'bg-purple-600 hover:bg-purple-500 text-white'
-            }`}
-          >
-            {globalPolicyActive ? 'Emergency Pause' : 'Activate All'}
-          </button>
-        </div>
+        <button
+          onClick={() => setIsExcelModalOpen(true)}
+          className="px-4 py-2.5 rounded-xl bg-[#3B82F6] text-white font-bold text-xs flex items-center space-x-2 shadow-xs hover:bg-[#2563EB] transition-colors self-start md:self-auto"
+        >
+          <FiUpload className="w-4 h-4" />
+          <span>Upload Student Excel</span>
+        </button>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* Statistics Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <StatsCard
-          title="Total Students Monitored"
-          value="480"
-          subtitle="Across 12 Sections (II, III, IV Year)"
+          title="Total CSE Students"
+          value={stats.totalStudents}
+          subtitle="Enrolled across 4 Academic Years"
           icon={FiUsers}
-          color="purple"
+          onClick={() => navigate('/admin/students')}
         />
         <StatsCard
-          title="Assigned Staff Advisors"
-          value="24"
-          subtitle="Active Faculty Overseers"
-          icon={FiBookOpen}
-          color="blue"
+          title="Total CSE Staff"
+          value={stats.totalStaff}
+          subtitle="Faculty members & Advisors"
+          icon={FiUserCheck}
+          onClick={() => navigate('/admin/staff')}
         />
         <StatsCard
-          title="Monitored Devices"
-          value="462"
-          subtitle="96.2% Active Heartbeat"
+          title="Active Devices"
+          value={stats.activeDevices}
+          subtitle="Active student device connections"
           icon={FiSmartphone}
-          color="emerald"
+          onClick={() => navigate('/admin/students')}
         />
         <StatsCard
-          title="Blocked Violations Today"
-          value="142"
-          subtitle="Filtered Attempt Triggers"
-          icon={FiAlertTriangle}
-          color="rose"
+          title="Blocked Devices"
+          value={stats.blockedDevices}
+          subtitle="Restricted student devices"
+          icon={FiSlash}
+          onClick={() => navigate('/admin/students')}
+        />
+        <StatsCard
+          title="Connected Phones"
+          value={stats.connectedPhones}
+          subtitle="CSE Registered Smart Devices"
+          icon={FiSmartphone}
+        />
+        <StatsCard
+          title="Today's Activity"
+          value={stats.todaysActivity}
+          subtitle="Application Control Status"
+          icon={FiActivity}
+          onClick={() => navigate('/admin/applications')}
         />
       </div>
 
-      {/* Master Overview Sections */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-slate-900">Year & Section Health Matrix</h3>
+      {/* Quick Actions Grid */}
+      <div className="space-y-4">
+        <h3 className="text-lg font-extrabold text-[#111827]">Quick Actions</h3>
 
-          <div className="divide-y divide-slate-100">
-            {[
-              { year: '2nd Year - A', students: 48, status: 'active', activeDevices: 46, violations: 12 },
-              { year: '2nd Year - B', students: 45, status: 'active', activeDevices: 44, violations: 8 },
-              { year: '3rd Year - A', students: 52, status: 'active', activeDevices: 50, violations: 24 },
-              { year: '3rd Year - B', students: 50, status: 'active', activeDevices: 49, violations: 18 },
-              { year: 'Final Year - A', students: 44, status: 'active', activeDevices: 42, violations: 5 },
-            ].map((sec, i) => (
-              <div key={i} className="py-3.5 flex items-center justify-between">
-                <div>
-                  <h4 className="text-sm font-bold text-slate-900">{sec.year}</h4>
-                  <p className="text-xs text-slate-500 font-medium">{sec.students} Registered Students • {sec.activeDevices} Connected Devices</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {quickActions.map((action, i) => {
+            const Icon = action.icon;
+            return (
+              <div
+                key={i}
+                onClick={action.onClick}
+                className="bg-[#FFFFFF] border border-[#E5E7EB] rounded-2xl p-5 shadow-xs hover:border-[#3B82F6] hover:shadow-md cursor-pointer transition-all flex items-start space-x-4"
+              >
+                <div className="p-3 rounded-xl bg-[#EFF6FF] text-[#3B82F6] shrink-0">
+                  <Icon className="w-5 h-5" />
                 </div>
-
-                <div className="flex items-center space-x-3">
-                  <span className="text-xs font-bold text-rose-600">{sec.violations} violations</span>
-                  <StatusBadge status={sec.status} />
+                <div>
+                  <h4 className="text-sm font-extrabold text-[#111827]">{action.title}</h4>
+                  <p className="text-xs font-semibold text-[#6B7280] mt-0.5">{action.subtitle}</p>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-slate-900">System Activity Overview</h3>
-
-          <div className="space-y-3 text-xs font-semibold text-slate-600">
-            <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
-              <span className="text-[10px] font-bold text-slate-400 uppercase">Policy Version</span>
-              <p className="text-sm font-bold text-slate-900">Version 2.4 (Distributed)</p>
-            </div>
-
-            <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
-              <span className="text-[10px] font-bold text-slate-400 uppercase">Schedule Window</span>
-              <p className="text-sm font-bold text-slate-900">09:00 AM – 04:00 PM (Mon-Sat)</p>
-            </div>
-
-            <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
-              <span className="text-[10px] font-bold text-slate-400 uppercase">Global Restricted Categories</span>
-              <p className="text-sm font-bold text-slate-900">Social Media, Gaming, Video Streaming</p>
-            </div>
-          </div>
+            );
+          })}
         </div>
       </div>
+
+      {/* Excel Import Modal */}
+      <ExcelImportModal
+        isOpen={isExcelModalOpen}
+        onClose={() => setIsExcelModalOpen(false)}
+        onImportSuccess={handleImportSuccess}
+      />
     </div>
   );
 };

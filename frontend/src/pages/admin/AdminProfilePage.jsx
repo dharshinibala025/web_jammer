@@ -54,7 +54,7 @@ export const AdminProfilePage = () => {
             <p className="text-sm font-extrabold text-[#111827]">Computer Science and Engineering</p>
           </div>
 
-          <div className="p-3 bg-[#F8FAFC] border border-[#E5E7EB] rounded-xl space-y-1">
+          <div className="p-[#F8FAFC] p-3 border border-[#E5E7EB] rounded-xl space-y-1">
             <span className="text-[10px] font-bold text-[#6B7280] uppercase">Access Level</span>
             <p className="text-sm font-extrabold text-[#10B981]">Master HOD Access</p>
           </div>
