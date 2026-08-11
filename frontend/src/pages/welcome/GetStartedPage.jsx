@@ -24,12 +24,18 @@ import MagicRings from '../../components/MagicRings';
 export const GetStartedPage = () => {
   const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
+  const [atBottom, setAtBottom] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
+
+      const windowHeight = window.innerHeight;
+      const fullHeight = document.documentElement.scrollHeight;
+      const isNearFooter = (window.scrollY + windowHeight) >= (fullHeight - 500);
+      setAtBottom(isNearFooter);
 
       const navItems = ['home', 'features', 'why-focussync', 'portals', 'contact'];
       const scrollPos = window.scrollY + 200;
@@ -95,17 +101,17 @@ export const GetStartedPage = () => {
       <div className="fixed bottom-1/3 right-10 w-[500px] h-[400px] bg-glow-light-emerald pointer-events-none -z-10 rounded-full blur-3xl opacity-50"></div>
 
       {/* ==========================================
-          FLOATING PILL NAVBAR (LANDING PAGE ONLY)
+          FLOATING PILL NAVBAR
          ========================================== */}
       <header className="fixed top-3 sm:top-5 inset-x-0 z-50 flex justify-center px-3 sm:px-6 pointer-events-none">
         <motion.div
           initial={{ y: -30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
-          className={`pointer-events-auto max-w-6xl w-full flex items-center justify-between px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full transition-all duration-300 ${
+          className={`pointer-events-auto max-w-6xl w-full flex items-center justify-between px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full transition-all duration-500 ${
             scrolled
-              ? 'bg-white/90 backdrop-blur-xl border border-slate-200/90 shadow-xl shadow-slate-900/10'
-              : 'bg-white/80 backdrop-blur-lg border border-slate-200/80 shadow-lg shadow-slate-900/5 hover:bg-white/90'
+              ? 'bg-white/90 backdrop-blur-xl border border-slate-200/90 shadow-xl shadow-slate-900/10 text-slate-900'
+              : 'bg-white/80 backdrop-blur-lg border border-slate-200/80 shadow-lg shadow-slate-900/5 hover:bg-white/90 text-slate-900'
           }`}
         >
           {/* Logo & Brand Pill Badge */}
@@ -116,24 +122,24 @@ export const GetStartedPage = () => {
               window.scrollTo({ top: 0, behavior: 'smooth' });
               setActiveSection('home');
             }}
-            className="flex items-center space-x-2.5 group bg-slate-100/80 hover:bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200/70 transition-all cursor-pointer"
+            className="flex items-center space-x-2.5 group px-3 py-1.5 rounded-full border transition-all cursor-pointer bg-slate-100/80 hover:bg-slate-100 border-slate-200/70"
           >
-            <div className="w-8 h-8 rounded-full bg-white border border-slate-200/80 p-0.5 flex items-center justify-center group-hover:scale-105 transition-transform shadow-2xs">
+            <div className="w-8 h-8 rounded-full p-0.5 flex items-center justify-center group-hover:scale-105 transition-transform shadow-2xs bg-white border border-slate-200/80">
               <img src={logo} alt="FocusSync Logo" className="w-full h-full object-contain" />
             </div>
             <div className="flex items-center space-x-1.5 pr-1">
-              <span className="text-base font-extrabold tracking-tight text-slate-900 leading-none font-heading">
+              <span className="text-base font-extrabold tracking-tight leading-none font-heading text-slate-900">
                 Focus<span className="text-emerald-500">Sync</span>
               </span>
-              <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 text-[9px] font-bold text-blue-700 bg-blue-50 border border-blue-200/70 rounded-full uppercase tracking-wider">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 text-[9px] font-bold rounded-full uppercase tracking-wider text-blue-700 bg-blue-50 border border-blue-200/70">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                 Enforcer
               </span>
             </div>
           </Link>
 
           {/* Navigation Links inside Central Pill Bar */}
-          <nav className="hidden md:flex items-center bg-slate-100/80 p-1.5 rounded-full border border-slate-200/70 shadow-xs space-x-1 relative">
+          <nav className="hidden md:flex items-center p-1.5 rounded-full border shadow-xs space-x-1 relative transition-colors duration-500 bg-slate-100/80 border-slate-200/70">
             {[
               { id: 'home', label: 'Home' },
               { id: 'features', label: 'Features' },
@@ -162,7 +168,7 @@ export const GetStartedPage = () => {
                   {isActive && (
                     <motion.div
                       layoutId="landingNavbarPill"
-                      className="absolute inset-0 bg-white rounded-full shadow-xs border border-slate-200/80 -z-10"
+                      className="absolute inset-0 rounded-full shadow-xs -z-10 bg-white border border-slate-200/80"
                       transition={{ type: 'spring', stiffness: 450, damping: 35 }}
                     />
                   )}
@@ -176,7 +182,7 @@ export const GetStartedPage = () => {
           <div className="flex items-center space-x-2 sm:space-x-3">
             <button
               onClick={() => navigate('/login')}
-              className="px-4 sm:px-5 py-2 text-white font-extrabold text-xs rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-md shadow-blue-600/20 hover:shadow-lg hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center space-x-2 border border-blue-500/20"
+              className="px-4 sm:px-5 py-2 text-xs font-extrabold rounded-full shadow-md transition-all cursor-pointer flex items-center space-x-2 border bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 border-blue-500/30 shadow-blue-600/25"
             >
               <span>Access Portal</span>
               <FiArrowRight className="w-3.5 h-3.5" />
@@ -185,7 +191,7 @@ export const GetStartedPage = () => {
             {/* Mobile Menu Toggle Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors cursor-pointer border border-slate-200/80"
+              className="md:hidden w-9 h-9 rounded-full flex items-center justify-center transition-colors cursor-pointer border bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200/80"
               aria-label="Toggle Menu"
             >
               {mobileMenuOpen ? <FiX className="w-4.5 h-4.5" /> : <FiMenu className="w-4.5 h-4.5" />}
@@ -199,7 +205,7 @@ export const GetStartedPage = () => {
             initial={{ opacity: 0, y: -10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
-            className="md:hidden absolute top-16 inset-x-4 pointer-events-auto bg-white/95 backdrop-blur-2xl rounded-3xl p-4 border border-slate-200/90 shadow-2xl space-y-1.5 text-center"
+            className="md:hidden absolute top-16 inset-x-4 pointer-events-auto rounded-3xl p-4 border shadow-2xl space-y-1.5 text-center bg-white/95 backdrop-blur-2xl border-slate-200/90 text-slate-900"
           >
             {[
               { id: 'home', label: 'Home' },
@@ -221,7 +227,7 @@ export const GetStartedPage = () => {
                 }}
                 className={`w-full py-2.5 px-4 rounded-full text-xs font-extrabold transition-all cursor-pointer ${
                   activeSection === navItem.id
-                    ? 'bg-blue-600 text-white shadow-md shadow-blue-600/25'
+                    ? 'bg-blue-600 text-white shadow-md'
                     : 'text-slate-700 hover:bg-slate-100'
                 }`}
               >
@@ -632,48 +638,56 @@ export const GetStartedPage = () => {
       </section>
 
       {/* ==========================================
-          FOOTER
+          FOOTER (#2563eb BLUE BACKGROUND)
          ========================================== */}
-      <footer id="contact" className="bg-white py-12 px-4 sm:px-6 lg:px-8 border-t border-slate-200/80 relative z-10">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-12 relative z-10">
+      <footer 
+        id="contact" 
+        style={{ backgroundColor: '#2563eb' }}
+        className="text-white py-12 px-4 sm:px-6 lg:px-8 relative z-10"
+      >
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-10 relative z-10">
           
+          {/* Brand Info */}
           <div className="md:col-span-2 space-y-4">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-white border border-slate-200 p-1 rounded-xl flex items-center justify-center shadow-sm">
+              <div className="w-10 h-10 bg-white border border-blue-200 p-1 rounded-xl flex items-center justify-center shadow-xs">
                 <img src={logo} alt="FocusSync Logo" className="w-full h-full object-contain" />
               </div>
-              <span className="text-2xl font-extrabold tracking-tight text-slate-900 font-heading">
-                Focus<span className="text-emerald-500">Sync</span>
+              <span className="text-2xl font-extrabold tracking-tight text-white font-heading">
+                Focus<span className="text-emerald-300">Sync</span>
               </span>
             </div>
-            <p className="text-xs font-medium text-slate-500 max-w-sm leading-relaxed">
+            <p className="text-xs font-medium text-blue-100 max-w-sm leading-relaxed">
               Smart Classroom Mobile Usage Control System. Departmental digital discipline platform designed for engineering and degree colleges.
             </p>
           </div>
 
+          {/* Quick Portals */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider font-heading">Quick Portals</h4>
-            <ul className="space-y-2 text-sm font-semibold text-slate-500">
-              <li><Link to="/student/login" className="hover:text-blue-600 transition-colors">Student Portal</Link></li>
-              <li><Link to="/staff/login" className="hover:text-blue-600 transition-colors">Staff Portal</Link></li>
-              <li><Link to="/admin/login" className="hover:text-blue-600 transition-colors">Admin Panel</Link></li>
+            <h4 className="text-xs font-bold text-white uppercase tracking-wider font-heading">Quick Portals</h4>
+            <ul className="space-y-2 text-sm font-semibold text-blue-100">
+              <li><Link to="/student/login" className="hover:text-white transition-colors">Student Portal</Link></li>
+              <li><Link to="/staff/login" className="hover:text-white transition-colors">Staff Portal</Link></li>
+              <li><Link to="/admin/login" className="hover:text-white transition-colors">Admin Panel</Link></li>
             </ul>
           </div>
 
+          {/* Contact */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider font-heading">Contact</h4>
-            <p className="text-sm font-semibold text-slate-600">Dept. of CSE</p>
-            <p className="text-xs text-slate-500">KSR College of Engineering</p>
-            <p className="text-sm font-bold text-blue-600 mt-1">support@focussync.edu</p>
+            <h4 className="text-xs font-bold text-white uppercase tracking-wider font-heading">Contact</h4>
+            <p className="text-sm font-semibold text-white">Dept. of CSE</p>
+            <p className="text-xs text-blue-100">KSR College of Engineering</p>
+            <p className="text-sm font-bold text-white mt-1">support@focussync.edu</p>
           </div>
 
         </div>
 
-        <div className="max-w-7xl mx-auto pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between text-xs font-medium text-slate-400">
+        {/* Footer Bottom Bar */}
+        <div className="max-w-7xl mx-auto pt-6 border-t border-blue-400/40 flex flex-col sm:flex-row items-center justify-between text-xs font-medium text-blue-100">
           <p>© 2026 FocusSync System. All rights reserved.</p>
           <div className="flex space-x-6 mt-4 sm:mt-0 font-semibold">
-            <span className="hover:text-slate-600 cursor-pointer">Privacy</span>
-            <span className="hover:text-slate-600 cursor-pointer">Terms</span>
+            <span className="hover:text-white cursor-pointer">Privacy</span>
+            <span className="hover:text-white cursor-pointer">Terms</span>
           </div>
         </div>
       </footer>
