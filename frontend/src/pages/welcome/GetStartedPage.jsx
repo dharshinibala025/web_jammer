@@ -243,21 +243,6 @@ export const GetStartedPage = () => {
          ========================================== */}
       <section className="relative w-full pt-32 pb-24 md:pt-40 md:pb-32 overflow-hidden">
         
-        {/* Left Carousel Arrow (Decorative) */}
-        <motion.div 
-          whileHover={{ scale: 1.08 }}
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 hidden lg:flex items-center justify-center w-11 h-11 rounded-full bg-white text-slate-400 shadow-md border border-slate-200 hover:text-blue-600 cursor-pointer transition-all"
-        >
-          <FiChevronLeft className="w-5 h-5" />
-        </motion.div>
-        
-        {/* Right Carousel Arrow (Decorative) */}
-        <motion.div 
-          whileHover={{ scale: 1.08 }}
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 hidden lg:flex items-center justify-center w-11 h-11 rounded-full bg-white text-slate-400 shadow-md border border-slate-200 hover:text-blue-600 cursor-pointer transition-all"
-        >
-          <FiChevronRight className="w-5 h-5" />
-        </motion.div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
           
