@@ -8,7 +8,6 @@ import {
   FiUsers,
   FiUserCheck,
   FiSmartphone,
-  FiShield,
   FiSettings,
   FiBell,
   FiUser,
@@ -60,7 +59,6 @@ export const AdminLayout = ({ children }) => {
     { to: '/admin/students', label: 'Students', icon: FiUsers },
     { to: '/admin/staff', label: 'Staff', icon: FiUserCheck },
     { to: '/admin/devices', label: 'Devices', icon: FiSmartphone },
-    { to: '/admin/applications', label: 'Block Apps', icon: FiShield },
     { to: '/admin/settings', label: 'Settings', icon: FiSettings },
   ];
 

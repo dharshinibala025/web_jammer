@@ -10,7 +10,6 @@ import {
   FiSlash,
   FiActivity,
   FiUpload,
-  FiShield,
   FiSettings,
   FiClock,
   FiLock,
@@ -92,7 +91,6 @@ export const AdminDashboardPage = () => {
     { title: 'Manage Staff', subtitle: 'Manage CSE faculty directory', icon: FiUserCheck, onClick: () => navigate('/admin/staff') },
     { title: 'Manage Devices', subtitle: 'Department mobile restriction controls', icon: FiSmartphone, onClick: () => navigate('/admin/devices') },
     { title: 'Upload Student Excel', subtitle: 'Import Google Form export file', icon: FiUpload, onClick: () => setIsExcelModalOpen(true) },
-    { title: 'Block Applications', subtitle: 'Toggle app restriction status', icon: FiShield, onClick: () => navigate('/admin/applications') },
     { title: 'Settings', subtitle: 'Department & system preferences', icon: FiSettings, onClick: () => navigate('/admin/settings') },
   ];
 
