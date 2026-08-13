@@ -84,8 +84,8 @@ export const AdminStudentsPage = () => {
       {/* Page Header */}
       <div className="bg-[#FFFFFF] border border-[#E5E7EB] rounded-2xl p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-extrabold text-[#111827]">CSE Student Directory</h2>
-          <p className="text-xs font-semibold text-[#6B7280] mt-0.5">
+          <h2 className="text-xl font-semibold text-[#111827]">CSE Student Directory</h2>
+          <p className="text-xs font-normal text-[#6B7280] mt-0.5">
             Manage Computer Science and Engineering student records, year-wise sections, and device status.
           </p>
         </div>
@@ -93,7 +93,7 @@ export const AdminStudentsPage = () => {
         <div className="flex items-center space-x-3">
           <button
             onClick={() => setIsExcelModalOpen(true)}
-            className="px-4 py-2 rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] text-[#111827] font-bold text-xs hover:bg-[#EFF6FF] hover:text-[#3B82F6] transition-colors flex items-center space-x-1.5 shadow-2xs"
+            className="px-4 py-2 rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] text-[#111827] font-medium text-xs hover:bg-[#EFF6FF] hover:text-[#3B82F6] transition-colors flex items-center space-x-1.5 shadow-2xs"
           >
             <FiUpload className="w-4 h-4 text-[#3B82F6]" />
             <span>Upload Excel</span>
@@ -104,7 +104,7 @@ export const AdminStudentsPage = () => {
               setEditingStudent(null);
               setIsStudentModalOpen(true);
             }}
-            className="px-4 py-2 rounded-xl bg-[#3B82F6] text-white font-bold text-xs hover:bg-[#2563EB] transition-colors flex items-center space-x-1.5 shadow-xs"
+            className="px-4 py-2 rounded-xl bg-[#3B82F6] text-white font-medium text-xs hover:bg-[#2563EB] transition-colors flex items-center space-x-1.5 shadow-xs"
           >
             <FiPlus className="w-4 h-4" />
             <span>Add Student</span>
@@ -125,11 +125,11 @@ export const AdminStudentsPage = () => {
         <div className="flex items-center space-x-3 w-full sm:w-auto">
           {/* Year Filter */}
           <div className="flex items-center space-x-1.5">
-            <span className="text-xs font-bold text-[#6B7280]">Year:</span>
+            <span className="text-xs font-medium text-[#6B7280]">Year:</span>
             <select
               value={selectedYear}
               onChange={(e) => handleYearFilterChange(e.target.value)}
-              className="py-2 px-3 bg-[#FFFFFF] border border-[#E5E7EB] rounded-xl text-xs font-bold text-[#111827] focus:outline-none focus:border-[#3B82F6]"
+              className="py-2 px-3 bg-[#FFFFFF] border border-[#E5E7EB] rounded-xl text-xs font-medium text-[#111827] focus:outline-none focus:border-[#3B82F6]"
             >
               <option value="All">All Years</option>
               <option value="1st Year">1st Year</option>
@@ -141,11 +141,11 @@ export const AdminStudentsPage = () => {
 
           {/* Section Filter (Dynamic based on selected Year) */}
           <div className="flex items-center space-x-1.5">
-            <span className="text-xs font-bold text-[#6B7280]">Section:</span>
+            <span className="text-xs font-medium text-[#6B7280]">Section:</span>
             <select
               value={selectedSection}
               onChange={(e) => setSelectedSection(e.target.value)}
-              className="py-2 px-3 bg-[#FFFFFF] border border-[#E5E7EB] rounded-xl text-xs font-bold text-[#111827] focus:outline-none focus:border-[#3B82F6]"
+              className="py-2 px-3 bg-[#FFFFFF] border border-[#E5E7EB] rounded-xl text-xs font-medium text-[#111827] focus:outline-none focus:border-[#3B82F6]"
             >
               <option value="All">All Sections</option>
               {availableSectionOptions().map((sec) => (
@@ -161,7 +161,7 @@ export const AdminStudentsPage = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-[#F8FAFC] border-b border-[#E5E7EB] text-[11px] font-bold text-[#6B7280] uppercase tracking-wider">
+              <tr className="bg-[#F8FAFC] border-b border-[#E5E7EB] text-[11px] font-semibold text-[#6B7280] uppercase tracking-wider">
                 <th className="p-4">Reg Number</th>
                 <th className="p-4">Student Name</th>
                 <th className="p-4">Year & Section</th>
@@ -172,22 +172,22 @@ export const AdminStudentsPage = () => {
                 <th className="p-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E5E7EB] text-xs font-semibold text-[#111827]">
+            <tbody className="divide-y divide-[#E5E7EB] text-xs font-normal text-[#111827]">
               {filteredStudents.length === 0 ? (
                 <tr>
-                  <td colSpan="8" className="p-8 text-center text-[#6B7280] font-semibold">
+                  <td colSpan="8" className="p-8 text-center text-[#6B7280] font-normal">
                     No CSE students found matching the search/filter criteria.
                   </td>
                 </tr>
               ) : (
                 filteredStudents.map((s) => (
                   <tr key={s.id} className="hover:bg-[#F8FAFC] transition-colors">
-                    <td className="p-4 font-bold text-[#111827]">{s.registerNumber}</td>
-                    <td className="p-4 font-extrabold text-[#111827]">{s.name}</td>
+                    <td className="p-4 font-mono font-medium text-[#111827]">{s.registerNumber}</td>
+                    <td className="p-4 font-medium text-[#111827]">{s.name}</td>
                     <td className="p-4 text-[#6B7280]">
-                      <span className="font-bold text-[#111827]">{s.year}</span> • Section {s.section}
+                      <span className="font-medium text-[#111827]">{s.year}</span> • Section {s.section}
                     </td>
-                    <td className="p-4 font-extrabold text-[#3B82F6]">CSE</td>
+                    <td className="p-4 font-medium text-[#3B82F6]">CSE</td>
                     <td className="p-4 text-[#6B7280]">{s.email}</td>
                     <td className="p-4 text-[#6B7280]">{s.phone}</td>
                     <td className="p-4">
@@ -244,3 +244,4 @@ export const AdminStudentsPage = () => {
 };
 
 export default AdminStudentsPage;
+

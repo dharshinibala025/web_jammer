@@ -65,7 +65,7 @@ export const StaffModal = ({ isOpen, onClose, onSave, staff = null }) => {
         
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#E5E7EB] bg-[#F8FAFC]">
-          <h3 className="text-base font-extrabold text-[#111827]">
+          <h3 className="text-sm font-semibold text-[#111827]">
             {staff ? 'Edit CSE Faculty' : 'Add New CSE Faculty'}
           </h3>
           <button onClick={onClose} className="text-[#6B7280] hover:text-[#111827] p-1">
@@ -77,7 +77,7 @@ export const StaffModal = ({ isOpen, onClose, onSave, staff = null }) => {
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-[#111827] uppercase tracking-wider mb-1">
+              <label className="block text-xs font-medium text-[#111827] uppercase tracking-wider mb-1">
                 Staff ID *
               </label>
               <input
@@ -85,13 +85,13 @@ export const StaffModal = ({ isOpen, onClose, onSave, staff = null }) => {
                 value={formData.staffId}
                 onChange={(e) => setFormData({ ...formData, staffId: e.target.value })}
                 placeholder="e.g. CSE-ST-105"
-                className="w-full py-2 px-3 bg-[#FFFFFF] border border-[#E5E7EB] rounded-xl text-xs font-bold text-[#111827] focus:outline-none focus:border-[#3B82F6]"
+                className="w-full py-2 px-3 bg-[#FFFFFF] border border-[#E5E7EB] rounded-xl text-xs font-medium text-[#111827] focus:outline-none focus:border-[#3B82F6]"
               />
-              {errors.staffId && <p className="text-[11px] font-semibold text-[#EF4444] mt-0.5">{errors.staffId}</p>}
+              {errors.staffId && <p className="text-[11px] font-medium text-[#EF4444] mt-0.5">{errors.staffId}</p>}
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-[#111827] uppercase tracking-wider mb-1">
+              <label className="block text-xs font-medium text-[#111827] uppercase tracking-wider mb-1">
                 Full Name *
               </label>
               <input
@@ -99,19 +99,19 @@ export const StaffModal = ({ isOpen, onClose, onSave, staff = null }) => {
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 placeholder="Faculty Name"
-                className="w-full py-2 px-3 bg-[#FFFFFF] border border-[#E5E7EB] rounded-xl text-xs font-bold text-[#111827] focus:outline-none focus:border-[#3B82F6]"
+                className="w-full py-2 px-3 bg-[#FFFFFF] border border-[#E5E7EB] rounded-xl text-xs font-medium text-[#111827] focus:outline-none focus:border-[#3B82F6]"
               />
-              {errors.name && <p className="text-[11px] font-semibold text-[#EF4444] mt-0.5">{errors.name}</p>}
+              {errors.name && <p className="text-[11px] font-medium text-[#EF4444] mt-0.5">{errors.name}</p>}
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-[#111827] uppercase tracking-wider mb-1">
+              <label className="block text-xs font-medium text-[#111827] uppercase tracking-wider mb-1">
                 Designation
               </label>
               <select
                 value={formData.designation}
                 onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
-                className="w-full py-2 px-3 bg-[#FFFFFF] border border-[#E5E7EB] rounded-xl text-xs font-bold text-[#111827] focus:outline-none focus:border-[#3B82F6]"
+                className="w-full py-2 px-3 bg-[#FFFFFF] border border-[#E5E7EB] rounded-xl text-xs font-medium text-[#111827] focus:outline-none focus:border-[#3B82F6]"
               >
                 <option value="HOD & Professor">HOD & Professor</option>
                 <option value="Professor">Professor</option>
@@ -121,25 +121,25 @@ export const StaffModal = ({ isOpen, onClose, onSave, staff = null }) => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-[#111827] uppercase tracking-wider mb-1">
+              <label className="block text-xs font-medium text-[#111827] uppercase tracking-wider mb-1">
                 Department
               </label>
               <input
                 type="text"
                 value="CSE"
                 disabled
-                className="w-full py-2 px-3 bg-[#F1F5F9] border border-[#E5E7EB] rounded-xl text-xs font-bold text-[#6B7280] cursor-not-allowed"
+                className="w-full py-2 px-3 bg-[#F1F5F9] border border-[#E5E7EB] rounded-xl text-xs font-medium text-[#6B7280] cursor-not-allowed"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-[#111827] uppercase tracking-wider mb-1">
+              <label className="block text-xs font-medium text-[#111827] uppercase tracking-wider mb-1">
                 Faculty Status
               </label>
               <select
                 value={formData.status}
                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                className="w-full py-2 px-3 bg-[#FFFFFF] border border-[#E5E7EB] rounded-xl text-xs font-bold text-[#111827] focus:outline-none focus:border-[#3B82F6]"
+                className="w-full py-2 px-3 bg-[#FFFFFF] border border-[#E5E7EB] rounded-xl text-xs font-medium text-[#111827] focus:outline-none focus:border-[#3B82F6]"
               >
                 <option value="Active">Active</option>
                 <option value="On Leave">On Leave</option>
@@ -148,7 +148,7 @@ export const StaffModal = ({ isOpen, onClose, onSave, staff = null }) => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-[#111827] uppercase tracking-wider mb-1">
+              <label className="block text-xs font-medium text-[#111827] uppercase tracking-wider mb-1">
                 Phone *
               </label>
               <input
@@ -156,14 +156,14 @@ export const StaffModal = ({ isOpen, onClose, onSave, staff = null }) => {
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                 placeholder="9443322114"
-                className="w-full py-2 px-3 bg-[#FFFFFF] border border-[#E5E7EB] rounded-xl text-xs font-bold text-[#111827] focus:outline-none focus:border-[#3B82F6]"
+                className="w-full py-2 px-3 bg-[#FFFFFF] border border-[#E5E7EB] rounded-xl text-xs font-medium text-[#111827] focus:outline-none focus:border-[#3B82F6]"
               />
-              {errors.phone && <p className="text-[11px] font-semibold text-[#EF4444] mt-0.5">{errors.phone}</p>}
+              {errors.phone && <p className="text-[11px] font-medium text-[#EF4444] mt-0.5">{errors.phone}</p>}
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-[#111827] uppercase tracking-wider mb-1">
+            <label className="block text-xs font-medium text-[#111827] uppercase tracking-wider mb-1">
               Faculty Email *
             </label>
             <input
@@ -171,9 +171,9 @@ export const StaffModal = ({ isOpen, onClose, onSave, staff = null }) => {
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               placeholder="faculty@ksrce.ac.in"
-              className="w-full py-2 px-3 bg-[#FFFFFF] border border-[#E5E7EB] rounded-xl text-xs font-bold text-[#111827] focus:outline-none focus:border-[#3B82F6]"
+              className="w-full py-2 px-3 bg-[#FFFFFF] border border-[#E5E7EB] rounded-xl text-xs font-medium text-[#111827] focus:outline-none focus:border-[#3B82F6]"
             />
-            {errors.email && <p className="text-[11px] font-semibold text-[#EF4444] mt-0.5">{errors.email}</p>}
+            {errors.email && <p className="text-[11px] font-medium text-[#EF4444] mt-0.5">{errors.email}</p>}
           </div>
 
           {/* Footer */}
@@ -181,13 +181,13 @@ export const StaffModal = ({ isOpen, onClose, onSave, staff = null }) => {
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] text-xs font-bold text-[#6B7280] hover:bg-[#F8FAFC]"
+              className="px-4 py-2 rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] text-xs font-medium text-[#6B7280] hover:bg-[#F8FAFC]"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-5 py-2 rounded-xl bg-[#3B82F6] text-white text-xs font-bold hover:bg-[#2563EB] shadow-xs flex items-center space-x-1.5"
+              className="px-5 py-2 rounded-xl bg-[#3B82F6] text-white text-xs font-medium hover:bg-[#2563EB] shadow-xs flex items-center space-x-1.5"
             >
               <FiCheck className="w-4 h-4" />
               <span>{staff ? 'Save Changes' : 'Add Staff'}</span>

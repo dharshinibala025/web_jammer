@@ -25,8 +25,8 @@ export const AdminNotificationsPage = () => {
       {/* Header */}
       <div className="bg-[#FFFFFF] border border-[#E5E7EB] rounded-2xl p-6 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-extrabold text-[#111827]">CSE Department Notifications</h2>
-          <p className="text-xs font-semibold text-[#6B7280] mt-0.5">
+          <h2 className="text-xl font-semibold text-[#111827]">CSE Department Notifications</h2>
+          <p className="text-xs font-normal text-[#6B7280] mt-0.5">
             System logs, batch import alerts, and departmental status updates.
           </p>
         </div>
@@ -34,7 +34,7 @@ export const AdminNotificationsPage = () => {
         {unreadCount > 0 && (
           <button
             onClick={() => adminService.markAllAsRead()}
-            className="px-4 py-2 rounded-xl bg-[#EFF6FF] text-[#3B82F6] font-bold text-xs hover:bg-[#3B82F6] hover:text-white transition-colors flex items-center space-x-1.5 shadow-2xs border border-[#60A5FA]/30"
+            className="px-4 py-2 rounded-xl bg-[#EFF6FF] text-[#3B82F6] font-medium text-xs hover:bg-[#3B82F6] hover:text-white transition-colors flex items-center space-x-1.5 shadow-2xs border border-[#60A5FA]/30"
           >
             <FiCheck className="w-4 h-4" />
             <span>Mark All as Read</span>
@@ -46,9 +46,9 @@ export const AdminNotificationsPage = () => {
       <div className="flex items-center space-x-2 border-b border-[#E5E7EB] pb-2">
         <button
           onClick={() => setFilter('All')}
-          className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-colors ${
+          className={`px-4 py-1.5 rounded-xl text-xs font-medium transition-colors ${
             filter === 'All'
-              ? 'bg-[#3B82F6] text-white'
+              ? 'bg-[#3B82F6] text-white font-semibold'
               : 'text-[#6B7280] hover:bg-[#F8FAFC]'
           }`}
         >
@@ -57,9 +57,9 @@ export const AdminNotificationsPage = () => {
 
         <button
           onClick={() => setFilter('Unread')}
-          className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-colors ${
+          className={`px-4 py-1.5 rounded-xl text-xs font-medium transition-colors ${
             filter === 'Unread'
-              ? 'bg-[#3B82F6] text-white'
+              ? 'bg-[#3B82F6] text-white font-semibold'
               : 'text-[#6B7280] hover:bg-[#F8FAFC]'
           }`}
         >
@@ -70,7 +70,7 @@ export const AdminNotificationsPage = () => {
       {/* Notifications List */}
       <div className="space-y-3">
         {filteredNotifs.length === 0 ? (
-          <div className="bg-[#FFFFFF] border border-[#E5E7EB] rounded-2xl p-8 text-center text-[#6B7280] font-semibold">
+          <div className="bg-[#FFFFFF] border border-[#E5E7EB] rounded-2xl p-8 text-center text-[#6B7280] font-normal">
             No notifications available in this category.
           </div>
         ) : (
@@ -92,15 +92,15 @@ export const AdminNotificationsPage = () => {
                 </div>
                 <div>
                   <div className="flex items-center space-x-2">
-                    <h4 className="text-sm font-extrabold text-[#111827]">{n.title}</h4>
+                    <h4 className="text-sm font-semibold text-[#111827]">{n.title}</h4>
                     {!n.isRead && (
-                      <span className="px-2 py-0.5 rounded-full text-[9px] font-black bg-[#EF4444] text-white">
+                      <span className="px-2 py-0.5 rounded-full text-[9px] font-medium bg-[#EF4444] text-white">
                         NEW
                       </span>
                     )}
                   </div>
-                  <p className="text-xs font-semibold text-[#6B7280] mt-1">{n.message}</p>
-                  <span className="text-[10px] text-[#6B7280] font-medium mt-2 block">{n.time}</span>
+                  <p className="text-xs font-normal text-[#6B7280] mt-1">{n.message}</p>
+                  <span className="text-[10px] text-[#6B7280] font-normal mt-2 block">{n.time}</span>
                 </div>
               </div>
 
@@ -110,7 +110,7 @@ export const AdminNotificationsPage = () => {
                     e.stopPropagation();
                     adminService.markAsRead(n.id);
                   }}
-                  className="text-xs font-bold text-[#3B82F6] hover:underline shrink-0"
+                  className="text-xs font-medium text-[#3B82F6] hover:underline shrink-0"
                 >
                   Mark as read
                 </button>
@@ -124,3 +124,4 @@ export const AdminNotificationsPage = () => {
 };
 
 export default AdminNotificationsPage;
+

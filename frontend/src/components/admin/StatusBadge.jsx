@@ -22,7 +22,7 @@ export const StatusBadge = ({ status }) => {
   };
 
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold border capitalize ${getBadgeStyle()}`}>
+    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border capitalize ${getBadgeStyle()}`}>
       {status || 'Active'}
     </span>
   );

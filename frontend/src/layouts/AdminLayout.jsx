@@ -7,7 +7,7 @@ import {
   FiGrid,
   FiUsers,
   FiUserCheck,
-  FiLayers,
+  FiSmartphone,
   FiShield,
   FiSettings,
   FiBell,
@@ -59,7 +59,7 @@ export const AdminLayout = ({ children }) => {
     { to: '/admin/dashboard', label: 'Dashboard', icon: FiGrid },
     { to: '/admin/students', label: 'Students', icon: FiUsers },
     { to: '/admin/staff', label: 'Staff', icon: FiUserCheck },
-    { to: '/admin/sections', label: 'Sections', icon: FiLayers },
+    { to: '/admin/devices', label: 'Devices', icon: FiSmartphone },
     { to: '/admin/applications', label: 'Block Apps', icon: FiShield },
     { to: '/admin/settings', label: 'Settings', icon: FiSettings },
   ];
@@ -82,13 +82,13 @@ export const AdminLayout = ({ children }) => {
                 <img src={logo} alt="Logo" className="w-full h-full object-contain" />
               </div>
               <div>
-                <h1 className="text-base font-extrabold text-[#111827] leading-tight flex items-center gap-1.5">
+                <h1 className="text-sm font-semibold text-[#111827] leading-tight flex items-center gap-1.5">
                   CSE Department Admin
-                  <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-[#EFF6FF] text-[#3B82F6] border border-[#60A5FA]/30">
+                  <span className="px-2 py-0.5 text-[10px] font-medium rounded-full bg-[#EFF6FF] text-[#3B82F6] border border-[#60A5FA]/30">
                     CSE Only
                   </span>
                 </h1>
-                <p className="text-[11px] font-medium text-[#6B7280]">Computer Science & Engineering</p>
+                <p className="text-[11px] font-normal text-[#6B7280]">Computer Science & Engineering</p>
               </div>
             </div>
 
@@ -101,9 +101,9 @@ export const AdminLayout = ({ children }) => {
                   <NavLink
                     key={link.to}
                     to={link.to}
-                    className={`flex items-center space-x-2 px-3 py-2 rounded-xl text-xs font-bold transition-colors ${
+                    className={`flex items-center space-x-2 px-3 py-2 rounded-xl text-xs font-medium transition-colors ${
                       isActive
-                        ? 'bg-[#EFF6FF] text-[#3B82F6]'
+                        ? 'bg-[#EFF6FF] text-[#3B82F6] font-semibold'
                         : 'text-[#6B7280] hover:bg-[#F8FAFC] hover:text-[#111827]'
                     }`}
                   >
@@ -117,7 +117,7 @@ export const AdminLayout = ({ children }) => {
             {/* Right Controls: Welcome Text, Notifications, Admin Profile */}
             <div className="flex items-center space-x-3 shrink-0">
               <div className="hidden sm:block text-right">
-                <p className="text-xs font-bold text-[#111827]">Welcome, Admin</p>
+                <p className="text-xs font-semibold text-[#111827]">Welcome, Admin</p>
                 <p className="text-[10px] text-[#6B7280]">admin@ksrce.ac.in</p>
               </div>
 

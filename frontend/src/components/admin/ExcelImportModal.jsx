@@ -130,13 +130,12 @@ export const ExcelImportModal = ({ isOpen, onClose, onImportSuccess }) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#111827]/40 backdrop-blur-xs p-4">
       <div className="bg-[#FFFFFF] rounded-2xl border border-[#E5E7EB] shadow-xl w-full max-w-3xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
         
-        {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#E5E7EB] bg-[#F8FAFC]">
           <div>
-            <h3 className="text-base font-extrabold text-[#111827]">
+            <h3 className="text-sm font-semibold text-[#111827]">
               Upload Student Excel (Google Form Export)
             </h3>
-            <p className="text-xs font-semibold text-[#6B7280]">
+            <p className="text-xs font-normal text-[#6B7280]">
               Import CSE student records collected from Google Form exports (.xlsx, .xls)
             </p>
           </div>
@@ -145,11 +144,9 @@ export const ExcelImportModal = ({ isOpen, onClose, onImportSuccess }) => {
           </button>
         </div>
 
-        {/* Body */}
         <div className="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
 
-          {/* Business Flow Visualizer */}
-          <div className="bg-[#EFF6FF] border border-[#60A5FA]/30 rounded-xl p-3 text-xs font-semibold text-[#111827] flex items-center justify-between flex-wrap gap-2">
+          <div className="bg-[#EFF6FF] border border-[#60A5FA]/30 rounded-xl p-3 text-xs font-medium text-[#111827] flex items-center justify-between flex-wrap gap-2">
             <span className="bg-white px-2 py-1 rounded border border-[#E5E7EB]">1. Google Form</span>
             <span className="text-[#3B82F6]">→</span>
             <span className="bg-white px-2 py-1 rounded border border-[#E5E7EB]">2. Excel File (.xlsx)</span>
@@ -159,15 +156,14 @@ export const ExcelImportModal = ({ isOpen, onClose, onImportSuccess }) => {
             <span className="bg-[#3B82F6] text-white px-2 py-1 rounded">4. Manage Students</span>
           </div>
 
-          {/* File Upload Drop Area */}
           {!parsedRows.length && (
             <div className="border-2 border-dashed border-[#E5E7EB] hover:border-[#3B82F6] rounded-2xl p-8 text-center bg-[#F8FAFC] transition-colors">
               <FiUpload className="w-8 h-8 text-[#3B82F6] mx-auto mb-2" />
-              <p className="text-sm font-bold text-[#111827]">Click or drag Excel file to upload</p>
-              <p className="text-xs text-[#6B7280] mt-1">Supported formats: .xlsx, .xls, .csv</p>
+              <p className="text-sm font-semibold text-[#111827]">Click or drag Excel file to upload</p>
+              <p className="text-xs text-[#6B7280] mt-1 font-normal">Supported formats: .xlsx, .xls, .csv</p>
 
               <div className="mt-4 flex items-center justify-center space-x-3">
-                <label className="px-4 py-2 rounded-xl bg-[#3B82F6] text-white font-bold text-xs cursor-pointer hover:bg-[#2563EB] transition-colors shadow-xs">
+                <label className="px-4 py-2 rounded-xl bg-[#3B82F6] text-white font-medium text-xs cursor-pointer hover:bg-[#2563EB] transition-colors shadow-xs">
                   Browse Excel File
                   <input
                     type="file"
@@ -180,7 +176,7 @@ export const ExcelImportModal = ({ isOpen, onClose, onImportSuccess }) => {
                 <button
                   type="button"
                   onClick={handleLoadSampleData}
-                  className="px-4 py-2 rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] text-[#111827] font-bold text-xs hover:bg-[#EFF6FF] hover:text-[#3B82F6] transition-colors flex items-center space-x-1.5"
+                  className="px-4 py-2 rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] text-[#111827] font-medium text-xs hover:bg-[#EFF6FF] hover:text-[#3B82F6] transition-colors flex items-center space-x-1.5"
                 >
                   <FiFileText className="w-3.5 h-3.5" />
                   <span>Load Sample CSE Data</span>
@@ -189,32 +185,29 @@ export const ExcelImportModal = ({ isOpen, onClose, onImportSuccess }) => {
             </div>
           )}
 
-          {/* Success Banner */}
           {successMessage && (
-            <div className="p-3 bg-[#DCFCE7] border border-[#10B981]/30 rounded-xl text-xs font-bold text-[#10B981] flex items-center space-x-2">
+            <div className="p-3 bg-[#DCFCE7] border border-[#10B981]/30 rounded-xl text-xs font-medium text-[#10B981] flex items-center space-x-2">
               <FiCheck className="w-4 h-4" />
               <span>{successMessage}</span>
             </div>
           )}
 
-          {/* Validation Warnings / Errors */}
           {validationErrors.map((err, i) => (
-            <div key={i} className="p-3 bg-[#FEE2E2] border border-[#EF4444]/30 rounded-xl text-xs font-bold text-[#EF4444] flex items-center space-x-2">
+            <div key={i} className="p-3 bg-[#FEE2E2] border border-[#EF4444]/30 rounded-xl text-xs font-medium text-[#EF4444] flex items-center space-x-2">
               <FiAlertTriangle className="w-4 h-4 shrink-0" />
               <span>{err}</span>
             </div>
           ))}
 
-          {/* Preview Table */}
           {parsedRows.length > 0 && (
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-[#111827]">
+                <span className="text-xs font-semibold text-[#111827]">
                   Preview ({parsedRows.filter((r) => r.isValid).length} Valid Students Ready to Import)
                 </span>
                 <button
                   onClick={handleReset}
-                  className="text-xs font-semibold text-[#EF4444] hover:underline"
+                  className="text-xs font-medium text-[#EF4444] hover:underline"
                 >
                   Choose Different File
                 </button>
@@ -222,31 +215,27 @@ export const ExcelImportModal = ({ isOpen, onClose, onImportSuccess }) => {
 
               <div className="border border-[#E5E7EB] rounded-xl overflow-hidden max-h-60 overflow-y-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-[#F8FAFC] border-b border-[#E5E7EB] text-[#6B7280] font-bold uppercase">
+                  <thead className="bg-[#F8FAFC] border-b border-[#E5E7EB] text-[10px] font-semibold text-[#6B7280] uppercase">
                     <tr>
-                      <th className="p-2.5">Row</th>
-                      <th className="p-2.5">Reg Number</th>
-                      <th className="p-2.5">Name</th>
-                      <th className="p-2.5">Year</th>
-                      <th className="p-2.5">Section</th>
-                      <th className="p-2.5">Dept</th>
-                      <th className="p-2.5">Status</th>
+                      <th className="p-2">Reg Number</th>
+                      <th className="p-2">Name</th>
+                      <th className="p-2">Year</th>
+                      <th className="p-2">Sec</th>
+                      <th className="p-2">Status</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#E5E7EB] font-semibold text-[#111827]">
-                    {parsedRows.map((row) => (
-                      <tr key={row.rowIndex} className={!row.isValid ? 'bg-[#FEE2E2]/50' : 'hover:bg-[#F8FAFC]'}>
-                        <td className="p-2.5 text-[#6B7280]">{row.rowIndex}</td>
-                        <td className="p-2.5 font-bold">{row.registerNumber || '-'}</td>
-                        <td className="p-2.5">{row.name || '-'}</td>
-                        <td className="p-2.5">{row.year}</td>
-                        <td className="p-2.5">{row.section}</td>
-                        <td className="p-2.5 text-[#3B82F6] font-bold">{row.department}</td>
-                        <td className="p-2.5">
-                          {row.isValid ? (
-                            <span className="text-[#10B981] font-bold">Valid</span>
+                  <tbody className="divide-y divide-[#E5E7EB] font-normal">
+                    {parsedRows.map((r, i) => (
+                      <tr key={i} className={r.isValid ? '' : 'bg-[#FEE2E2]/30'}>
+                        <td className="p-2 font-mono font-medium">{r.registerNumber || '-'}</td>
+                        <td className="p-2 font-medium">{r.name || '-'}</td>
+                        <td className="p-2 text-[#6B7280]">{r.year}</td>
+                        <td className="p-2 text-[#6B7280]">{r.section}</td>
+                        <td className="p-2">
+                          {r.isValid ? (
+                            <span className="text-[#10B981] font-medium text-[11px]">Valid</span>
                           ) : (
-                            <span className="text-[#EF4444] font-bold">{row.error}</span>
+                            <span className="text-[#EF4444] font-medium text-[11px]">{r.error}</span>
                           )}
                         </td>
                       </tr>
@@ -256,32 +245,31 @@ export const ExcelImportModal = ({ isOpen, onClose, onImportSuccess }) => {
               </div>
             </div>
           )}
-
         </div>
 
-        {/* Footer */}
         <div className="flex items-center justify-between px-6 py-4 border-t border-[#E5E7EB] bg-[#F8FAFC]">
-          <span className="text-xs text-[#6B7280] font-semibold">
-            {file ? file.name : 'No file selected'}
-          </span>
+          <button
+            type="button"
+            onClick={handleDownloadTemplate}
+            className="text-xs font-medium text-[#3B82F6] hover:underline flex items-center space-x-1"
+          >
+            <FiDownload className="w-3.5 h-3.5" />
+            <span>Download Blank Template</span>
+          </button>
 
           <div className="flex items-center space-x-3">
             <button
               type="button"
               onClick={() => { handleReset(); onClose(); }}
-              className="px-4 py-2 rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] text-xs font-bold text-[#6B7280] hover:bg-[#F8FAFC]"
+              className="px-4 py-2 rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] text-xs font-medium text-[#6B7280] hover:bg-[#F8FAFC]"
             >
               Cancel
             </button>
             <button
               type="button"
-              disabled={parsedRows.filter((r) => r.isValid).length === 0 || loading}
+              disabled={!parsedRows.length || loading || parsedRows.filter((r) => r.isValid).length === 0}
               onClick={handleConfirmImport}
-              className={`px-5 py-2 rounded-xl text-white text-xs font-bold shadow-xs flex items-center space-x-1.5 transition-colors ${
-                parsedRows.filter((r) => r.isValid).length > 0 && !loading
-                  ? 'bg-[#3B82F6] hover:bg-[#2563EB]'
-                  : 'bg-[#6B7280]/50 cursor-not-allowed'
-              }`}
+              className="px-5 py-2 rounded-xl bg-[#3B82F6] text-white text-xs font-medium hover:bg-[#2563EB] shadow-xs disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-1.5"
             >
               <FiCheck className="w-4 h-4" />
               <span>Confirm & Import Students</span>
