@@ -10,6 +10,9 @@ export const StaffModal = ({ isOpen, onClose, onSave, staff = null }) => {
     department: 'CSE',
     phone: '',
     status: 'Active',
+    year: '1st Year',
+    section: 'A',
+    advisorType: 'CA1',
   });
 
   const [errors, setErrors] = useState({});
@@ -24,6 +27,9 @@ export const StaffModal = ({ isOpen, onClose, onSave, staff = null }) => {
         department: 'CSE',
         phone: staff.phone || '',
         status: staff.status || 'Active',
+        year: staff.year || '1st Year',
+        section: staff.section || 'A',
+        advisorType: staff.advisorType || 'CA1',
       });
     } else {
       setFormData({
@@ -34,6 +40,9 @@ export const StaffModal = ({ isOpen, onClose, onSave, staff = null }) => {
         department: 'CSE',
         phone: '',
         status: 'Active',
+        year: '1st Year',
+        section: 'A',
+        advisorType: 'CA1',
       });
     }
     setErrors({});
@@ -68,13 +77,13 @@ export const StaffModal = ({ isOpen, onClose, onSave, staff = null }) => {
           <h3 className="text-sm font-semibold text-[#111827]">
             {staff ? 'Edit CSE Faculty' : 'Add New CSE Faculty'}
           </h3>
-          <button onClick={onClose} className="text-[#6B7280] hover:text-[#111827] p-1">
+          <button onClick={onClose} className="text-[#6B7280] hover:text-[#111827] p-1 cursor-pointer">
             <FiX className="w-5 h-5" />
           </button>
         </div>
 
         {/* Body */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="p-6 space-y-4 text-left">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-medium text-[#111827] uppercase tracking-wider mb-1">
@@ -122,14 +131,50 @@ export const StaffModal = ({ isOpen, onClose, onSave, staff = null }) => {
 
             <div>
               <label className="block text-xs font-medium text-[#111827] uppercase tracking-wider mb-1">
-                Department
+                Advisor Role / Type
               </label>
-              <input
-                type="text"
-                value="CSE"
-                disabled
-                className="w-full py-2 px-3 bg-[#F1F5F9] border border-[#E5E7EB] rounded-xl text-xs font-medium text-[#6B7280] cursor-not-allowed"
-              />
+              <select
+                value={formData.advisorType}
+                onChange={(e) => setFormData({ ...formData, advisorType: e.target.value })}
+                className="w-full py-2 px-3 bg-[#FFFFFF] border border-[#E5E7EB] rounded-xl text-xs font-medium text-[#111827] focus:outline-none focus:border-[#3B82F6]"
+              >
+                <option value="CA1">CA1 (Class Advisor 1)</option>
+                <option value="CA2">CA2 (Class Advisor 2)</option>
+                <option value="CA3">CA3 (Class Advisor 3)</option>
+                <option value="General">General Faculty</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-[#111827] uppercase tracking-wider mb-1">
+                Assigned Academic Year
+              </label>
+              <select
+                value={formData.year}
+                onChange={(e) => setFormData({ ...formData, year: e.target.value })}
+                className="w-full py-2 px-3 bg-[#FFFFFF] border border-[#E5E7EB] rounded-xl text-xs font-medium text-[#111827] focus:outline-none focus:border-[#3B82F6]"
+              >
+                <option value="1st Year">1st Year</option>
+                <option value="2nd Year">2nd Year</option>
+                <option value="3rd Year">3rd Year</option>
+                <option value="4th Year">4th Year</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-[#111827] uppercase tracking-wider mb-1">
+                Assigned Section
+              </label>
+              <select
+                value={formData.section}
+                onChange={(e) => setFormData({ ...formData, section: e.target.value })}
+                className="w-full py-2 px-3 bg-[#FFFFFF] border border-[#E5E7EB] rounded-xl text-xs font-medium text-[#111827] focus:outline-none focus:border-[#3B82F6]"
+              >
+                <option value="A">Section A</option>
+                <option value="B">Section B</option>
+                <option value="C">Section C</option>
+                <option value="D">Section D</option>
+              </select>
             </div>
 
             <div>

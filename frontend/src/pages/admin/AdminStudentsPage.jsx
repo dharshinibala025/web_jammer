@@ -1,21 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import adminService from '../../services/adminService';
-import SearchBar from '../../components/admin/SearchBar';
 import StatusBadge from '../../components/admin/StatusBadge';
 import StudentModal from '../../components/admin/StudentModal';
 import ExcelImportModal from '../../components/admin/ExcelImportModal';
-import { FiPlus, FiUpload, FiEdit2, FiTrash2, FiUsers } from 'react-icons/fi';
+import {
+  FiPlus,
+  FiUpload,
+  FiEdit2,
+  FiTrash2,
+  FiFilter,
+  FiSearch,
+  FiRotateCcw,
+  FiCheckCircle,
+  FiX
+} from 'react-icons/fi';
 
 export const AdminStudentsPage = () => {
   const [students, setStudents] = useState([]);
   const [sectionsObj, setSectionsObj] = useState({});
-  const [search, setSearch] = useState('');
-  const [selectedYear, setSelectedYear] = useState('All');
-  const [selectedSection, setSelectedSection] = useState('All');
+
+  // Filter form draft state (controlled inputs)
+  const [filterDept, setFilterDept] = useState('CSE');
+  const [filterYear, setFilterYear] = useState('All');
+  const [filterSection, setFilterSection] = useState('All');
+  const [filterSearch, setFilterSearch] = useState('');
+
+  // Applied filter state (triggers active list filtering on Apply click)
+  const [appliedFilters, setAppliedFilters] = useState({
+    department: 'CSE',
+    year: 'All',
+    section: 'All',
+    search: '',
+  });
 
   const [isStudentModalOpen, setIsStudentModalOpen] = useState(false);
   const [editingStudent, setEditingStudent] = useState(null);
   const [isExcelModalOpen, setIsExcelModalOpen] = useState(false);
+  const [isAppliedAnimation, setIsAppliedAnimation] = useState(false);
 
   useEffect(() => {
     const loadData = () => {
@@ -28,9 +49,33 @@ export const AdminStudentsPage = () => {
     return () => unsubscribe();
   }, []);
 
-  const handleYearFilterChange = (newYear) => {
-    setSelectedYear(newYear);
-    setSelectedSection('All'); // Reset section filter when year changes
+  // Action: Apply Filter button click
+  const handleApplyFilter = (e) => {
+    if (e) e.preventDefault();
+    setAppliedFilters({
+      department: filterDept,
+      year: filterYear,
+      section: filterSection,
+      search: filterSearch.trim(),
+    });
+
+    setIsAppliedAnimation(true);
+    setTimeout(() => setIsAppliedAnimation(false), 1200);
+  };
+
+  // Action: Reset Filters button click
+  const handleResetFilter = () => {
+    const defaultState = {
+      department: 'CSE',
+      year: 'All',
+      section: 'All',
+      search: '',
+    };
+    setFilterDept('CSE');
+    setFilterYear('All');
+    setFilterSection('All');
+    setFilterSearch('');
+    setAppliedFilters(defaultState);
   };
 
   const handleSaveStudent = (formData) => {
@@ -52,40 +97,34 @@ export const AdminStudentsPage = () => {
     return adminService.importStudents(validStudents);
   };
 
-  // Determine available section options based on selected Year
-  const availableSectionOptions = () => {
-    if (selectedYear !== 'All' && sectionsObj[selectedYear]) {
-      return sectionsObj[selectedYear];
-    }
-    // Aggregate unique sections across all years
-    const allSecs = new Set();
-    Object.values(sectionsObj).forEach((arr) => {
-      if (Array.isArray(arr)) arr.forEach((s) => allSecs.add(s));
-    });
-    return Array.from(allSecs).sort();
-  };
-
-  // Filter students by Search, Year, and Section
+  // Filter students based on appliedFilters
   const filteredStudents = students.filter((s) => {
     const matchesSearch =
-      s.name.toLowerCase().includes(search.toLowerCase()) ||
-      s.registerNumber.toLowerCase().includes(search.toLowerCase()) ||
-      s.email.toLowerCase().includes(search.toLowerCase()) ||
-      s.phone.includes(search);
+      !appliedFilters.search ||
+      s.name.toLowerCase().includes(appliedFilters.search.toLowerCase()) ||
+      s.registerNumber.toLowerCase().includes(appliedFilters.search.toLowerCase()) ||
+      s.email.toLowerCase().includes(appliedFilters.search.toLowerCase()) ||
+      s.phone.includes(appliedFilters.search);
 
-    const matchesYear = selectedYear === 'All' || s.year === selectedYear;
-    const matchesSection = selectedSection === 'All' || s.section === selectedSection;
+    const matchesDept =
+      appliedFilters.department === 'All' ||
+      s.department === appliedFilters.department ||
+      (appliedFilters.department === 'CSE' && (s.department === 'CSE' || !s.department));
 
-    return matchesSearch && matchesYear && matchesSection;
+    const matchesYear = appliedFilters.year === 'All' || s.year === appliedFilters.year;
+    const matchesSection =
+      appliedFilters.section === 'All' || s.section === appliedFilters.section;
+
+    return matchesSearch && matchesDept && matchesYear && matchesSection;
   });
 
   return (
-    <div className="space-y-6">
-      {/* Page Header */}
-      <div className="bg-[#FFFFFF] border border-[#E5E7EB] rounded-2xl p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div className="space-y-5 text-left">
+      {/* Page Header Card */}
+      <div className="bg-white border border-slate-200/80 rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-semibold text-[#111827]">CSE Student Directory</h2>
-          <p className="text-xs font-normal text-[#6B7280] mt-0.5">
+          <h2 className="text-xl font-semibold text-slate-900 tracking-tight">CSE Student Directory</h2>
+          <p className="text-xs text-slate-500 font-normal mt-0.5">
             Manage Computer Science and Engineering student records, year-wise sections, and device status.
           </p>
         </div>
@@ -93,9 +132,9 @@ export const AdminStudentsPage = () => {
         <div className="flex items-center space-x-3">
           <button
             onClick={() => setIsExcelModalOpen(true)}
-            className="px-4 py-2 rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] text-[#111827] font-medium text-xs hover:bg-[#EFF6FF] hover:text-[#3B82F6] transition-colors flex items-center space-x-1.5 shadow-2xs"
+            className="px-4 py-2 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium text-xs hover:bg-slate-50 hover:text-blue-600 transition-colors flex items-center space-x-1.5 shadow-2xs cursor-pointer"
           >
-            <FiUpload className="w-4 h-4 text-[#3B82F6]" />
+            <FiUpload className="w-4 h-4 text-blue-600" />
             <span>Upload Excel</span>
           </button>
 
@@ -104,7 +143,7 @@ export const AdminStudentsPage = () => {
               setEditingStudent(null);
               setIsStudentModalOpen(true);
             }}
-            className="px-4 py-2 rounded-xl bg-[#3B82F6] text-white font-medium text-xs hover:bg-[#2563EB] transition-colors flex items-center space-x-1.5 shadow-xs"
+            className="px-4 py-2 rounded-xl bg-blue-600 text-white font-medium text-xs hover:bg-blue-700 transition-colors flex items-center space-x-1.5 shadow-xs cursor-pointer"
           >
             <FiPlus className="w-4 h-4" />
             <span>Add Student</span>
@@ -112,56 +151,148 @@ export const AdminStudentsPage = () => {
         </div>
       </div>
 
-      {/* Search & Year -> Section Filters */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="w-full sm:w-80">
-          <SearchBar
-            value={search}
-            onChangeText={setSearch}
-            placeholder="Search by name, reg no, email..."
-          />
-        </div>
-
-        <div className="flex items-center space-x-3 w-full sm:w-auto">
-          {/* Year Filter */}
-          <div className="flex items-center space-x-1.5">
-            <span className="text-xs font-medium text-[#6B7280]">Year:</span>
-            <select
-              value={selectedYear}
-              onChange={(e) => handleYearFilterChange(e.target.value)}
-              className="py-2 px-3 bg-[#FFFFFF] border border-[#E5E7EB] rounded-xl text-xs font-medium text-[#111827] focus:outline-none focus:border-[#3B82F6]"
-            >
-              <option value="All">All Years</option>
-              <option value="1st Year">1st Year</option>
-              <option value="2nd Year">2nd Year</option>
-              <option value="3rd Year">3rd Year</option>
-              <option value="4th Year">4th Year</option>
-            </select>
+      {/* ==========================================
+          CLEAN ENTERPRISE FILTER CARD
+         ========================================== */}
+      <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-xs space-y-4">
+        
+        {/* Title Bar */}
+        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div className="flex items-center space-x-2">
+            <FiFilter className="w-4 h-4 text-blue-600" />
+            <h3 className="text-sm font-semibold text-slate-800">Filter Directory</h3>
           </div>
 
-          {/* Section Filter (Dynamic based on selected Year) */}
-          <div className="flex items-center space-x-1.5">
-            <span className="text-xs font-medium text-[#6B7280]">Section:</span>
-            <select
-              value={selectedSection}
-              onChange={(e) => setSelectedSection(e.target.value)}
-              className="py-2 px-3 bg-[#FFFFFF] border border-[#E5E7EB] rounded-xl text-xs font-medium text-[#111827] focus:outline-none focus:border-[#3B82F6]"
-            >
-              <option value="All">All Sections</option>
-              {availableSectionOptions().map((sec) => (
-                <option key={sec} value={sec}>Section {sec}</option>
-              ))}
-            </select>
-          </div>
+          <button
+            onClick={handleResetFilter}
+            type="button"
+            className="text-xs font-medium text-slate-500 hover:text-slate-800 flex items-center space-x-1 transition-colors cursor-pointer"
+          >
+            <FiRotateCcw className="w-3.5 h-3.5" />
+            <span>Reset Filters</span>
+          </button>
         </div>
+
+        {/* Filter Inputs Grid */}
+        <form onSubmit={handleApplyFilter} className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            {/* Department */}
+            <div>
+              <label className="block text-xs font-medium text-slate-600 mb-1.5">
+                Department
+              </label>
+              <select
+                value={filterDept}
+                onChange={(e) => setFilterDept(e.target.value)}
+                className="w-full py-2 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer"
+              >
+                <option value="CSE">CSE (Computer Science)</option>
+                <option value="All">All Departments</option>
+              </select>
+            </div>
+
+            {/* Year */}
+            <div>
+              <label className="block text-xs font-medium text-slate-600 mb-1.5">
+                Academic Year
+              </label>
+              <select
+                value={filterYear}
+                onChange={(e) => setFilterYear(e.target.value)}
+                className="w-full py-2 px-3 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer"
+              >
+                <option value="All">All Years</option>
+                <option value="1st Year">1st Year</option>
+                <option value="2nd Year">2nd Year</option>
+                <option value="3rd Year">3rd Year</option>
+                <option value="4th Year">4th Year</option>
+              </select>
+            </div>
+
+            {/* Section */}
+            <div>
+              <label className="block text-xs font-medium text-slate-600 mb-1.5">
+                Section
+              </label>
+              <select
+                value={filterSection}
+                onChange={(e) => setFilterSection(e.target.value)}
+                className="w-full py-2 px-3 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer"
+              >
+                <option value="All">All Sections</option>
+                <option value="A">Section A</option>
+                <option value="B">Section B</option>
+                <option value="C">Section C</option>
+                <option value="D">Section D</option>
+              </select>
+            </div>
+
+            {/* Search Keyword */}
+            <div>
+              <label className="block text-xs font-medium text-slate-600 mb-1.5">
+                Search
+              </label>
+              <div className="relative">
+                <FiSearch className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-3 pointer-events-none" />
+                <input
+                  type="text"
+                  value={filterSearch}
+                  onChange={(e) => setFilterSearch(e.target.value)}
+                  placeholder="Search name, reg no, email..."
+                  className="w-full py-2 pl-8 pr-8 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                />
+                {filterSearch && (
+                  <button
+                    type="button"
+                    onClick={() => setFilterSearch('')}
+                    className="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-600 p-0.5 cursor-pointer"
+                  >
+                    <FiX className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
+            </div>
+
+          </div>
+
+          {/* Action Row */}
+          <div className="flex items-center justify-between pt-2 border-t border-slate-100">
+            <span className="text-xs text-slate-500 font-normal">
+              Showing <strong className="font-semibold text-slate-800">{filteredStudents.length}</strong> of {students.length} students
+            </span>
+
+            <button
+              type="submit"
+              className={`px-4 py-2 rounded-xl text-xs font-medium text-white shadow-2xs flex items-center space-x-1.5 transition-all cursor-pointer ${
+                isAppliedAnimation
+                  ? 'bg-emerald-600'
+                  : 'bg-blue-600 hover:bg-blue-700'
+              }`}
+            >
+              {isAppliedAnimation ? (
+                <>
+                  <FiCheckCircle className="w-3.5 h-3.5" />
+                  <span>Applied</span>
+                </>
+              ) : (
+                <>
+                  <FiFilter className="w-3.5 h-3.5" />
+                  <span>Apply Filter</span>
+                </>
+              )}
+            </button>
+          </div>
+        </form>
+
       </div>
 
       {/* Student Table */}
-      <div className="bg-[#FFFFFF] rounded-2xl border border-[#E5E7EB] shadow-xs overflow-hidden">
+      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-[#F8FAFC] border-b border-[#E5E7EB] text-[11px] font-semibold text-[#6B7280] uppercase tracking-wider">
+              <tr className="bg-slate-50/80 border-b border-slate-200/80 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
                 <th className="p-4">Reg Number</th>
                 <th className="p-4">Student Name</th>
                 <th className="p-4">Year & Section</th>
@@ -172,24 +303,24 @@ export const AdminStudentsPage = () => {
                 <th className="p-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E5E7EB] text-xs font-normal text-[#111827]">
+            <tbody className="divide-y divide-slate-100 text-xs font-normal text-slate-800">
               {filteredStudents.length === 0 ? (
                 <tr>
-                  <td colSpan="8" className="p-8 text-center text-[#6B7280] font-normal">
-                    No CSE students found matching the search/filter criteria.
+                  <td colSpan="8" className="p-8 text-center text-slate-500 font-normal">
+                    No CSE students found matching the selected filter criteria.
                   </td>
                 </tr>
               ) : (
                 filteredStudents.map((s) => (
-                  <tr key={s.id} className="hover:bg-[#F8FAFC] transition-colors">
-                    <td className="p-4 font-mono font-medium text-[#111827]">{s.registerNumber}</td>
-                    <td className="p-4 font-medium text-[#111827]">{s.name}</td>
-                    <td className="p-4 text-[#6B7280]">
-                      <span className="font-medium text-[#111827]">{s.year}</span> • Section {s.section}
+                  <tr key={s.id} className="hover:bg-slate-50/50 transition-colors">
+                    <td className="p-4 font-mono font-medium text-slate-900">{s.registerNumber}</td>
+                    <td className="p-4 font-medium text-slate-900">{s.name}</td>
+                    <td className="p-4 text-slate-600">
+                      <span className="font-medium text-slate-800">{s.year}</span> • Section {s.section}
                     </td>
-                    <td className="p-4 font-medium text-[#3B82F6]">CSE</td>
-                    <td className="p-4 text-[#6B7280]">{s.email}</td>
-                    <td className="p-4 text-[#6B7280]">{s.phone}</td>
+                    <td className="p-4 font-medium text-blue-600">{s.department || 'CSE'}</td>
+                    <td className="p-4 text-slate-600">{s.email}</td>
+                    <td className="p-4 text-slate-600">{s.phone}</td>
                     <td className="p-4">
                       <StatusBadge status={s.status} />
                     </td>
@@ -200,14 +331,14 @@ export const AdminStudentsPage = () => {
                             setEditingStudent(s);
                             setIsStudentModalOpen(true);
                           }}
-                          className="p-1.5 rounded-lg border border-[#E5E7EB] bg-[#FFFFFF] text-[#6B7280] hover:text-[#3B82F6] hover:bg-[#EFF6FF] transition-colors"
+                          className="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer"
                           title="Edit Student"
                         >
                           <FiEdit2 className="w-3.5 h-3.5" />
                         </button>
                         <button
                           onClick={() => handleDeleteStudent(s.id, s.name)}
-                          className="p-1.5 rounded-lg border border-[#E5E7EB] bg-[#FFFFFF] text-[#6B7280] hover:text-[#EF4444] hover:bg-[#FEE2E2]/50 transition-colors"
+                          className="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
                           title="Delete Student"
                         >
                           <FiTrash2 className="w-3.5 h-3.5" />

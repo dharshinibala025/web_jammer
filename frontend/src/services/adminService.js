@@ -26,10 +26,12 @@ const DEFAULT_STUDENTS = [
 ];
 
 const DEFAULT_STAFF = [
-  { id: '1', staffId: 'CSE-ST-101', name: 'Dr. Rajesh Kumar', email: 'rajesh.kumar@ksrce.ac.in', designation: 'HOD & Professor', department: 'CSE', phone: '9443322110', status: 'Active' },
-  { id: '2', staffId: 'CSE-ST-102', name: 'Prof. Priya Nair', email: 'priya.nair@ksrce.ac.in', designation: 'Assistant Professor', department: 'CSE', phone: '9443322111', status: 'Active' },
-  { id: '3', staffId: 'CSE-ST-103', name: 'Prof. Anil Kumar', email: 'anil.kumar@ksrce.ac.in', designation: 'Associate Professor', department: 'CSE', phone: '9443322112', status: 'Active' },
-  { id: '4', staffId: 'CSE-ST-104', name: 'Prof. Divya Francis', email: 'divya.francis@ksrce.ac.in', designation: 'Assistant Professor', department: 'CSE', phone: '9443322113', status: 'On Leave' },
+  { id: '1', staffId: 'CSE-ST-101', name: 'Dr. Rajesh Kumar', email: 'rajesh.kumar@ksrce.ac.in', designation: 'HOD & Professor', department: 'CSE', phone: '9443322110', status: 'Active', year: '4th Year', section: 'A', advisorType: 'CA1' },
+  { id: '2', staffId: 'CSE-ST-102', name: 'Prof. Priya Nair', email: 'priya.nair@ksrce.ac.in', designation: 'Assistant Professor', department: 'CSE', phone: '9443322111', status: 'Active', year: '3rd Year', section: 'A', advisorType: 'CA1' },
+  { id: '3', staffId: 'CSE-ST-103', name: 'Prof. Anil Kumar', email: 'anil.kumar@ksrce.ac.in', designation: 'Associate Professor', department: 'CSE', phone: '9443322112', status: 'Active', year: '2nd Year', section: 'B', advisorType: 'CA2' },
+  { id: '4', staffId: 'CSE-ST-104', name: 'Prof. Divya Francis', email: 'divya.francis@ksrce.ac.in', designation: 'Assistant Professor', department: 'CSE', phone: '9443322113', status: 'On Leave', year: '1st Year', section: 'C', advisorType: 'CA3' },
+  { id: '5', staffId: 'CSE-ST-105', name: 'Prof. Suresh V', email: 'suresh.v@ksrce.ac.in', designation: 'Assistant Professor', department: 'CSE', phone: '9443322114', status: 'Active', year: '3rd Year', section: 'B', advisorType: 'CA2' },
+  { id: '6', staffId: 'CSE-ST-106', name: 'Prof. Kavitha M', email: 'kavitha.m@ksrce.ac.in', designation: 'Assistant Professor', department: 'CSE', phone: '9443322115', status: 'Active', year: '1st Year', section: 'A', advisorType: 'CA1' },
 ];
 
 // Year-wise Sections structure
