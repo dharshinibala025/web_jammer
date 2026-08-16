@@ -8,32 +8,14 @@ import {
   FiAlertTriangle,
   FiSearch,
   FiFilter,
-  FiCheck,
   FiSlash,
   FiShield,
   FiRefreshCw,
   FiSend
 } from 'react-icons/fi';
 
-const SUPPORTED_APPS = [
-  'Instagram',
-  'WhatsApp',
-  'Facebook',
-  'Snapchat',
-  'Telegram',
-  'Discord',
-  'Twitter (X)',
-  'YouTube',
-  'Netflix',
-  'Prime Video',
-  'BGMI',
-  'Free Fire',
-  'PUBG',
-];
-
 export const AdminDevicesPage = () => {
   const [students, setStudents] = useState(adminService.getStudents());
-  const [selectedApps, setSelectedApps] = useState(['Instagram', 'YouTube', 'Facebook', 'BGMI', 'PUBG']);
   const [startTime, setStartTime] = useState('09:00 AM');
   const [endTime, setEndTime] = useState('04:00 PM');
   const [restrictionStatus, setRestrictionStatus] = useState('ACTIVE');
@@ -48,17 +30,6 @@ export const AdminDevicesPage = () => {
     return () => unsubscribe();
   }, []);
 
-  const handleToggleApp = (app) => {
-    if (selectedApps.includes(app)) {
-      setSelectedApps(selectedApps.filter(a => a !== app));
-    } else {
-      setSelectedApps([...selectedApps, app]);
-    }
-  };
-
-  const handleSelectAllApps = () => setSelectedApps(SUPPORTED_APPS);
-  const handleClearAllApps = () => setSelectedApps([]);
-
   const handleToggleStudentDeviceStatus = (student) => {
     const nextStatus = student.status === 'Blocked' ? 'Active' : 'Blocked';
     adminService.updateStudent(student.id, { status: nextStatus });
@@ -69,14 +40,10 @@ export const AdminDevicesPage = () => {
   };
 
   const handleApplyDepartmentPolicy = () => {
-    if (selectedApps.length === 0) {
-      alert('Please select at least one app to restrict.');
-      return;
-    }
     setRestrictionStatus('ACTIVE');
     adminService.addNotification(
       'Department Policy Enforced',
-      `CSE Mobile Restriction updated for ${selectedApps.length} apps during ${startTime} - ${endTime}.`
+      `CSE Mobile Restriction updated for schedule ${startTime} - ${endTime}.`
     );
     alert('Department mobile policy updated successfully.');
   };
@@ -185,7 +152,7 @@ export const AdminDevicesPage = () => {
             </div>
           </div>
           <h3 className="text-xl font-semibold text-slate-900 mt-2">{restrictionStatus}</h3>
-          <p className="text-xs text-slate-500 mt-0.5 font-normal">{selectedApps.length} Apps Blocked</p>
+          <p className="text-xs text-slate-500 mt-0.5 font-normal">{restrictionStatus === 'ACTIVE' ? 'Policy Active' : 'Policy Paused'}</p>
         </div>
       </div>
 
@@ -194,7 +161,7 @@ export const AdminDevicesPage = () => {
         <div className="flex items-center justify-between border-b border-slate-100 pb-4">
           <div>
             <h3 className="text-sm font-semibold text-slate-900">CSE Department Policy Rules</h3>
-            <p className="text-xs text-slate-500 font-normal">Configure global application blocklists and restriction hours</p>
+            <p className="text-xs text-slate-500 font-normal">Configure restriction schedule and global department rules</p>
           </div>
 
           <div className="flex items-center space-x-2">
@@ -218,55 +185,8 @@ export const AdminDevicesPage = () => {
           </div>
         </div>
 
-        {/* Apps Selection Grid */}
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-slate-700 uppercase tracking-wider">
-              Select Applications to Restrict ({selectedApps.length})
-            </span>
-            <div className="flex space-x-2">
-              <button
-                onClick={handleSelectAllApps}
-                className="px-2.5 py-1 text-[10px] font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg cursor-pointer transition-colors"
-              >
-                Select All
-              </button>
-              <button
-                onClick={handleClearAllApps}
-                className="px-2.5 py-1 text-[10px] font-medium text-slate-500 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer transition-colors"
-              >
-                Clear
-              </button>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap gap-2">
-            {SUPPORTED_APPS.map((app) => {
-              const isSelected = selectedApps.includes(app);
-              return (
-                <button
-                  key={app}
-                  onClick={() => handleToggleApp(app)}
-                  className={`px-3.5 py-1.5 rounded-full border flex items-center space-x-2 text-xs font-medium transition-all cursor-pointer ${
-                    isSelected
-                      ? 'bg-blue-600 border-blue-600 text-white font-medium shadow-xs'
-                      : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-white hover:border-slate-300'
-                  }`}
-                >
-                  <span className={`w-3.5 h-3.5 rounded-full flex items-center justify-center border shrink-0 ${
-                    isSelected ? 'bg-white border-white text-blue-600' : 'border-slate-300 bg-white'
-                  }`}>
-                    {isSelected && <FiCheck className="w-2.5 h-2.5 stroke-[3]" />}
-                  </span>
-                  <span>{app}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
         {/* Schedule Inputs */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-slate-100">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="text-[10px] font-medium text-slate-400 uppercase">Policy Start Time</label>
             <div className="flex items-center space-x-2 mt-1">

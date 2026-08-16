@@ -1,50 +1,18 @@
 import React, { useState } from 'react';
 import staffMockData from '../../services/staffMockData';
 import { useAuth } from '../../contexts/AuthContext';
-import { FiSmartphone, FiClock, FiLock, FiUnlock, FiAlertTriangle, FiBookOpen, FiActivity, FiCheck, FiSquare } from 'react-icons/fi';
-
-const SUPPORTED_APPS = [
-  'Instagram',
-  'WhatsApp',
-  'Facebook',
-  'Snapchat',
-  'Telegram',
-  'Discord',
-  'Twitter (X)',
-  'YouTube',
-  'Netflix',
-  'Prime Video',
-  'BGMI',
-  'Free Fire',
-  'PUBG',
-];
+import { FiSmartphone, FiClock, FiLock, FiUnlock, FiAlertTriangle, FiBookOpen, FiActivity } from 'react-icons/fi';
 
 export const StaffDevicesPage = () => {
   const { user } = useAuth();
   const staff = user || staffMockData.staff;
   const mentorClass = staff.assignedClass || 'III CSE - A';
 
-  const [selectedApps, setSelectedApps] = useState(['Instagram', 'WhatsApp', 'Snapchat', 'BGMI', 'PUBG']);
   const [startTime, setStartTime] = useState('09:00 AM');
   const [endTime, setEndTime] = useState('04:00 PM');
   const [restrictionStatus, setRestrictionStatus] = useState('ACTIVE'); // 'ACTIVE' | 'PAUSED' | 'IDLE'
 
-  const handleToggleApp = (app) => {
-    if (selectedApps.includes(app)) {
-      setSelectedApps(selectedApps.filter(a => a !== app));
-    } else {
-      setSelectedApps([...selectedApps, app]);
-    }
-  };
-
-  const handleSelectAll = () => setSelectedApps(SUPPORTED_APPS);
-  const handleClearAll = () => setSelectedApps([]);
-
   const handleApplyPolicy = () => {
-    if (selectedApps.length === 0) {
-      alert('Please select at least one app to restrict.');
-      return;
-    }
     setRestrictionStatus('ACTIVE');
     alert(`Policy applied successfully to class ${mentorClass}.`);
   };
@@ -57,7 +25,6 @@ export const StaffDevicesPage = () => {
 
   const handleLiftPolicy = () => {
     setRestrictionStatus('IDLE');
-    setSelectedApps([]);
     alert(`All policy restrictions removed for class ${mentorClass}.`);
   };
 
@@ -79,7 +46,7 @@ export const StaffDevicesPage = () => {
       <div>
         <h2 className="text-2xl font-bold tracking-tight text-slate-900">Class Restrictions & Rules</h2>
         <p className="text-xs font-normal text-slate-500 mt-1">
-          Configure and enforce mobile blocklists and schedules for your students.
+          Configure and enforce mobile restrictions and schedules for your students.
         </p>
       </div>
 
@@ -105,57 +72,10 @@ export const StaffDevicesPage = () => {
           </div>
         </div>
 
-        {/* Section 1: Apps to Block */}
+        {/* Restriction Schedule */}
         <div className="space-y-3 pt-2">
-          <div className="flex items-center justify-between">
-            <h3 className="text-xs font-semibold text-slate-700 uppercase tracking-wider">
-              1. APPS TO BLOCK ({selectedApps.length})
-            </h3>
-            <div className="flex space-x-2">
-              <button 
-                onClick={handleSelectAll}
-                className="px-2.5 py-1 text-[10px] font-semibold text-blue-600 bg-blue-50/50 hover:bg-blue-50 border border-blue-100 rounded-lg cursor-pointer transition-colors"
-              >
-                Select All
-              </button>
-              <button 
-                onClick={handleClearAll}
-                className="px-2.5 py-1 text-[10px] font-semibold text-slate-500 bg-slate-50 border border-slate-100 rounded-lg cursor-pointer transition-colors"
-              >
-                Clear
-              </button>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap gap-2 pt-1">
-            {SUPPORTED_APPS.map((app) => {
-              const isBlocked = selectedApps.includes(app);
-              return (
-                <button
-                  key={app}
-                  onClick={() => handleToggleApp(app)}
-                  className={`px-3.5 py-1.5 rounded-full border flex items-center space-x-2 text-xs font-medium transition-all cursor-pointer ${
-                    isBlocked 
-                      ? 'bg-blue-600 border-blue-600 text-white shadow-xs font-semibold' 
-                      : 'bg-slate-50 border-slate-200/80 text-slate-600 hover:bg-white hover:border-slate-300'
-                  }`}
-                >
-                  <span className={`w-3.5 h-3.5 rounded-full flex items-center justify-center border shrink-0 ${
-                    isBlocked ? 'bg-white border-white text-blue-600' : 'border-slate-300 bg-white'
-                  }`}>
-                    {isBlocked && <FiCheck className="w-2.5 h-2.5 stroke-[3]" />}
-                  </span>
-                  <span>{app}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Section 2: Restriction Schedule */}
-        <div className="space-y-3 pt-4 border-t border-slate-100">
           <h3 className="text-xs font-semibold text-slate-700 uppercase tracking-wider">
-            2. RESTRICTION SCHEDULE
+            RESTRICTION SCHEDULE
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
