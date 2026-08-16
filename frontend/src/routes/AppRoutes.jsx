@@ -64,16 +64,16 @@ export const AppRoutes = () => {
       <Route path="/staff/settings" element={<AppLayout><StaffSettingsPage /></AppLayout>} />
 
       {/* Admin App Routes */}
-      <Route path="/admin/dashboard" element={<AdminLayout><AdminDashboardPage /></AdminLayout>} />
-      <Route path="/admin/students" element={<AdminLayout><AdminStudentsPage /></AdminLayout>} />
-      <Route path="/admin/staff" element={<AdminLayout><AdminStaffPage /></AdminLayout>} />
-      <Route path="/admin/devices" element={<AdminLayout><AdminDevicesPage /></AdminLayout>} />
+      <Route path="/admin/dashboard" element={<AppLayout><AdminDashboardPage /></AppLayout>} />
+      <Route path="/admin/students" element={<AppLayout><AdminStudentsPage /></AppLayout>} />
+      <Route path="/admin/staff" element={<AppLayout><AdminStaffPage /></AppLayout>} />
+      <Route path="/admin/devices" element={<AppLayout><AdminDevicesPage /></AppLayout>} />
       <Route path="/admin/sections" element={<Navigate to="/admin/devices" replace />} />
       <Route path="/admin/applications" element={<Navigate to="/admin/dashboard" replace />} />
-      <Route path="/admin/settings" element={<AdminLayout><AdminSettingsPage /></AdminLayout>} />
-      <Route path="/admin/profile" element={<AdminLayout><AdminProfilePage /></AdminLayout>} />
-      <Route path="/admin/notifications" element={<AdminLayout><AdminNotificationsPage /></AdminLayout>} />
-      <Route path="/admin/activity" element={<AdminLayout><AdminDashboardPage /></AdminLayout>} />
+      <Route path="/admin/settings" element={<AppLayout><AdminSettingsPage /></AppLayout>} />
+      <Route path="/admin/profile" element={<AppLayout><AdminProfilePage /></AppLayout>} />
+      <Route path="/admin/notifications" element={<AppLayout><AdminNotificationsPage /></AppLayout>} />
+      <Route path="/admin/activity" element={<AppLayout><AdminDashboardPage /></AppLayout>} />
 
       {/* Catch-all Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />
