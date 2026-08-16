@@ -94,15 +94,10 @@ export const StaffDashboardPage = () => {
 
         <div className="relative z-10 space-y-6">
           
-          {/* Top Bar: Badge & Clock */}
+          {/* Top Bar: Department & Clock */}
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center space-x-3">
-              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-medium">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                <span>STAFF COMMAND CENTER</span>
-              </div>
-              <span className="text-slate-400 text-xs hidden sm:inline">•</span>
-              <span className="text-slate-300 text-xs font-normal hidden sm:inline">{staff.department || 'Computer Science & Engineering'}</span>
+              <span className="text-slate-300 text-xs font-normal">{staff.department || 'Computer Science & Engineering'}</span>
             </div>
 
             {/* Live Clock Badge */}
@@ -165,7 +160,6 @@ export const StaffDashboardPage = () => {
         {/* Left Side: Label & Schedule Info */}
         <div className="space-y-1 text-center sm:text-left">
           <div className="flex items-center justify-center sm:justify-start space-x-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
             <span className="text-xs font-semibold text-slate-700 uppercase tracking-wider">LIVE RESTRICTION COUNTDOWN</span>
           </div>
           <p className="text-xs font-medium text-slate-500">Active Window: <strong className="text-slate-800">09:00 AM – 04:00 PM</strong> • Class: {mentorClass}</p>

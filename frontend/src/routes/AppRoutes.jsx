@@ -20,6 +20,7 @@ import StudentRestrictionInfoPage from '../pages/student/StudentRestrictionInfoP
 import StaffDashboardPage from '../pages/staff/StaffDashboardPage';
 import StaffStudentsPage from '../pages/staff/StaffStudentsPage';
 import StaffDevicesPage from '../pages/staff/StaffDevicesPage';
+import StaffNotificationsPage from '../pages/staff/StaffNotificationsPage';
 import StaffSettingsPage from '../pages/staff/StaffSettingsPage';
 
 import AdminLayout from '../layouts/AdminLayout';
@@ -57,7 +58,8 @@ export const AppRoutes = () => {
       <Route path="/staff/dashboard" element={<AppLayout><StaffDashboardPage /></AppLayout>} />
       <Route path="/staff/students" element={<AppLayout><StaffStudentsPage /></AppLayout>} />
       <Route path="/staff/devices" element={<AppLayout><StaffDevicesPage /></AppLayout>} />
-      <Route path="/staff/notifications" element={<AppLayout><StaffDashboardPage /></AppLayout>} />
+      <Route path="/staff/notifications" element={<AppLayout><StaffNotificationsPage /></AppLayout>} />
+      <Route path="/staff/activity" element={<AppLayout><StaffDashboardPage /></AppLayout>} />
       <Route path="/staff/profile" element={<AppLayout><StaffSettingsPage /></AppLayout>} />
       <Route path="/staff/settings" element={<AppLayout><StaffSettingsPage /></AppLayout>} />
 
@@ -71,6 +73,7 @@ export const AppRoutes = () => {
       <Route path="/admin/settings" element={<AdminLayout><AdminSettingsPage /></AdminLayout>} />
       <Route path="/admin/profile" element={<AdminLayout><AdminProfilePage /></AdminLayout>} />
       <Route path="/admin/notifications" element={<AdminLayout><AdminNotificationsPage /></AdminLayout>} />
+      <Route path="/admin/activity" element={<AdminLayout><AdminDashboardPage /></AdminLayout>} />
 
       {/* Catch-all Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />

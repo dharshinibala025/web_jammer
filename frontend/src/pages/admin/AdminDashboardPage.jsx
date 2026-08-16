@@ -17,7 +17,9 @@ import {
   FiBell,
   FiChevronRight,
   FiCheckCircle,
-  FiLayers
+  FiLayers,
+  FiSearch,
+  FiFilter
 } from 'react-icons/fi';
 
 export const AdminDashboardPage = () => {
@@ -30,6 +32,9 @@ export const AdminDashboardPage = () => {
   const [currentTime, setCurrentTime] = useState('');
   const [currentDate, setCurrentDate] = useState('');
   const [remainingSeconds, setRemainingSeconds] = useState(8100); // 02:15:00 countdown
+  const [searchTerm, setSearchTerm] = useState('');
+  const [yearFilter, setYearFilter] = useState('All');
+  const [statusFilter, setStatusFilter] = useState('All');
 
   useEffect(() => {
     const updateData = () => {
@@ -81,6 +86,25 @@ export const AdminDashboardPage = () => {
   const handleDismissNotification = (id) => {
     adminService.markAsRead(id);
   };
+
+  const handleToggleStudentDeviceStatus = (student) => {
+    const nextStatus = student.status === 'Blocked' ? 'Active' : 'Blocked';
+    adminService.updateStudent(student.id, { status: nextStatus });
+    adminService.addNotification(
+      'Device Policy Changed',
+      `Device control for ${student.name} (${student.registerNumber}) updated to ${nextStatus}.`
+    );
+  };
+
+  const filteredStudents = students.filter((s) => {
+    const matchesSearch =
+      s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      s.registerNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (s.email && s.email.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesYear = yearFilter === 'All' || s.year === yearFilter;
+    const matchesStatus = statusFilter === 'All' || s.status === statusFilter;
+    return matchesSearch && matchesYear && matchesStatus;
+  });
 
   const hour = new Date().getHours();
   const greeting = hour < 12 ? 'Good Morning' : hour < 17 ? 'Good Afternoon' : 'Good Evening';
@@ -322,49 +346,102 @@ export const AdminDashboardPage = () => {
          ========================================== */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         
-        {/* Left Column: CSE Department Live Device Roster (7 cols) */}
+        {/* Left Column: CSE Department Live Device Roster & Filter Section (7 cols) */}
         <div className="lg:col-span-7 bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-3 gap-2">
             <div>
-              <h3 className="text-sm font-semibold text-slate-800">CSE Department Student & Device Directory</h3>
-              <p className="text-xs text-slate-500 font-normal">Real-time device status across all sections</p>
+              <h3 className="text-sm font-semibold text-slate-800">CSE Department Live Device Directory</h3>
+              <p className="text-xs text-slate-500 font-normal">Real-time device status and policy enforcement across all sections</p>
             </div>
             <button 
-              onClick={() => navigate('/admin/students')}
-              className="text-xs font-medium text-blue-600 hover:text-blue-700 flex items-center space-x-1 cursor-pointer"
+              onClick={() => navigate('/admin/devices')}
+              className="text-xs font-medium text-blue-600 hover:text-blue-700 flex items-center space-x-1 cursor-pointer shrink-0"
             >
-              <span>View Roster</span>
+              <span>Manage Devices</span>
               <FiChevronRight className="w-4 h-4" />
             </button>
           </div>
 
-          <div className="divide-y divide-slate-100 max-h-[360px] overflow-y-auto pr-1">
-            {students.slice(0, 8).map((student) => {
-              const isBlocked = student.status === 'Blocked';
-              return (
-                <div key={student.id} className="py-2.5 flex items-center justify-between hover:bg-slate-50/50 rounded-xl px-2 transition-colors">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 rounded-full bg-blue-50 text-blue-700 font-medium text-xs flex items-center justify-center shrink-0 border border-blue-100">
-                      {student.name.substring(0, 2).toUpperCase()}
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-medium text-slate-800">{student.name}</h4>
-                      <p className="text-[11px] text-slate-500 font-normal">{student.registerNumber} • {student.year} ({student.section})</p>
-                    </div>
-                  </div>
+          {/* Search & Filters Toolbar */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-50/70 p-3 rounded-xl border border-slate-100">
+            <div className="relative w-full sm:w-52">
+              <FiSearch className="w-3.5 h-3.5 absolute left-3 top-2.5 text-slate-400" />
+              <input
+                type="text"
+                placeholder="Search name, reg no..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-8 pr-3 py-1.5 text-xs bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-blue-500 font-normal"
+              />
+            </div>
 
-                  <div className="flex items-center space-x-3">
-                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium border ${
-                      isBlocked 
-                        ? 'bg-rose-50 text-rose-700 border-rose-200' 
-                        : 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                    }`}>
-                      {isBlocked ? 'BLOCKED' : 'ACTIVE'}
-                    </span>
+            <div className="flex items-center space-x-2 w-full sm:w-auto justify-between sm:justify-end">
+              <div className="flex items-center space-x-1 shrink-0">
+                <FiFilter className="w-3 h-3 text-slate-400" />
+                <select
+                  value={yearFilter}
+                  onChange={(e) => setYearFilter(e.target.value)}
+                  className="bg-white border border-slate-200 text-xs font-medium rounded-lg px-2 py-1 focus:outline-none text-slate-700 cursor-pointer"
+                >
+                  <option value="All">All Years</option>
+                  <option value="1st Year">1st Year</option>
+                  <option value="2nd Year">2nd Year</option>
+                  <option value="3rd Year">3rd Year</option>
+                  <option value="4th Year">4th Year</option>
+                </select>
+              </div>
+
+              <div className="flex items-center space-x-1 shrink-0">
+                <select
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                  className="bg-white border border-slate-200 text-xs font-medium rounded-lg px-2 py-1 focus:outline-none text-slate-700 cursor-pointer"
+                >
+                  <option value="All">All Statuses</option>
+                  <option value="Active">Active (Unblocked)</option>
+                  <option value="Blocked">Blocked</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Student Device List */}
+          <div className="divide-y divide-slate-100 max-h-[340px] overflow-y-auto pr-1">
+            {filteredStudents.length === 0 ? (
+              <div className="py-8 text-center text-slate-400 font-normal text-xs">
+                No matching student devices found.
+              </div>
+            ) : (
+              filteredStudents.map((student) => {
+                const isBlocked = student.status === 'Blocked';
+                return (
+                  <div key={student.id} className="py-2.5 flex items-center justify-between hover:bg-slate-50/50 rounded-xl px-2 transition-colors">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 rounded-full bg-blue-50 text-blue-700 font-medium text-xs flex items-center justify-center shrink-0 border border-blue-100">
+                        {student.name.substring(0, 2).toUpperCase()}
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-medium text-slate-800">{student.name}</h4>
+                        <p className="text-[11px] text-slate-500 font-normal">{student.registerNumber} • {student.year} ({student.section})</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={() => handleToggleStudentDeviceStatus(student)}
+                        className={`px-2.5 py-1 rounded-full text-[10px] font-medium border transition-colors cursor-pointer ${
+                          isBlocked 
+                            ? 'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100' 
+                            : 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
+                        }`}
+                      >
+                        {isBlocked ? 'BLOCKED' : 'ACTIVE'}
+                      </button>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })
+            )}
           </div>
         </div>
 

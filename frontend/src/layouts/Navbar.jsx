@@ -130,7 +130,10 @@ export const Navbar = ({ onToggleSidebar, isSidebarOpen }) => {
                   <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
                     <span className="text-slate-400 font-medium">2 Active Class Alerts</span>
                     <button 
-                      onClick={() => { setNotificationsOpen(false); navigate(`/${role}/notifications`); }}
+                      onClick={() => { 
+                        setNotificationsOpen(false); 
+                        navigate(`/${role}/notifications`); 
+                      }}
                       className="text-blue-600 font-semibold hover:underline cursor-pointer"
                     >
                       View All Activity Log

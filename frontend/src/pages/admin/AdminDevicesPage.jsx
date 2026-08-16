@@ -8,6 +8,7 @@ import {
   FiAlertTriangle,
   FiSearch,
   FiFilter,
+  FiCheck,
   FiSlash,
   FiShield,
   FiRefreshCw,
