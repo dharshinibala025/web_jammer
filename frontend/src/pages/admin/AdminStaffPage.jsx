@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import adminService from '../../services/adminService';
-import StatusBadge from '../../components/admin/StatusBadge';
 import StaffModal from '../../components/admin/StaffModal';
 import {
   FiPlus,
@@ -292,8 +291,6 @@ export const AdminStaffPage = () => {
                     <span className="text-[10px] font-normal text-slate-400">ID: {s.staffId}</span>
                   </div>
                 </div>
-
-                <StatusBadge status={s.status} />
               </div>
 
               {/* Year & Section Badge Info */}

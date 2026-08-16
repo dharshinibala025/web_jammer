@@ -179,21 +179,6 @@ export const StaffModal = ({ isOpen, onClose, onSave, staff = null }) => {
 
             <div>
               <label className="block text-xs font-medium text-[#111827] uppercase tracking-wider mb-1">
-                Faculty Status
-              </label>
-              <select
-                value={formData.status}
-                onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                className="w-full py-2 px-3 bg-[#FFFFFF] border border-[#E5E7EB] rounded-xl text-xs font-medium text-[#111827] focus:outline-none focus:border-[#3B82F6]"
-              >
-                <option value="Active">Active</option>
-                <option value="On Leave">On Leave</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-xs font-medium text-[#111827] uppercase tracking-wider mb-1">
                 Phone *
               </label>
               <input
