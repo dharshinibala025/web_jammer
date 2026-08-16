@@ -11,15 +11,14 @@ import {
   FiCheck,
   FiSlash,
   FiShield,
-  FiRefreshCw,
-  FiSend
+  FiActivity
 } from 'react-icons/fi';
 
 export const AdminDevicesPage = () => {
   const [students, setStudents] = useState(adminService.getStudents());
   const [startTime, setStartTime] = useState('09:00 AM');
   const [endTime, setEndTime] = useState('04:00 PM');
-  const [restrictionStatus, setRestrictionStatus] = useState('ACTIVE');
+  const [restrictionStatus, setRestrictionStatus] = useState('ACTIVE'); // 'ACTIVE' | 'PAUSED' | 'IDLE'
   const [searchTerm, setSearchTerm] = useState('');
   const [yearFilter, setYearFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
@@ -58,6 +57,15 @@ export const AdminDevicesPage = () => {
     );
   };
 
+  const handleLiftPolicy = () => {
+    setRestrictionStatus('IDLE');
+    adminService.addNotification(
+      'Department Restrictions Lifted',
+      'All CSE Department restrictions have been set to Idle.'
+    );
+    alert('All department policy restrictions removed.');
+  };
+
   const handleEmergencyUnblockAll = () => {
     if (window.confirm('Are you sure you want to lift all mobile restrictions across CSE department?')) {
       setRestrictionStatus('IDLE');
@@ -67,7 +75,20 @@ export const AdminDevicesPage = () => {
         'Emergency Unblock Executed',
         'All student mobile restrictions have been lifted by Admin.'
       );
+      alert('Emergency unblock executed successfully.');
     }
+  };
+
+  const getStatusBgColor = () => {
+    if (restrictionStatus === 'ACTIVE') return 'bg-emerald-100/70 border-emerald-200 text-emerald-700';
+    if (restrictionStatus === 'PAUSED') return 'bg-amber-100/70 border-amber-200 text-amber-700';
+    return 'bg-slate-100/70 border-slate-200 text-slate-700';
+  };
+
+  const getStatusDotColor = () => {
+    if (restrictionStatus === 'ACTIVE') return 'bg-emerald-500';
+    if (restrictionStatus === 'PAUSED') return 'bg-amber-500';
+    return 'bg-slate-400';
   };
 
   // Filtered devices list
@@ -81,142 +102,109 @@ export const AdminDevicesPage = () => {
     return matchesSearch && matchesYear && matchesStatus;
   });
 
-  const totalDevices = students.length;
-  const blockedDevicesCount = students.filter(s => s.status === 'Blocked').length;
-  const activeDevicesCount = students.filter(s => s.status === 'Active').length;
-
   return (
     <div className="space-y-6 text-left w-full">
-      {/* Page Header Banner */}
-      <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <span className="px-3 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-600 border border-blue-200">
-            Computer Science and Engineering (CSE)
-          </span>
-          <h2 className="text-xl font-semibold text-slate-900 mt-2">Department Device Management</h2>
-          <p className="text-xs font-normal text-slate-500 mt-0.5">
-            Monitor registered mobile devices, configure blocklists, and manage restriction rules.
-          </p>
-        </div>
-
-        <div className="flex items-center space-x-2 shrink-0">
-          <button
-            onClick={handleEmergencyUnblockAll}
-            className="px-4 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-medium text-xs flex items-center space-x-2 cursor-pointer transition-colors"
-          >
-            <FiAlertTriangle className="w-4 h-4 text-rose-600" />
-            <span>Emergency Unblock</span>
-          </button>
-        </div>
+      {/* Top Header */}
+      <div>
+        <h2 className="text-2xl font-bold tracking-tight text-slate-900">Department Device Restrictions & Rules</h2>
+        <p className="text-xs font-normal text-slate-500 mt-1">
+          Configure and enforce mobile restrictions and schedules across all CSE department student devices.
+        </p>
       </div>
 
-      {/* Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white border border-slate-200/80 rounded-2xl p-4 shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-slate-500">Total CSE Devices</span>
-            <div className="p-2 rounded-xl bg-blue-50 text-blue-600">
-              <FiSmartphone className="w-4 h-4" />
-            </div>
-          </div>
-          <h3 className="text-2xl font-semibold text-slate-900 mt-2">{totalDevices}</h3>
-          <p className="text-xs text-slate-500 mt-0.5 font-normal">Smartphones registered in CSE</p>
-        </div>
-
-        <div className="bg-white border border-slate-200/80 rounded-2xl p-4 shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-slate-500">Active Connections</span>
-            <div className="p-2 rounded-xl bg-emerald-50 text-emerald-600">
-              <FiCheck className="w-4 h-4" />
-            </div>
-          </div>
-          <h3 className="text-2xl font-semibold text-slate-900 mt-2">{activeDevicesCount}</h3>
-          <p className="text-xs text-emerald-600 font-medium mt-0.5">Unrestricted Devices</p>
-        </div>
-
-        <div className="bg-white border border-slate-200/80 rounded-2xl p-4 shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-slate-500">Restricted / Blocked</span>
-            <div className="p-2 rounded-xl bg-rose-50 text-rose-600">
-              <FiSlash className="w-4 h-4" />
-            </div>
-          </div>
-          <h3 className="text-2xl font-semibold text-slate-900 mt-2">{blockedDevicesCount}</h3>
-          <p className="text-xs text-rose-600 font-medium mt-0.5">Enforced Mobile Restrictions</p>
-        </div>
-
-        <div className="bg-white border border-slate-200/80 rounded-2xl p-4 shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-slate-500">Master Policy Status</span>
-            <div className="p-2 rounded-xl bg-indigo-50 text-indigo-600">
-              <FiShield className="w-4 h-4" />
-            </div>
-          </div>
-          <h3 className="text-xl font-semibold text-slate-900 mt-2">{restrictionStatus}</h3>
-          <p className="text-xs text-slate-500 mt-0.5 font-normal">{restrictionStatus === 'ACTIVE' ? 'Policy Active' : 'Policy Paused'}</p>
-        </div>
-      </div>
-
-      {/* Master Department Policy Control Box */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs space-y-5">
-        <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+      {/* Master Control Card (Identical to Staff Device Page structure) */}
+      <div className="bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-8 shadow-xs space-y-6">
+        
+        {/* Target Supervision Department Bar */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
           <div>
-            <h3 className="text-sm font-semibold text-slate-900">CSE Department Policy Rules</h3>
-            <p className="text-xs text-slate-500 font-normal">Configure restriction schedule and global department rules</p>
+            <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Target Department Scope</span>
+            <div className="flex items-center space-x-3 mt-1">
+              <span className="text-base font-semibold text-slate-900">Computer Science and Engineering (CSE)</span>
+            </div>
           </div>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-3">
+            <span className="text-xs font-medium text-slate-600">Restriction Status:</span>
+            <div className={`px-3 py-1 rounded-full border flex items-center space-x-1.5 ${getStatusBgColor()}`}>
+              <span className={`w-2 h-2 rounded-full ${getStatusDotColor()}`} />
+              <span className="text-xs font-semibold tracking-wider">{restrictionStatus}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Restriction Schedule Inputs */}
+        <div className="space-y-3 pt-2">
+          <h3 className="text-xs font-semibold text-slate-700 uppercase tracking-wider">
+            RESTRICTION SCHEDULE
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="text-[10px] font-semibold text-slate-400 uppercase">Start Time</label>
+              <div className="flex items-center space-x-2 mt-1">
+                <FiClock className="w-4 h-4 text-slate-400" />
+                <input 
+                  type="text" 
+                  value={startTime}
+                  onChange={(e) => setStartTime(e.target.value)}
+                  className="w-full bg-slate-50 border border-slate-200/80 rounded-xl h-11 px-3 text-xs font-medium text-slate-800 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" 
+                />
+              </div>
+            </div>
+            <div>
+              <label className="text-[10px] font-semibold text-slate-400 uppercase">End Time</label>
+              <div className="flex items-center space-x-2 mt-1">
+                <FiClock className="w-4 h-4 text-slate-400" />
+                <input 
+                  type="text" 
+                  value={endTime}
+                  onChange={(e) => setEndTime(e.target.value)}
+                  className="w-full bg-slate-50 border border-slate-200/80 rounded-xl h-11 px-3 text-xs font-medium text-slate-800 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" 
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Action Buttons Section */}
+        <div className="space-y-3 pt-6 border-t border-slate-100">
+          <button
+            onClick={handleApplyDepartmentPolicy}
+            className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-xs flex items-center justify-center space-x-2 shadow-xs cursor-pointer transition-colors"
+          >
+            <FiLock className="w-4 h-4" />
+            <span>Apply Restriction</span>
+          </button>
+
+          <div className="grid grid-cols-2 gap-4">
             <button
               onClick={handleTogglePause}
-              className={`px-3 py-1.5 rounded-xl text-xs font-medium border transition-colors cursor-pointer ${
-                restrictionStatus === 'ACTIVE'
-                  ? 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100'
-                  : 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
-              }`}
+              className="h-11 bg-white border border-amber-200/80 hover:bg-amber-50 text-amber-600 rounded-xl font-semibold text-xs flex items-center justify-center space-x-1.5 cursor-pointer transition-colors"
             >
-              {restrictionStatus === 'ACTIVE' ? 'Pause Policy' : 'Resume Policy'}
+              <FiActivity className="w-4 h-4" />
+              <span>{restrictionStatus === 'ACTIVE' ? 'Pause' : 'Resume'}</span>
             </button>
             <button
-              onClick={handleApplyDepartmentPolicy}
-              className="px-4 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs flex items-center space-x-1.5 shadow-xs cursor-pointer"
+              onClick={handleLiftPolicy}
+              className="h-11 bg-slate-50 border border-slate-200/80 hover:bg-slate-100 text-slate-600 rounded-xl font-semibold text-xs flex items-center justify-center space-x-1.5 cursor-pointer transition-colors"
             >
-              <FiLock className="w-3.5 h-3.5" />
-              <span>Apply Policy</span>
+              <FiUnlock className="w-4 h-4" />
+              <span>Remove</span>
             </button>
           </div>
+
+          <button
+            onClick={handleEmergencyUnblockAll}
+            className="w-full h-11 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-semibold text-xs flex items-center justify-center space-x-2 shadow-xs cursor-pointer transition-colors"
+          >
+            <FiAlertTriangle className="w-4 h-4 animate-pulse" />
+            <span>Emergency Unblock All</span>
+          </button>
         </div>
 
-        {/* Schedule Inputs */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className="text-[10px] font-medium text-slate-400 uppercase">Policy Start Time</label>
-            <div className="flex items-center space-x-2 mt-1">
-              <FiClock className="w-4 h-4 text-slate-400" />
-              <input
-                type="text"
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl h-10 px-3 text-xs font-medium text-slate-800 focus:outline-none focus:border-blue-500"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="text-[10px] font-medium text-slate-400 uppercase">Policy End Time</label>
-            <div className="flex items-center space-x-2 mt-1">
-              <FiClock className="w-4 h-4 text-slate-400" />
-              <input
-                type="text"
-                value={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl h-10 px-3 text-xs font-medium text-slate-800 focus:outline-none focus:border-blue-500"
-              />
-            </div>
-          </div>
-        </div>
       </div>
 
-      {/* Student Device Directory Table Section */}
+      {/* Student Device Directory Table Section (Kept as requested) */}
       <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs space-y-4">
         {/* Table Search & Filters */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -238,7 +226,7 @@ export const AdminDevicesPage = () => {
               <select
                 value={yearFilter}
                 onChange={(e) => setYearFilter(e.target.value)}
-                className="bg-slate-50 border border-slate-200 text-xs font-medium rounded-xl px-2.5 py-1.5 focus:outline-none"
+                className="bg-slate-50 border border-slate-200 text-xs font-medium rounded-xl px-2.5 py-1.5 focus:outline-none cursor-pointer"
               >
                 <option value="All">All Years</option>
                 <option value="1st Year">1st Year</option>
@@ -253,7 +241,7 @@ export const AdminDevicesPage = () => {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="bg-slate-50 border border-slate-200 text-xs font-medium rounded-xl px-2.5 py-1.5 focus:outline-none"
+                className="bg-slate-50 border border-slate-200 text-xs font-medium rounded-xl px-2.5 py-1.5 focus:outline-none cursor-pointer"
               >
                 <option value="All">All Statuses</option>
                 <option value="Active">Active (Unblocked)</option>
@@ -348,4 +336,5 @@ export const AdminDevicesPage = () => {
     </div>
   );
 };
+
 export default AdminDevicesPage;
