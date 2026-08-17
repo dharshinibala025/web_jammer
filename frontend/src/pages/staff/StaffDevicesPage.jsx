@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import staffMockData from '../../services/staffMockData';
 import { useAuth } from '../../contexts/AuthContext';
-import { FiSmartphone, FiClock, FiLock, FiUnlock, FiAlertTriangle, FiBookOpen, FiActivity } from 'react-icons/fi';
+import { FiSmartphone, FiClock, FiLock, FiUnlock, FiBookOpen, FiActivity } from 'react-icons/fi';
 
 export const StaffDevicesPage = () => {
   const { user } = useAuth();
@@ -131,14 +131,6 @@ export const StaffDevicesPage = () => {
               <span>Remove</span>
             </button>
           </div>
-
-          <button
-            onClick={handleLiftPolicy}
-            className="w-full h-11 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-semibold text-xs flex items-center justify-center space-x-2 shadow-xs cursor-pointer transition-colors"
-          >
-            <FiAlertTriangle className="w-4 h-4 animate-pulse" />
-            <span>Emergency Unblock All</span>
-          </button>
         </div>
 
       </div>

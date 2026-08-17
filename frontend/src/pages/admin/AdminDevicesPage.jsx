@@ -5,7 +5,6 @@ import {
   FiClock,
   FiLock,
   FiUnlock,
-  FiAlertTriangle,
   FiSearch,
   FiFilter,
   FiCheck,
@@ -64,19 +63,6 @@ export const AdminDevicesPage = () => {
       'All CSE Department restrictions have been set to Idle.'
     );
     alert('All department policy restrictions removed.');
-  };
-
-  const handleEmergencyUnblockAll = () => {
-    if (window.confirm('Are you sure you want to lift all mobile restrictions across CSE department?')) {
-      setRestrictionStatus('IDLE');
-      const updated = students.map(s => ({ ...s, status: 'Active' }));
-      adminService.saveStudents(updated);
-      adminService.addNotification(
-        'Emergency Unblock Executed',
-        'All student mobile restrictions have been lifted by Admin.'
-      );
-      alert('Emergency unblock executed successfully.');
-    }
   };
 
   const getStatusBgColor = () => {
@@ -192,14 +178,6 @@ export const AdminDevicesPage = () => {
               <span>Remove</span>
             </button>
           </div>
-
-          <button
-            onClick={handleEmergencyUnblockAll}
-            className="w-full h-11 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-semibold text-xs flex items-center justify-center space-x-2 shadow-xs cursor-pointer transition-colors"
-          >
-            <FiAlertTriangle className="w-4 h-4 animate-pulse" />
-            <span>Emergency Unblock All</span>
-          </button>
         </div>
 
       </div>
