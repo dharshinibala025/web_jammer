@@ -41,11 +41,11 @@ export const Sidebar = ({ isOpen, onClose }) => {
   ];
 
   const adminLinks = [
-    { to: '/admin/dashboard', label: 'Admin Panel', icon: FiGrid },
-    { to: '/admin/students', label: 'Students Master', icon: FiUsers },
-    { to: '/admin/staff', label: 'Faculty Directory', icon: FiBookOpen },
-    { to: '/admin/devices', label: 'All Registered Devices', icon: FiSmartphone },
-    { to: '/admin/settings', label: 'System Policy Config', icon: FiSettings },
+    { to: '/admin/dashboard', label: 'Dashboard', icon: FiGrid },
+    { to: '/admin/students', label: 'Students', icon: FiUsers },
+    { to: '/admin/staff', label: 'Faculty', icon: FiBookOpen },
+    { to: '/admin/devices', label: 'Devices', icon: FiSmartphone },
+    { to: '/admin/settings', label: 'Settings', icon: FiSettings },
   ];
 
   const navItems = role === 'admin' ? adminLinks : role === 'staff' ? staffLinks : studentLinks;

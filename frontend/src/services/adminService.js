@@ -171,6 +171,26 @@ class AdminService {
     this.saveStaff(updated);
   }
 
+  importStaff(newStaffArray) {
+    const staffList = this.getStaff();
+    const formatted = newStaffArray.map((s, index) => ({
+      id: (Date.now() + index).toString(),
+      staffId: s.staffId || s['Staff ID'] || s['ID'] || `STF${String(index + 100).padStart(3, '0')}`,
+      name: s.name || s['Name'] || 'Faculty Member',
+      designation: s.designation || s['Designation'] || 'Assistant Professor',
+      advisorType: s.advisorType || s['Advisor Type'] || 'CA1',
+      year: s.year || s['Year'] || '1st Year',
+      section: s.section || s['Section'] || 'A',
+      department: 'CSE',
+      email: s.email || s['Email'] || 'faculty@ksrce.ac.in',
+      phone: s.phone || s['Phone'] || '9876543210',
+    }));
+    const updated = [...formatted, ...staffList];
+    this.saveStaff(updated);
+    this.addNotification('Batch Faculty Import Successful', `${formatted.length} CSE faculty member records imported.`);
+    return formatted.length;
+  }
+
   // --- Year-Wise Sections ---
   getSections(year) {
     const raw = localStorage.getItem(STORAGE_KEYS.SECTIONS);

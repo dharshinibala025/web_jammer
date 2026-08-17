@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import adminService from '../../services/adminService';
 import StaffModal from '../../components/admin/StaffModal';
+import StaffExcelImportModal from '../../components/admin/StaffExcelImportModal';
 import {
   FiPlus,
+  FiUpload,
   FiEdit2,
   FiTrash2,
   FiFilter,
@@ -35,6 +37,7 @@ export const AdminStaffPage = () => {
   });
 
   const [isStaffModalOpen, setIsStaffModalOpen] = useState(false);
+  const [isExcelModalOpen, setIsExcelModalOpen] = useState(false);
   const [editingStaff, setEditingStaff] = useState(null);
   const [isAppliedAnimation, setIsAppliedAnimation] = useState(false);
 
@@ -81,6 +84,10 @@ export const AdminStaffPage = () => {
     setEditingStaff(null);
   };
 
+  const handleImportExcelSuccess = (newStaffRows) => {
+    return adminService.importStaff(newStaffRows);
+  };
+
   const handleDeleteStaff = (id, name) => {
     if (window.confirm(`Are you sure you want to remove staff member "${name}"?`)) {
       adminService.deleteStaff(id);
@@ -114,16 +121,26 @@ export const AdminStaffPage = () => {
           </p>
         </div>
 
-        <button
-          onClick={() => {
-            setEditingStaff(null);
-            setIsStaffModalOpen(true);
-          }}
-          className="px-4 py-2 rounded-xl bg-blue-600 text-white font-medium text-xs hover:bg-blue-700 transition-colors flex items-center space-x-1.5 shadow-xs cursor-pointer"
-        >
-          <FiPlus className="w-4 h-4" />
-          <span>Add Staff Member</span>
-        </button>
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={() => setIsExcelModalOpen(true)}
+            className="px-4 py-2 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium text-xs hover:bg-slate-50 hover:text-blue-600 transition-colors flex items-center space-x-1.5 shadow-2xs cursor-pointer"
+          >
+            <FiUpload className="w-4 h-4 text-blue-600" />
+            <span>Upload Excel</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setEditingStaff(null);
+              setIsStaffModalOpen(true);
+            }}
+            className="px-4 py-2 rounded-xl bg-blue-600 text-white font-medium text-xs hover:bg-blue-700 transition-colors flex items-center space-x-1.5 shadow-xs cursor-pointer"
+          >
+            <FiPlus className="w-4 h-4" />
+            <span>Add Staff Member</span>
+          </button>
+        </div>
       </div>
 
       {/* ==========================================
@@ -350,6 +367,13 @@ export const AdminStaffPage = () => {
         }}
         onSave={handleSaveStaff}
         staff={editingStaff}
+      />
+
+      {/* Staff Excel Import Modal */}
+      <StaffExcelImportModal
+        isOpen={isExcelModalOpen}
+        onClose={() => setIsExcelModalOpen(false)}
+        onImportSuccess={handleImportExcelSuccess}
       />
     </div>
   );
