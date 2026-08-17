@@ -47,11 +47,17 @@ export const AppGridCard = ({ app, onClick }) => {
   };
 
   const isBlocked = app.blocked;
+  const isClickable = !!onClick;
 
   return (
     <div
       onClick={onClick}
-      className={`relative p-4 rounded-2xl border transition-all duration-200 cursor-pointer flex flex-col justify-between ${
+      role={isClickable ? 'button' : undefined}
+      tabIndex={isClickable ? 0 : undefined}
+      onKeyDown={isClickable ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(e); } } : undefined}
+      className={`relative p-4 rounded-2xl border transition-all duration-200 flex flex-col justify-between ${
+        isClickable ? 'cursor-pointer' : ''
+      } ${
         isBlocked
           ? 'bg-rose-50/40 border-rose-100 hover:border-rose-300 hover:shadow-md'
           : 'bg-white border-slate-200 hover:border-blue-300 hover:shadow-md'

@@ -18,7 +18,7 @@ class SyncService {
         osVersion: navigator.userAgent || 'Web Browser',
         appVersion: '1.0.0 Web',
         deviceModel: 'Web Controller',
-        deviceId: 'web_device_' + Math.random().toString(36).substr(2, 9),
+        deviceId: 'web_device_' + Math.random().toString(36).substring(2, 11),
       };
 
       const registrationPayload = {
@@ -35,8 +35,8 @@ class SyncService {
       if (serverDeviceId) {
         localStorage.setItem(CACHE_KEYS.DEVICE_ID, serverDeviceId);
       }
-    } catch (error) {
-      console.warn('FocusSync Web: Background Synchronization notice:', error.message);
+    } catch {
+      // Sync failed silently
     } finally {
       this.isSyncing = false;
     }
@@ -47,11 +47,11 @@ class SyncService {
   }
 
   openAccessibilitySettings() {
-    console.log('Web Edition: Accessibility settings controlled via browser permissions');
+    // Web edition: accessibility settings controlled via browser permissions
   }
 
   openOverlaySettings() {
-    console.log('Web Edition: Overlay settings controlled via browser permissions');
+    // Web edition: overlay settings controlled via browser permissions
   }
 
   async reportBlockedAttempt(packageName, appName, policyVersion) {
@@ -68,8 +68,8 @@ class SyncService {
           attemptedAt: new Date().toISOString(),
         }),
       });
-    } catch (error) {
-      console.warn('FocusSync: Blocked attempt logging notice:', error.message);
+    } catch {
+      // Blocked attempt logging failed silently
     }
   }
 }

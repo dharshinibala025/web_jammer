@@ -136,7 +136,7 @@ export const LoginPage = () => {
           <InputField
             label="Email Address"
             value={email}
-            onChangeText={(text) => {
+            onChange={(text) => {
               setEmail(text);
               if (errors.email) setErrors((prev) => ({ ...prev, email: null }));
             }}
@@ -148,7 +148,7 @@ export const LoginPage = () => {
           <InputField
             label="Password"
             value={password}
-            onChangeText={(text) => {
+            onChange={(text) => {
               setPassword(text);
               if (errors.password) setErrors((prev) => ({ ...prev, password: null }));
             }}

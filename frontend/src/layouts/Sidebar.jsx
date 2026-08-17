@@ -67,6 +67,7 @@ export const Sidebar = ({ isOpen, onClose }) => {
 
       {/* Sidebar container */}
       <aside
+        aria-label="Main navigation"
         className={`fixed top-16 bottom-0 left-0 z-40 w-64 bg-white border-r border-slate-200 shadow-sm flex flex-col justify-between transition-transform duration-300 ease-in-out lg:translate-x-0 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
@@ -78,7 +79,6 @@ export const Sidebar = ({ isOpen, onClose }) => {
           
           {navItems.map((item) => {
             const Icon = item.icon;
-            const isActive = location.pathname === item.to;
             return (
               <NavLink
                 key={item.to}
@@ -92,8 +92,12 @@ export const Sidebar = ({ isOpen, onClose }) => {
                   }`
                 }
               >
-                <Icon className={`w-5 h-5 ${isActive ? 'text-blue-600' : 'text-slate-400'}`} />
-                <span>{item.label}</span>
+                {({ isActive }) => (
+                  <>
+                    <Icon className={`w-5 h-5 ${isActive ? 'text-blue-600' : 'text-slate-400'}`} />
+                    <span>{item.label}</span>
+                  </>
+                )}
               </NavLink>
             );
           })}

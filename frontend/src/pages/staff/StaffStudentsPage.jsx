@@ -28,7 +28,7 @@ export const StaffStudentsPage = () => {
         <div className="max-w-md w-full">
           <SearchBar
             value={search}
-            onChangeText={setSearch}
+            onChange={setSearch}
             placeholder="Search by student name or roll number..."
           />
         </div>

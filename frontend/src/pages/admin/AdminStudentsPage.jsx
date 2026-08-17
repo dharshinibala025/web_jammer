@@ -40,7 +40,7 @@ export const AdminStudentsPage = () => {
       </div>
 
       <div className="max-w-md">
-        <SearchBar value={search} onChangeText={setSearch} placeholder="Search by name, roll no, or section..." />
+        <SearchBar value={search} onChange={setSearch} placeholder="Search by name, roll no, or section..." />
       </div>
 
       {/* Table */}

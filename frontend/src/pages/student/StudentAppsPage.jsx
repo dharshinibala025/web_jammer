@@ -59,7 +59,7 @@ export const StudentAppsPage = () => {
       <div className="max-w-md">
         <SearchBar
           value={searchTerm}
-          onChangeText={setSearchTerm}
+          onChange={setSearchTerm}
           placeholder="Search by app name or category..."
         />
       </div>

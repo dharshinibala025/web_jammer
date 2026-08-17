@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import PrimaryButton from '../../components/common/PrimaryButton';
 import { FiClock, FiShield, FiSliders, FiCheckCircle } from 'react-icons/fi';
 
@@ -6,12 +6,19 @@ export const AdminSettingsPage = () => {
   const [startTime, setStartTime] = useState('09:00');
   const [endTime, setEndTime] = useState('16:00');
   const [saved, setSaved] = useState(false);
+  const timerRef = useRef(null);
 
-  const handleSave = (e) => {
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
+
+  const handleSave = useCallback((e) => {
     e.preventDefault();
     setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
-  };
+    timerRef.current = setTimeout(() => setSaved(false), 2000);
+  }, []);
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
@@ -75,7 +82,7 @@ export const AdminSettingsPage = () => {
           </div>
         )}
 
-        <PrimaryButton title="Save & Broadcast Policy" onPress={handleSave} className="bg-purple-900 hover:bg-purple-800 shadow-purple-900/25" />
+        <PrimaryButton title="Save & Broadcast Policy" type="submit" className="bg-purple-900 hover:bg-purple-800 shadow-purple-900/25" />
       </form>
     </div>
   );

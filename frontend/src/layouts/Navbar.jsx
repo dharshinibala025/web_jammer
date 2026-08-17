@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { 
@@ -17,6 +17,7 @@ export const Navbar = ({ onToggleSidebar, isSidebarOpen }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   const handleLogout = async () => {
     await logout();
@@ -33,6 +34,27 @@ export const Navbar = ({ onToggleSidebar, isSidebarOpen }) => {
         return <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-700 border border-blue-200">Student</span>;
     }
   };
+
+  useEffect(() => {
+    if (!profileDropdownOpen) return;
+
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setProfileDropdownOpen(false);
+      }
+    };
+
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') setProfileDropdownOpen(false);
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscape);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [profileDropdownOpen]);
 
   return (
     <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-xs">
@@ -74,6 +96,7 @@ export const Navbar = ({ onToggleSidebar, isSidebarOpen }) => {
             <button
               onClick={() => navigate(`/${role}/notifications`)}
               className="relative p-2.5 rounded-xl text-slate-600 hover:bg-slate-100 transition-colors focus:outline-none"
+              aria-label="Notifications"
               title="Notifications"
             >
               <FiBell className="w-5 h-5" />
@@ -81,10 +104,12 @@ export const Navbar = ({ onToggleSidebar, isSidebarOpen }) => {
             </button>
 
             {/* Profile Dropdown */}
-            <div className="relative">
+            <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
                 className="flex items-center space-x-2 p-1.5 rounded-xl hover:bg-slate-100 transition-colors focus:outline-none"
+                aria-expanded={profileDropdownOpen}
+                aria-haspopup="true"
               >
                 <div className="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm shadow-sm overflow-hidden">
                   {user?.avatar ? (
@@ -96,11 +121,11 @@ export const Navbar = ({ onToggleSidebar, isSidebarOpen }) => {
                 <span className="hidden md:block text-sm font-semibold text-slate-800 max-w-[120px] truncate">
                   {user?.name || 'User'}
                 </span>
-                <FiChevronDown className="hidden md:block w-4 h-4 text-slate-500" />
+                <FiChevronDown className={`hidden md:block w-4 h-4 text-slate-500 transition-transform ${profileDropdownOpen ? 'rotate-180' : ''}`} />
               </button>
 
               {profileDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150" role="menu">
                   <div className="px-4 py-2.5 border-b border-slate-100">
                     <p className="text-sm font-bold text-slate-900 truncate">{user?.name}</p>
                     <p className="text-xs text-slate-500 truncate">{user?.email}</p>
@@ -109,6 +134,7 @@ export const Navbar = ({ onToggleSidebar, isSidebarOpen }) => {
                     to={`/${role}/profile`}
                     onClick={() => setProfileDropdownOpen(false)}
                     className="flex items-center space-x-2.5 px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-blue-600 transition-colors"
+                    role="menuitem"
                   >
                     <FiUser className="w-4 h-4 text-slate-500" />
                     <span>Profile & Settings</span>
@@ -116,6 +142,7 @@ export const Navbar = ({ onToggleSidebar, isSidebarOpen }) => {
                   <button
                     onClick={handleLogout}
                     className="w-full flex items-center space-x-2.5 px-4 py-2.5 text-sm font-medium text-rose-600 hover:bg-rose-50 transition-colors border-t border-slate-100 mt-1"
+                    role="menuitem"
                   >
                     <FiLogOut className="w-4 h-4 text-rose-500" />
                     <span>Sign Out</span>

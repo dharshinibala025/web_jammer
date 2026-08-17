@@ -11,9 +11,7 @@ export const PasswordStrengthMeter = ({ password = '' }) => {
 
     if (score === 1) return { score: 1, label: 'Weak', color: 'bg-rose-500', textColor: 'text-rose-500' };
     if (score === 2) return { score: 2, label: 'Medium', color: 'bg-amber-500', textColor: 'text-amber-500' };
-    if (score === 3) return { score: 3, label: 'Strong', color: 'bg-emerald-500', textColor: 'text-emerald-500' };
-
-    return { score: 1, label: 'Weak', color: 'bg-rose-500', textColor: 'text-rose-500' };
+    return { score: 3, label: 'Strong', color: 'bg-emerald-500', textColor: 'text-emerald-500' };
   };
 
   const { score, label, color, textColor } = calculateStrength(password);

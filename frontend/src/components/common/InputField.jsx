@@ -4,7 +4,7 @@ import { FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
 export const InputField = ({
   label,
   value,
-  onChangeText,
+  onChange,
   placeholder,
   iconType,
   isPassword = false,
@@ -44,7 +44,7 @@ export const InputField = ({
         <input
           type={inputType}
           value={value}
-          onChange={(e) => onChangeText && onChangeText(e.target.value)}
+          onChange={(e) => onChange && onChange(e.target.value)}
           placeholder={placeholder}
           className={`w-full py-3.5 ${
             getIcon() ? 'pl-11' : 'pl-4'
