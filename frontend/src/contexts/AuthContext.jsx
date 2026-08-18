@@ -47,6 +47,7 @@ export const AuthProvider = ({ children }) => {
       } else if (finalRole === 'admin') {
         activeUser = {
           name: 'HOD / Department Admin',
+          initials: 'AD',
           email: email || 'admin@ksrce.ac.in',
           role: 'admin',
           department: 'Computer Science and Engineering',

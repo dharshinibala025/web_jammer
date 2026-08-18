@@ -12,6 +12,17 @@ import {
 } from 'react-icons/fi';
 import logo from '../assets/logo.png';
 
+const getInitials = (name) => {
+  if (!name) return 'U';
+  return name
+    .split(' ')
+    .filter(Boolean)
+    .map((n) => n[0])
+    .join('')
+    .substring(0, 2)
+    .toUpperCase();
+};
+
 export const Navbar = ({ onToggleSidebar, isSidebarOpen }) => {
   const { user, role, logout } = useAuth();
   const navigate = useNavigate();
