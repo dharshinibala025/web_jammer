@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 export const PrimaryButton = ({
   title,
   onPress,
+  type = 'button',
   loading = false,
   disabled = false,
   variant = 'primary',
@@ -15,7 +16,7 @@ export const PrimaryButton = ({
     <motion.button
       whileHover={{ scale: 1.01 }}
       whileTap={{ scale: 0.98 }}
-      type="button"
+      type={type}
       onClick={onPress}
       disabled={loading || disabled}
       className={`w-full h-14 rounded-2xl font-bold text-base transition-all flex items-center justify-center shadow-lg ${

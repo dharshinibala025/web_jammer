@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import adminService from '../../services/adminService';
-import { FiSettings, FiCheck, FiMail, FiGrid, FiBell, FiShield } from 'react-icons/fi';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import PrimaryButton from '../../components/common/PrimaryButton';
+import { FiClock, FiShield, FiSliders, FiCheckCircle } from 'react-icons/fi';
 
 export const AdminSettingsPage = () => {
   const [settings, setSettings] = useState(adminService.getSettings());
   const [saved, setSaved] = useState(false);
+  const timerRef = useRef(null);
 
   useEffect(() => {
-    const loadSettings = () => setSettings(adminService.getSettings());
-    loadSettings();
-    const unsubscribe = adminService.subscribe(loadSettings);
-    return () => unsubscribe();
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
   }, []);
 
-  const handleSave = (e) => {
+  const handleSave = useCallback((e) => {
     e.preventDefault();
     adminService.updateSettings(settings);
     setSaved(true);
-    setTimeout(() => setSaved(false), 2500);
-  };
+    timerRef.current = setTimeout(() => setSaved(false), 2000);
+  }, []);
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
@@ -108,13 +108,7 @@ export const AdminSettingsPage = () => {
           </div>
         )}
 
-        <button
-          type="submit"
-          className="w-full py-3 rounded-xl bg-[#3B82F6] text-white font-medium text-xs hover:bg-[#2563EB] transition-colors shadow-xs flex items-center justify-center space-x-2"
-        >
-          <FiCheck className="w-4 h-4" />
-          <span>Save Preferences</span>
-        </button>
+        <PrimaryButton title="Save & Broadcast Policy" type="submit" className="bg-purple-900 hover:bg-purple-800 shadow-purple-900/25" />
       </form>
     </div>
   );

@@ -24,7 +24,11 @@ export const NotificationsCard = ({ notifications = [] }) => {
               n.read ? 'bg-slate-50 border-slate-100 text-slate-600' : 'bg-blue-50/40 border-blue-100 text-slate-900 font-medium'
             }`}
           >
-            <FiCheckCircle className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+            {n.read ? (
+              <FiCheckCircle className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
+            ) : (
+              <FiBell className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+            )}
             <div className="flex-1 min-w-0">
               <p className="text-xs sm:text-sm font-semibold">{n.message}</p>
               <p className="text-[11px] text-slate-400 mt-1 font-medium">{n.time}</p>

@@ -1,6 +1,5 @@
 import {
   BASE_URL,
-  STORAGE_KEYS,
   apiFetch,
   saveTokens,
   saveUser,
@@ -118,7 +117,12 @@ class AuthService {
         body: JSON.stringify({ refreshToken }),
       });
 
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch {
+        return null;
+      }
 
       if (!response.ok || !data.accessToken) {
         return null;
@@ -161,7 +165,8 @@ class AuthService {
 
       return data;
     } catch (err) {
-      return { success: true, message: 'Password updated successfully' };
+      if (err.status) throw err;
+      return { success: false, message: 'Password update failed. Please try again.' };
     }
   }
 }

@@ -1,13 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiClock } from 'react-icons/fi';
 
 export const LiveRestrictionClock = ({
-  currentTime = new Date(),
-  remainingSeconds = 8100, // 02:15:00 default
+  remainingSeconds: initialRemainingSeconds = 8100,
   progress = 0.65,
   statusMode = 'ACTIVE',
 }) => {
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [remainingSeconds, setRemainingSeconds] = useState(initialRemainingSeconds);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(new Date());
+      setRemainingSeconds(prev => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   const formatTimeDigits = (totalSec) => {
     if (totalSec <= 0) return { hrs: '00', mins: '00', secs: '00' };
     const h = Math.floor(totalSec / 3600);

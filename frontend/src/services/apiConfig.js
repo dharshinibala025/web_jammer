@@ -5,7 +5,7 @@
  */
 import axios from 'axios';
 
-export const BASE_URL = 'http://localhost:5000';
+export const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
 export const STORAGE_KEYS = {
   ACCESS_TOKEN: '@focussync:accessToken',
@@ -38,7 +38,13 @@ export const saveUser = async (user) => {
 
 export const getStoredUser = async () => {
   const raw = localStorage.getItem(STORAGE_KEYS.USER);
-  return raw ? JSON.parse(raw) : null;
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    localStorage.removeItem(STORAGE_KEYS.USER);
+    return null;
+  }
 };
 
 export const api = axios.create({
@@ -64,12 +70,19 @@ export const apiFetch = async (path, options = {}) => {
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...(options.headers || {}),
     };
-    
+
+    let data;
+    if (options.body) {
+      data = typeof options.body === 'string'
+        ? (() => { try { return JSON.parse(options.body); } catch { return options.body; } })()
+        : options.body;
+    }
+
     const response = await axios({
       url: `${BASE_URL}${path}`,
       method,
       headers,
-      data: options.body ? (typeof options.body === 'string' ? JSON.parse(options.body) : options.body) : undefined,
+      data,
     });
     return response.data;
   } catch (error) {

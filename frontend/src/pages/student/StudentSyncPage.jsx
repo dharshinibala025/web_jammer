@@ -1,17 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { FiRefreshCw, FiCheckCircle, FiServer, FiWifi } from 'react-icons/fi';
+import { BASE_URL } from '../../services/apiConfig';
 
 export const StudentSyncPage = () => {
   const [syncing, setSyncing] = useState(false);
   const [lastSync, setLastSync] = useState('Just now');
+  const timerRef = useRef(null);
 
-  const handleManualSync = () => {
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
+
+  const handleManualSync = useCallback(() => {
     setSyncing(true);
-    setTimeout(() => {
+    timerRef.current = setTimeout(() => {
       setSyncing(false);
       setLastSync(new Date().toLocaleTimeString());
     }, 1200);
-  };
+  }, []);
+
+  const serverHost = (() => {
+    try {
+      return new URL(BASE_URL).host;
+    } catch {
+      return BASE_URL;
+    }
+  })();
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
@@ -48,7 +64,7 @@ export const StudentSyncPage = () => {
               <FiServer className="w-4 h-4" />
               <span>Server Link</span>
             </div>
-            <p className="text-sm font-bold text-slate-900">Connected (localhost:5000)</p>
+            <p className="text-sm font-bold text-slate-900">Connected ({serverHost})</p>
           </div>
 
           <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-1">

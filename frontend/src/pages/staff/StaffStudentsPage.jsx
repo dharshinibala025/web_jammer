@@ -77,59 +77,12 @@ export const StaffStudentsPage = () => {
           </div>
         </div>
 
-        {/* Directory List Section */}
-        <div className="space-y-4">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400">My Class Students</h3>
-          
-          {sorted.length === 0 ? (
-            <div className="py-8 text-center text-slate-400 font-normal text-xs">
-              No students match your filter or search query.
-            </div>
-          ) : (
-          <div className="divide-y divide-slate-100">
-            {sorted.map((student) => {
-              const isBlocked = student.status === 'blocked';
-              const isOffline = student.status === 'offline';
-              return (
-                <button
-                  key={student.id}
-                  onClick={() => setSelectedStudent(student)}
-                  className="w-full py-3.5 text-left flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-50/50 transition-colors cursor-pointer group"
-                >
-                  <div className="flex items-start space-x-3">
-                    <div className="w-9 h-9 rounded-full bg-blue-50 text-blue-700 font-semibold text-xs flex items-center justify-center shrink-0 border border-blue-100 mt-0.5">
-                      {student.name.substring(0, 2).toUpperCase()}
-                    </div>
-                    <div className="space-y-0.5">
-                      <h4 className="text-sm font-medium text-slate-900 group-hover:text-blue-600 transition-colors">{student.name}</h4>
-                      <p className="text-xs text-slate-500 font-normal leading-none">{student.rollNo}</p>
-                      
-                      {/* Warnings row */}
-                      {isBlocked && student.attempts > 0 && (
-                        <div className="flex items-center space-x-1 text-[10px] text-rose-600 font-medium pt-1">
-                          <FiAlertCircle className="w-3.5 h-3.5 text-rose-500 shrink-0" />
-                          <span>{student.attempts} attempts to open restricted apps today</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2">
-                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-semibold tracking-wider ${
-                      isBlocked 
-                        ? 'bg-rose-100 text-rose-700' 
-                        : isOffline 
-                          ? 'bg-slate-100 text-slate-600' 
-                          : 'bg-emerald-100 text-emerald-700'
-                    }`}>
-                      {isBlocked ? 'BLOCKED' : isOffline ? 'OFFLINE' : 'UNBLOCKED'}
-                    </span>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        )}
+        <div className="max-w-md w-full">
+          <SearchBar
+            value={search}
+            onChange={setSearch}
+            placeholder="Search by student name or roll number..."
+          />
         </div>
       </div>
 

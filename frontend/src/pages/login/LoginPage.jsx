@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FiArrowLeft, FiCheck } from 'react-icons/fi';
+import { FiArrowLeft, FiCheck, FiShield } from 'react-icons/fi';
 import { useAuth } from '../../contexts/AuthContext';
 import RoleSelector from '../../components/common/RoleSelector';
 import InputField from '../../components/common/InputField';
 import PrimaryButton from '../../components/common/PrimaryButton';
 import logo from '../../assets/logo.png';
+import MagicRings from '../../components/MagicRings';
 
 export const LoginPage = () => {
   const navigate = useNavigate();
@@ -65,17 +66,37 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-center items-center px-4 py-8 font-sans">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col justify-center items-center px-4 py-8 font-sans relative overflow-hidden selection:bg-blue-600 selection:text-white">
+      
+      {/* Soft Background Magic Rings */}
+      <div className="fixed inset-0 -z-10 pointer-events-none opacity-40">
+        <MagicRings
+          color="#93c5fd"
+          colorTwo="#3b82f6"
+          ringCount={6}
+          speed={0.7}
+          attenuation={10}
+          lineThickness={1.5}
+          baseRadius={0.4}
+          radiusStep={0.12}
+          scaleRate={0.08}
+          opacity={0.45}
+          noiseAmount={0.01}
+          followMouse={true}
+          mouseInfluence={0.15}
+        />
+      </div>
+
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="w-full max-w-md bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xl"
+        className="w-full max-w-md bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xl relative z-10"
       >
         {/* Back Button */}
         <button
           onClick={() => navigate('/')}
-          className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors mb-6"
+          className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors mb-6 cursor-pointer"
         >
           <FiArrowLeft className="w-4 h-4 text-blue-600" />
           <span>Welcome</span>
@@ -86,16 +107,19 @@ export const LoginPage = () => {
           <div className="w-16 h-16 rounded-2xl bg-white border border-slate-100 p-2 shadow-xs mb-3 flex items-center justify-center">
             <img src={logo} alt="Logo" className="w-full h-full object-contain" />
           </div>
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900">FocusSync</h2>
-          <p className="text-xs font-medium text-slate-500 mt-0.5">Department Mobile Controller</p>
+          <h2 className="text-2xl font-extrabold text-slate-900 font-heading">FocusSync</h2>
+          <p className="text-xs font-semibold text-slate-500 mt-0.5 flex items-center justify-center gap-1">
+            <FiShield className="w-3.5 h-3.5 text-emerald-500" />
+            Department Mobile Controller
+          </p>
         </div>
 
         <div className="h-px bg-slate-100 my-4" />
 
         {/* Welcome Section */}
         <div className="text-left mb-4">
-          <h3 className="text-lg font-semibold text-slate-900">Welcome Back</h3>
-          <p className="text-xs font-normal text-slate-500 mt-1">
+          <h3 className="text-xl font-extrabold text-slate-900 font-heading">Welcome Back</h3>
+          <p className="text-xs font-medium text-slate-500 mt-1">
             Sign in using your institutional account.
           </p>
         </div>
@@ -112,7 +136,7 @@ export const LoginPage = () => {
           <InputField
             label="Email Address"
             value={email}
-            onChangeText={(text) => {
+            onChange={(text) => {
               setEmail(text);
               if (errors.email) setErrors((prev) => ({ ...prev, email: null }));
             }}
@@ -124,7 +148,7 @@ export const LoginPage = () => {
           <InputField
             label="Password"
             value={password}
-            onChangeText={(text) => {
+            onChange={(text) => {
               setPassword(text);
               if (errors.password) setErrors((prev) => ({ ...prev, password: null }));
             }}
@@ -159,9 +183,8 @@ export const LoginPage = () => {
 
         {/* Footer Section */}
         <div className="text-center text-[11px] text-slate-400 font-medium space-y-0.5">
-          <p>FocusSync System</p>
+          <p className="font-semibold text-slate-600">FocusSync System</p>
           <p>Department Mobile Controller</p>
-          <p>Version 1.0</p>
         </div>
       </motion.div>
     </div>
