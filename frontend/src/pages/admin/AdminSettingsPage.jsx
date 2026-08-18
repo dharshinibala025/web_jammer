@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import adminService from '../../services/adminService';
 import PrimaryButton from '../../components/common/PrimaryButton';
-import { FiClock, FiShield, FiSliders, FiCheckCircle } from 'react-icons/fi';
+import { FiClock, FiShield, FiSliders, FiCheckCircle, FiBell, FiCheck } from 'react-icons/fi';
 
 export const AdminSettingsPage = () => {
   const [settings, setSettings] = useState(adminService.getSettings());
