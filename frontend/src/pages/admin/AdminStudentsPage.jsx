@@ -151,10 +151,6 @@ export const AdminStudentsPage = () => {
         </div>
       </div>
 
-      <div className="max-w-md">
-        <SearchBar value={search} onChange={setSearch} placeholder="Search by name, roll no, or section..." />
-      </div>
-
       {/* Student Table */}
       <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">

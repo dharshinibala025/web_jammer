@@ -76,14 +76,6 @@ export const StaffStudentsPage = () => {
             })}
           </div>
         </div>
-
-        <div className="max-w-md w-full">
-          <SearchBar
-            value={search}
-            onChange={setSearch}
-            placeholder="Search by student name or roll number..."
-          />
-        </div>
       </div>
 
       {/* Device Monitoring Details Modal */}
