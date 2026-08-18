@@ -24,6 +24,8 @@ const StaffStudentsPage = lazy(() => import('../pages/staff/StaffStudentsPage'))
 const StaffDevicesPage = lazy(() => import('../pages/staff/StaffDevicesPage'));
 const StaffSettingsPage = lazy(() => import('../pages/staff/StaffSettingsPage'));
 
+import AdminLayout from '../layouts/AdminLayout';
+
 // Admin Pages
 const AdminDashboardPage = lazy(() => import('../pages/admin/AdminDashboardPage'));
 const AdminStudentsPage = lazy(() => import('../pages/admin/AdminStudentsPage'));

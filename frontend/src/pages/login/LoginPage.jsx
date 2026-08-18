@@ -104,7 +104,7 @@ export const LoginPage = () => {
 
         {/* Header Section */}
         <div className="flex flex-col items-center text-center mb-6">
-          <div className="w-16 h-16 rounded-2xl bg-white border border-slate-100 p-2 shadow-md mb-3 flex items-center justify-center">
+          <div className="w-16 h-16 rounded-2xl bg-white border border-slate-100 p-2 shadow-xs mb-3 flex items-center justify-center">
             <img src={logo} alt="Logo" className="w-full h-full object-contain" />
           </div>
           <h2 className="text-2xl font-extrabold text-slate-900 font-heading">FocusSync</h2>
@@ -114,7 +114,7 @@ export const LoginPage = () => {
           </p>
         </div>
 
-        <div className="h-px bg-slate-200 my-4" />
+        <div className="h-px bg-slate-100 my-4" />
 
         {/* Welcome Section */}
         <div className="text-left mb-4">

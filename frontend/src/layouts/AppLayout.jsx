@@ -9,6 +9,7 @@ import { useAuth } from '../contexts/AuthContext';
 export const AppLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { role } = useAuth();
+  const location = useLocation();
 
   const handleToggleSidebar = useCallback(() => {
     setSidebarOpen(prev => !prev);
@@ -37,7 +38,7 @@ export const AppLayout = ({ children }) => {
         isSidebarOpen={sidebarOpen}
       />
 
-      <div className="flex flex-1">
+      <div className="flex flex-1 pt-16">
         <Sidebar
           isOpen={sidebarOpen}
           onClose={handleCloseSidebar}
@@ -48,10 +49,7 @@ export const AppLayout = ({ children }) => {
         </main>
       </div>
 
-      {/* Mobile Bottom Navigation for quick touch access */}
-      <div className="lg:hidden">
-        {renderMobileBottomNav()}
-      </div>
+      {renderMobileBottomNav()}
     </div>
   );
 };

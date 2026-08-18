@@ -3,8 +3,7 @@ import PrimaryButton from '../../components/common/PrimaryButton';
 import { FiClock, FiShield, FiSliders, FiCheckCircle } from 'react-icons/fi';
 
 export const AdminSettingsPage = () => {
-  const [startTime, setStartTime] = useState('09:00');
-  const [endTime, setEndTime] = useState('16:00');
+  const [settings, setSettings] = useState(adminService.getSettings());
   const [saved, setSaved] = useState(false);
   const timerRef = useRef(null);
 
@@ -16,69 +15,96 @@ export const AdminSettingsPage = () => {
 
   const handleSave = useCallback((e) => {
     e.preventDefault();
+    adminService.updateSettings(settings);
     setSaved(true);
     timerRef.current = setTimeout(() => setSaved(false), 2000);
   }, []);
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
-      <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-        <h2 className="text-2xl font-extrabold text-slate-900">System Policy Configuration</h2>
-        <p className="text-xs font-semibold text-slate-500 mt-1">
-          Global restriction parameters enforced across all department devices.
+      {/* Header */}
+      <div className="bg-[#FFFFFF] border border-[#E5E7EB] rounded-2xl p-6 shadow-xs">
+        <h2 className="text-xl font-semibold text-[#111827]">CSE Admin Settings</h2>
+        <p className="text-xs font-normal text-[#6B7280] mt-0.5">
+          Departmental administration configurations and dashboard preferences.
         </p>
       </div>
 
-      <form onSubmit={handleSave} className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-6">
-        <div className="space-y-4">
-          <h3 className="text-base font-bold text-slate-900 flex items-center space-x-2 border-b border-slate-100 pb-2">
-            <FiClock className="w-5 h-5 text-purple-600" />
-            <span>Academic Restriction Schedule</span>
+      <form onSubmit={handleSave} className="space-y-6">
+        {/* Department Info */}
+        <div className="bg-[#FFFFFF] border border-[#E5E7EB] rounded-2xl p-6 shadow-xs space-y-4">
+          <h3 className="text-sm font-semibold text-[#111827] flex items-center space-x-2 border-b border-[#E5E7EB] pb-3">
+            <FiShield className="w-5 h-5 text-[#3B82F6]" />
+            <span>Department Information</span>
           </h3>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Start Time (Morning)</label>
+              <label className="block font-medium text-[#6B7280] uppercase tracking-wider mb-1">
+                Department Name
+              </label>
               <input
-                type="time"
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
-                className="w-full py-3 px-4 bg-white border border-slate-300 rounded-xl text-sm font-bold text-slate-900"
+                type="text"
+                value="Computer Science and Engineering (CSE)"
+                disabled
+                className="w-full py-2.5 px-3 bg-[#F1F5F9] border border-[#E5E7EB] rounded-xl font-medium text-[#111827] cursor-not-allowed"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">End Time (Evening)</label>
+              <label className="block font-medium text-[#6B7280] uppercase tracking-wider mb-1">
+                Admin Email Address
+              </label>
               <input
-                type="time"
-                value={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
-                className="w-full py-3 px-4 bg-white border border-slate-300 rounded-xl text-sm font-bold text-slate-900"
+                type="text"
+                value="admin@ksrce.ac.in"
+                disabled
+                className="w-full py-2.5 px-3 bg-[#F1F5F9] border border-[#E5E7EB] rounded-xl font-medium text-[#3B82F6] cursor-not-allowed"
               />
             </div>
           </div>
         </div>
 
-        <div className="space-y-4">
-          <h3 className="text-base font-bold text-slate-900 flex items-center space-x-2 border-b border-slate-100 pb-2">
-            <FiShield className="w-5 h-5 text-purple-600" />
-            <span>Default App Categories to Block</span>
+        {/* Preferences */}
+        <div className="bg-[#FFFFFF] border border-[#E5E7EB] rounded-2xl p-6 shadow-xs space-y-4">
+          <h3 className="text-sm font-semibold text-[#111827] flex items-center space-x-2 border-b border-[#E5E7EB] pb-3">
+            <FiBell className="w-5 h-5 text-[#3B82F6]" />
+            <span>Notification & Dashboard Preferences</span>
           </h3>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {['Social Media', 'Messaging', 'Gaming', 'Video Streaming', 'Shopping'].map((cat, i) => (
-              <label key={i} className="flex items-center space-x-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer">
-                <input type="checkbox" defaultChecked={i < 4} className="w-4 h-4 text-purple-600 rounded" />
-                <span className="text-xs font-bold text-slate-800">{cat}</span>
-              </label>
-            ))}
+          <div className="space-y-3">
+            <label className="flex items-center justify-between p-3 rounded-xl bg-[#F8FAFC] border border-[#E5E7EB] cursor-pointer">
+              <div>
+                <p className="text-xs font-semibold text-[#111827]">Email Alerts</p>
+                <p className="text-[11px] text-[#6B7280] font-normal">Receive notifications when student Excel files are imported</p>
+              </div>
+              <input
+                type="checkbox"
+                checked={settings.emailNotifications}
+                onChange={(e) => setSettings({ ...settings, emailNotifications: e.target.checked })}
+                className="w-4 h-4 text-[#3B82F6] rounded focus:ring-[#3B82F6]"
+              />
+            </label>
+
+            <label className="flex items-center justify-between p-3 rounded-xl bg-[#F8FAFC] border border-[#E5E7EB] cursor-pointer">
+              <div>
+                <p className="text-xs font-semibold text-[#111827]">Dashboard Auto-Refresh</p>
+                <p className="text-[11px] text-[#6B7280] font-normal">Automatically recalculate CSE department statistics</p>
+              </div>
+              <input
+                type="checkbox"
+                checked={settings.dashboardAutoRefresh}
+                onChange={(e) => setSettings({ ...settings, dashboardAutoRefresh: e.target.checked })}
+                className="w-4 h-4 text-[#3B82F6] rounded focus:ring-[#3B82F6]"
+              />
+            </label>
           </div>
         </div>
 
         {saved && (
-          <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs font-bold text-emerald-700 flex items-center space-x-2">
-            <FiCheckCircle className="w-4 h-4" />
-            <span>Policy updated and broadcasted to all active devices!</span>
+          <div className="p-3 bg-[#DCFCE7] border border-[#10B981]/30 rounded-xl text-xs font-medium text-[#10B981] flex items-center space-x-2">
+            <FiCheck className="w-4 h-4" />
+            <span>CSE Admin Settings updated successfully!</span>
           </div>
         )}
 
@@ -89,3 +115,4 @@ export const AdminSettingsPage = () => {
 };
 
 export default AdminSettingsPage;
+

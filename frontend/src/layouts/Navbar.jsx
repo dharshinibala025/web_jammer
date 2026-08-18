@@ -27,11 +27,11 @@ export const Navbar = ({ onToggleSidebar, isSidebarOpen }) => {
   const getRoleBadge = () => {
     switch (role) {
       case 'admin':
-        return <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-700 border border-purple-200">Admin</span>;
+        return <span className="px-2.5 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-700 border border-purple-200">Admin</span>;
       case 'staff':
-        return <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200">Staff Advisor</span>;
+        return <span className="px-2.5 py-1 text-xs font-medium rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200">Staff Advisor (CA1)</span>;
       default:
-        return <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-700 border border-blue-200">Student</span>;
+        return <span className="px-2.5 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-700 border border-blue-200">Student</span>;
     }
   };
 
@@ -57,8 +57,8 @@ export const Navbar = ({ onToggleSidebar, isSidebarOpen }) => {
   }, [profileDropdownOpen]);
 
   return (
-    <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-xs">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-xs">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           
           {/* Left: Sidebar Toggle + Brand Logo */}
@@ -75,11 +75,11 @@ export const Navbar = ({ onToggleSidebar, isSidebarOpen }) => {
               <div className="w-10 h-10 rounded-2xl bg-white border border-slate-200 p-1 shadow-xs flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
                 <img src={logo} alt="FocusSync Logo" className="w-full h-full object-contain" />
               </div>
-              <div className="flex flex-col">
-                <span className="text-xl font-extrabold tracking-tight text-slate-900 leading-none">
+              <div className="flex flex-col text-left">
+                <span className="text-xl font-bold tracking-tight text-slate-900 leading-none">
                   Focus<span className="text-emerald-500">Sync</span>
                 </span>
-                <span className="text-[10px] font-semibold text-slate-500 tracking-wide uppercase mt-0.5">
+                <span className="text-[10px] font-medium text-slate-500 tracking-wider uppercase mt-0.5">
                   Dept Mobile Controller
                 </span>
               </div>
@@ -87,7 +87,7 @@ export const Navbar = ({ onToggleSidebar, isSidebarOpen }) => {
           </div>
 
           {/* Right: Role Badge, Notifications & Profile Menu */}
-          <div className="flex items-center space-x-3 sm:space-x-4">
+          <div className="flex items-center space-x-3 sm:space-x-4 relative">
             <div className="hidden sm:block">
               {getRoleBadge()}
             </div>
@@ -111,14 +111,11 @@ export const Navbar = ({ onToggleSidebar, isSidebarOpen }) => {
                 aria-expanded={profileDropdownOpen}
                 aria-haspopup="true"
               >
-                <div className="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm shadow-sm overflow-hidden">
-                  {user?.avatar ? (
-                    <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
-                  ) : (
-                    user?.initials || 'U'
-                  )}
+                {/* Initials Badge (No image as requested) */}
+                <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs shadow-xs shrink-0">
+                  {user?.initials || getInitials(user?.name)}
                 </div>
-                <span className="hidden md:block text-sm font-semibold text-slate-800 max-w-[120px] truncate">
+                <span className="hidden md:block text-sm font-medium text-slate-800 max-w-[120px] truncate">
                   {user?.name || 'User'}
                 </span>
                 <FiChevronDown className={`hidden md:block w-4 h-4 text-slate-500 transition-transform ${profileDropdownOpen ? 'rotate-180' : ''}`} />
@@ -127,11 +124,11 @@ export const Navbar = ({ onToggleSidebar, isSidebarOpen }) => {
               {profileDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150" role="menu">
                   <div className="px-4 py-2.5 border-b border-slate-100">
-                    <p className="text-sm font-bold text-slate-900 truncate">{user?.name}</p>
+                    <p className="text-sm font-semibold text-slate-900 truncate">{user?.name}</p>
                     <p className="text-xs text-slate-500 truncate">{user?.email}</p>
                   </div>
                   <Link
-                    to={`/${role}/profile`}
+                    to={`/${role}/settings`}
                     onClick={() => setProfileDropdownOpen(false)}
                     className="flex items-center space-x-2.5 px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-blue-600 transition-colors"
                     role="menuitem"

@@ -37,7 +37,10 @@ export const AuthProvider = ({ children }) => {
     try {
       const result = await authService.login(email, password);
       let activeUser = result.user;
-      const finalRole = activeUser?.role || selectedRole;
+      // Prefer the role explicitly selected on the login form so
+      // the UI-driven choice (student/staff/admin) navigates correctly
+      // even when the backend/mock returns a different role.
+      const finalRole = selectedRole || activeUser?.role || 'student';
       
       if (finalRole === 'staff') {
         activeUser = getStaffProfile(email);

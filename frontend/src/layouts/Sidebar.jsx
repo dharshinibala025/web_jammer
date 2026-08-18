@@ -30,27 +30,22 @@ export const Sidebar = ({ isOpen, onClose }) => {
     { to: '/student/dashboard', label: 'Dashboard', icon: FiHome },
     { to: '/student/blocked-apps', label: 'Blocked Apps', icon: FiSmartphone },
     { to: '/student/notifications', label: 'Notifications', icon: FiBell },
-    { to: '/student/activity', label: 'Activity Timeline', icon: FiActivity },
-    { to: '/student/sync', label: 'Sync Status', icon: FiRefreshCw },
-    { to: '/student/device-info', label: 'Device Specs', icon: FiSmartphone },
-    { to: '/student/restriction-info', label: 'Policy Rules', icon: FiHelpCircle },
     { to: '/student/profile', label: 'My Profile', icon: FiUser },
   ];
 
   const staffLinks = [
-    { to: '/staff/dashboard', label: 'Dashboard Overview', icon: FiGrid },
-    { to: '/staff/students', label: 'Student Directory', icon: FiUsers },
-    { to: '/staff/devices', label: 'Monitored Devices', icon: FiSmartphone },
-    { to: '/staff/notifications', label: 'Alerts & Logs', icon: FiBell },
-    { to: '/staff/settings', label: 'Settings & Profile', icon: FiSettings },
+    { to: '/staff/dashboard', label: 'Dashboard', icon: FiGrid },
+    { to: '/staff/devices', label: 'Devices', icon: FiSmartphone },
+    { to: '/staff/students', label: 'Students', icon: FiUsers },
+    { to: '/staff/settings', label: 'Settings', icon: FiSettings },
   ];
 
   const adminLinks = [
-    { to: '/admin/dashboard', label: 'Admin Panel', icon: FiGrid },
-    { to: '/admin/students', label: 'Students Master', icon: FiUsers },
-    { to: '/admin/staff', label: 'Faculty Directory', icon: FiBookOpen },
-    { to: '/admin/devices', label: 'All Registered Devices', icon: FiSmartphone },
-    { to: '/admin/settings', label: 'System Policy Config', icon: FiSettings },
+    { to: '/admin/dashboard', label: 'Dashboard', icon: FiGrid },
+    { to: '/admin/students', label: 'Students', icon: FiUsers },
+    { to: '/admin/staff', label: 'Faculty', icon: FiBookOpen },
+    { to: '/admin/devices', label: 'Devices', icon: FiSmartphone },
+    { to: '/admin/settings', label: 'Settings', icon: FiSettings },
   ];
 
   const navItems = role === 'admin' ? adminLinks : role === 'staff' ? staffLinks : studentLinks;
@@ -73,7 +68,7 @@ export const Sidebar = ({ isOpen, onClose }) => {
         }`}
       >
         <div className="px-3 py-4 overflow-y-auto flex-1 space-y-1">
-          <div className="px-3 pb-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+          <div className="px-3 pb-2 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
             {role.toUpperCase()} MENU
           </div>
           
@@ -85,9 +80,9 @@ export const Sidebar = ({ isOpen, onClose }) => {
                 to={item.to}
                 onClick={onClose}
                 className={({ isActive }) =>
-                  `flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+                  `flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
                     isActive
-                      ? 'bg-blue-50 text-blue-600 shadow-2xs font-bold'
+                      ? 'bg-blue-50/80 text-blue-600 font-semibold shadow-2xs'
                       : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                   }`
                 }
@@ -107,12 +102,12 @@ export const Sidebar = ({ isOpen, onClose }) => {
         <div className="p-3 border-t border-slate-100 bg-slate-50/50">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-rose-600 hover:bg-rose-50 transition-colors"
+            className="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
           >
             <FiLogOut className="w-5 h-5 text-rose-500" />
             <span>Log Out</span>
           </button>
-          <div className="mt-3 px-3 text-[11px] text-slate-400 font-medium text-center">
+          <div className="mt-2.5 px-3 text-[11px] text-slate-400 font-normal text-center">
             FocusSync Web v1.0.0
           </div>
         </div>
