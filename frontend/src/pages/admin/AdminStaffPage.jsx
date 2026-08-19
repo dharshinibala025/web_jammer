@@ -95,12 +95,18 @@ export const AdminStaffPage = () => {
   };
 
   const filteredStaff = staffList.filter((s) => {
+    const searchLower = (appliedFilters.search || '').toLowerCase();
+    const nameStr = (s.name || '').toLowerCase();
+    const staffIdStr = (s.staffId || '').toLowerCase();
+    const emailStr = (s.email || '').toLowerCase();
+    const desigStr = (s.designation || '').toLowerCase();
+
     const matchesSearch =
       !appliedFilters.search ||
-      s.name.toLowerCase().includes(appliedFilters.search.toLowerCase()) ||
-      s.staffId.toLowerCase().includes(appliedFilters.search.toLowerCase()) ||
-      s.email.toLowerCase().includes(appliedFilters.search.toLowerCase()) ||
-      s.designation.toLowerCase().includes(appliedFilters.search.toLowerCase());
+      nameStr.includes(searchLower) ||
+      staffIdStr.includes(searchLower) ||
+      emailStr.includes(searchLower) ||
+      desigStr.includes(searchLower);
 
     const matchesYear = appliedFilters.year === 'All' || s.year === appliedFilters.year;
     const matchesSection = appliedFilters.section === 'All' || s.section === appliedFilters.section;

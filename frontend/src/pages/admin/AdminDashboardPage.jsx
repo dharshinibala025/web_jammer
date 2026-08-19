@@ -97,10 +97,13 @@ export const AdminDashboardPage = () => {
   };
 
   const filteredStudents = students.filter((s) => {
+    const nameStr = s.name || '';
+    const regStr = s.registerNumber || '';
+    const emailStr = s.email || '';
     const matchesSearch =
-      s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      s.registerNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (s.email && s.email.toLowerCase().includes(searchTerm.toLowerCase()));
+      nameStr.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      regStr.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      emailStr.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesYear = yearFilter === 'All' || s.year === yearFilter;
     const matchesStatus = statusFilter === 'All' || s.status === statusFilter;
     return matchesSearch && matchesYear && matchesStatus;
