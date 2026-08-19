@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FiArrowLeft, FiCheck, FiShield } from 'react-icons/fi';
+import { 
+  FiArrowLeft, 
+  FiCheck, 
+  FiShield, 
+  FiLock, 
+  FiAlertCircle
+} from 'react-icons/fi';
 import { useAuth } from '../../contexts/AuthContext';
 import RoleSelector from '../../components/common/RoleSelector';
 import InputField from '../../components/common/InputField';
@@ -11,32 +17,63 @@ import MagicRings from '../../components/MagicRings';
 
 export const LoginPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
 
-  const [role, setRole] = useState('student');
+  // Detect role from URL path if specified
+  const getInitialRole = () => {
+    if (location.pathname.includes('/staff')) return 'staff';
+    if (location.pathname.includes('/admin')) return 'admin';
+    return 'student';
+  };
+
+  const [role, setRole] = useState(getInitialRole);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(true);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
+  // Sync role if path changes
+  useEffect(() => {
+    if (location.pathname.includes('/staff')) setRole('staff');
+    else if (location.pathname.includes('/admin')) setRole('admin');
+    else setRole('student');
+  }, [location.pathname]);
+
+  // Demo accounts helper
+  const demoAccounts = {
+    student: { email: 'student@ksrce.ac.in', label: 'Demo Student' },
+    staff: { email: 'faculty@ksrce.ac.in', label: 'Demo Faculty' },
+    admin: { email: 'admin@ksrce.ac.in', label: 'Demo Admin / HOD' },
+  };
+
+  const fillDemoAccount = () => {
+    const acc = demoAccounts[role];
+    if (acc) {
+      setEmail(acc.email);
+      setPassword('password123');
+      setErrors({});
+    }
+  };
+
   const validate = () => {
     let valid = true;
     let newErrors = {};
 
     if (!email.trim()) {
-      newErrors.email = 'Email address is required';
+      newErrors.email = 'Institutional email address is required';
       valid = false;
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      newErrors.email = 'Please enter a valid email address';
+      newErrors.email = 'Please enter a valid institutional email address';
       valid = false;
     }
 
     if (!password) {
       newErrors.password = 'Password is required';
       valid = false;
-    } else if (password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+    } else if (password.length < 4) {
+      newErrors.password = 'Password must be at least 4 characters';
       valid = false;
     }
 
@@ -45,7 +82,7 @@ export const LoginPage = () => {
   };
 
   const handleSignIn = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     if (validate()) {
       setLoading(true);
       try {
@@ -58,7 +95,7 @@ export const LoginPage = () => {
           navigate('/student/dashboard');
         }
       } catch (err) {
-        setErrors({ email: 'Login failed. Please verify credentials.' });
+        setErrors({ email: 'Authentication failed. Please verify credentials.' });
       } finally {
         setLoading(false);
       }
@@ -66,127 +103,193 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col justify-center items-center px-4 py-8 font-sans relative overflow-hidden selection:bg-blue-600 selection:text-white">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col justify-between font-sans relative overflow-hidden selection:bg-blue-600 selection:text-white">
       
-      {/* Soft Background Magic Rings */}
-      <div className="fixed inset-0 -z-10 pointer-events-none opacity-40">
+      {/* Background Magic Rings Canvas */}
+      <div className="fixed inset-0 -z-10 pointer-events-none opacity-35">
         <MagicRings
           color="#93c5fd"
           colorTwo="#3b82f6"
-          ringCount={6}
-          speed={0.7}
-          attenuation={10}
-          lineThickness={1.5}
-          baseRadius={0.4}
-          radiusStep={0.12}
-          scaleRate={0.08}
-          opacity={0.45}
-          noiseAmount={0.01}
+          ringCount={5}
+          speed={0.4}
+          attenuation={12}
+          lineThickness={1.2}
+          baseRadius={0.45}
+          radiusStep={0.14}
+          scaleRate={0.05}
+          opacity={0.4}
+          blur={1.5}
+          noiseAmount={0.005}
           followMouse={true}
-          mouseInfluence={0.15}
+          mouseInfluence={0.06}
         />
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 15 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className="w-full max-w-md bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xl relative z-10"
-      >
-        {/* Back Button */}
-        <button
-          onClick={() => navigate('/')}
-          className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors mb-6 cursor-pointer"
+      {/* Radial Ambient Glow Orbs */}
+      <div className="fixed top-12 left-1/2 -translate-x-1/2 w-[700px] h-[450px] bg-glow-light-blue pointer-events-none -z-10 rounded-full blur-3xl opacity-40"></div>
+
+      {/* Top Header */}
+      <header className="w-full pt-4 sm:pt-6 px-4 sm:px-8 max-w-7xl mx-auto flex items-center justify-between z-20">
+        <Link
+          to="/"
+          className="flex items-center space-x-2.5 group cursor-pointer"
         >
-          <FiArrowLeft className="w-4 h-4 text-blue-600" />
-          <span>Welcome</span>
-        </button>
-
-        {/* Header Section */}
-        <div className="flex flex-col items-center text-center mb-6">
-          <div className="w-16 h-16 rounded-2xl bg-white border border-slate-100 p-2 shadow-xs mb-3 flex items-center justify-center">
-            <img src={logo} alt="Logo" className="w-full h-full object-contain" />
+          <div className="w-9 h-9 rounded-xl bg-white border border-slate-200/90 p-1 shadow-2xs group-hover:scale-105 transition-transform flex items-center justify-center">
+            <img src={logo} alt="FocusSync Logo" className="w-full h-full object-contain" />
           </div>
-          <h2 className="text-2xl font-extrabold text-slate-900 font-heading">FocusSync</h2>
-          <p className="text-xs font-semibold text-slate-500 mt-0.5 flex items-center justify-center gap-1">
-            <FiShield className="w-3.5 h-3.5 text-emerald-500" />
-            Department Mobile Controller
-          </p>
+          <div className="flex items-center space-x-1.5">
+            <span className="text-lg font-bold tracking-tight leading-none font-heading text-slate-900">
+              Focus<span className="text-blue-600">Sync</span>
+            </span>
+            <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 text-[9px] font-semibold rounded-full uppercase tracking-wider text-blue-700 bg-blue-50 border border-blue-200">
+              KSR CE • CSE
+            </span>
+          </div>
+        </Link>
+
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={() => navigate('/')}
+            className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-100 hover:border-slate-300 transition-all shadow-2xs cursor-pointer"
+          >
+            <FiArrowLeft className="w-3.5 h-3.5 text-blue-600" />
+            <span>Back to Overview</span>
+          </button>
         </div>
+      </header>
 
-        <div className="h-px bg-slate-100 my-4" />
+      {/* Centered Login Form Card */}
+      <main className="w-full max-w-md mx-auto px-4 py-8 flex-1 flex items-center justify-center z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="w-full bg-white/95 backdrop-blur-xl rounded-3xl p-7 sm:p-8 border border-slate-200/90 shadow-2xl shadow-slate-900/5 space-y-5"
+        >
+          
+          {/* Card Header */}
+          <div className="text-center space-y-1.5">
+            <div className="w-14 h-14 rounded-2xl bg-white border border-slate-200/90 p-1.5 mx-auto shadow-2xs flex items-center justify-center">
+              <img src={logo} alt="FocusSync Logo" className="w-full h-full object-contain" />
+            </div>
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 font-heading tracking-tight pt-1">
+              Portal Sign In
+            </h2>
+            <p className="text-xs text-slate-500 font-normal">
+              Select your account role to sign into the institutional portal.
+            </p>
+          </div>
 
-        {/* Welcome Section */}
-        <div className="text-left mb-4">
-          <h3 className="text-xl font-extrabold text-slate-900 font-heading">Welcome Back</h3>
-          <p className="text-xs font-medium text-slate-500 mt-1">
-            Sign in using your institutional account.
-          </p>
-        </div>
-
-        {/* Role Selector */}
-        <div className="my-4">
-          <RoleSelector selectedRole={role} onSelectRole={setRole} />
-        </div>
-
-        <div className="h-px bg-slate-200 my-4" />
-
-        {/* Login Form */}
-        <form onSubmit={handleSignIn} className="space-y-4">
-          <InputField
-            label="Email Address"
-            value={email}
-            onChange={(text) => {
-              setEmail(text);
-              if (errors.email) setErrors((prev) => ({ ...prev, email: null }));
-            }}
-            placeholder="enter.your.email@college.edu"
-            iconType="email"
-            error={errors.email}
-          />
-
-          <InputField
-            label="Password"
-            value={password}
-            onChange={(text) => {
-              setPassword(text);
-              if (errors.password) setErrors((prev) => ({ ...prev, password: null }));
-            }}
-            placeholder="••••••••••••"
-            isPassword={true}
-            error={errors.password}
-          />
-
-          {/* Remember Me Checkbox */}
-          <div className="flex items-center justify-between my-2">
-            <label className="flex items-center space-x-2.5 cursor-pointer">
-              <div
-                onClick={() => setRememberMe(!rememberMe)}
-                className={`w-5 h-5 rounded-md border flex items-center justify-center transition-colors ${
-                  rememberMe ? 'bg-blue-600 border-blue-600' : 'bg-white border-slate-300'
-                }`}
-              >
-                {rememberMe && <FiCheck className="w-3.5 h-3.5 text-white" />}
-              </div>
-              <span className="text-xs font-semibold text-slate-700">Remember Me</span>
+          {/* Role Switcher Component (Student, Staff, Admin) */}
+          <div className="space-y-1.5">
+            <label className="block text-[11px] font-semibold text-slate-700 uppercase tracking-wider font-heading text-center">
+              Account Access Level
             </label>
+            <RoleSelector selectedRole={role} onSelectRole={setRole} />
           </div>
 
-          <PrimaryButton
-            title="Sign In"
-            onPress={handleSignIn}
-            loading={loading}
-          />
-        </form>
+          {/* Contextual Role Helper Alert */}
+          <div className="bg-slate-50 border border-slate-200/90 rounded-xl p-2.5 text-[11px] text-slate-600 flex items-center justify-between font-normal">
+            <span className="flex items-center gap-1.5">
+              <FiLock className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+              {role === 'student' && 'Student Portal: View active timetable & allowed apps.'}
+              {role === 'staff' && 'Faculty Portal: Live monitoring & classroom control.'}
+              {role === 'admin' && 'Admin Console: Department rules & system management.'}
+            </span>
+            <button
+              type="button"
+              onClick={fillDemoAccount}
+              className="text-[10px] font-semibold text-blue-600 hover:text-blue-800 hover:underline shrink-0 cursor-pointer ml-1"
+              title="Fill demo credentials"
+            >
+              Auto-fill Demo
+            </button>
+          </div>
 
-        <div className="h-px bg-slate-200 my-6" />
+          {/* Login Form */}
+          <form onSubmit={handleSignIn} className="space-y-4">
+            <InputField
+              label="Institutional Email"
+              value={email}
+              onChange={(text) => {
+                setEmail(text);
+                if (errors.email) setErrors((prev) => ({ ...prev, email: null }));
+              }}
+              placeholder={
+                role === 'student' 
+                  ? 'student@ksrce.ac.in' 
+                  : role === 'staff' 
+                    ? 'faculty@ksrce.ac.in' 
+                    : 'admin@ksrce.ac.in'
+              }
+              iconType="email"
+              error={errors.email}
+            />
 
-        {/* Footer Section */}
-        <div className="text-center text-[11px] text-slate-400 font-medium space-y-0.5">
-          <p className="font-semibold text-slate-600">FocusSync System</p>
-          <p>Department Mobile Controller</p>
-        </div>
-      </motion.div>
+            <InputField
+              label="Password"
+              value={password}
+              onChange={(text) => {
+                setPassword(text);
+                if (errors.password) setErrors((prev) => ({ ...prev, password: null }));
+              }}
+              placeholder="••••••••••••"
+              isPassword={true}
+              error={errors.password}
+            />
+
+            {/* Remember Me */}
+            <div className="flex items-center justify-between pt-0.5">
+              <label className="flex items-center space-x-2 cursor-pointer">
+                <div
+                  onClick={() => setRememberMe(!rememberMe)}
+                  className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${
+                    rememberMe ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-300'
+                  }`}
+                >
+                  {rememberMe && <FiCheck className="w-3 h-3" />}
+                </div>
+                <span className="text-xs font-medium text-slate-700">Remember session</span>
+              </label>
+
+              <span className="text-xs font-semibold text-blue-600 hover:text-blue-800 transition-colors cursor-pointer">
+                Need Assistance?
+              </span>
+            </div>
+
+            {/* Error Alert Box */}
+            {errors.email && (
+              <div className="bg-rose-50 border border-rose-200 rounded-xl p-2.5 text-xs text-rose-700 flex items-center space-x-2 font-medium">
+                <FiAlertCircle className="w-4 h-4 text-rose-500 shrink-0" />
+                <span>{errors.email}</span>
+              </div>
+            )}
+
+            {/* Submit Button */}
+            <PrimaryButton
+              title={`Sign In to ${role === 'student' ? 'Student' : role === 'staff' ? 'Faculty & Staff' : 'Admin & HOD'} Portal`}
+              onPress={handleSignIn}
+              loading={loading}
+            />
+          </form>
+
+          {/* Footer Trust Bar */}
+          <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-medium">
+            <span className="flex items-center gap-1">
+              <FiShield className="w-3 h-3 text-emerald-500" />
+              TLS 1.3 Encrypted
+            </span>
+            <span>K.S.R. College of Engineering</span>
+          </div>
+
+        </motion.div>
+      </main>
+
+      {/* Footer */}
+      <footer className="py-4 text-center text-xs text-slate-400 font-normal border-t border-slate-200/60 z-20">
+        <p>© 2026 FocusSync System • Dept. of Computer Science & Engineering, KSRCE.</p>
+      </footer>
+
     </div>
   );
 };
