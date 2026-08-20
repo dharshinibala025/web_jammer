@@ -99,12 +99,18 @@ export const AdminStudentsPage = () => {
 
   // Filter students based on appliedFilters
   const filteredStudents = students.filter((s) => {
+    const searchLower = (appliedFilters.search || '').toLowerCase();
+    const nameStr = (s.name || '').toLowerCase();
+    const regStr = (s.registerNumber || '').toLowerCase();
+    const emailStr = (s.email || '').toLowerCase();
+    const phoneStr = s.phone || '';
+
     const matchesSearch =
       !appliedFilters.search ||
-      s.name.toLowerCase().includes(appliedFilters.search.toLowerCase()) ||
-      s.registerNumber.toLowerCase().includes(appliedFilters.search.toLowerCase()) ||
-      s.email.toLowerCase().includes(appliedFilters.search.toLowerCase()) ||
-      s.phone.includes(appliedFilters.search);
+      nameStr.includes(searchLower) ||
+      regStr.includes(searchLower) ||
+      emailStr.includes(searchLower) ||
+      phoneStr.includes(appliedFilters.search);
 
     const matchesDept =
       appliedFilters.department === 'All' ||

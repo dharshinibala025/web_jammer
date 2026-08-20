@@ -30,8 +30,12 @@ import AdminLayout from '../layouts/AdminLayout';
 const AdminDashboardPage = lazy(() => import('../pages/admin/AdminDashboardPage'));
 const AdminStudentsPage = lazy(() => import('../pages/admin/AdminStudentsPage'));
 const AdminStaffPage = lazy(() => import('../pages/admin/AdminStaffPage'));
+const AdminSectionsPage = lazy(() => import('../pages/admin/AdminSectionsPage'));
 const AdminDevicesPage = lazy(() => import('../pages/admin/AdminDevicesPage'));
+const AdminApplicationsPage = lazy(() => import('../pages/admin/AdminApplicationsPage'));
 const AdminSettingsPage = lazy(() => import('../pages/admin/AdminSettingsPage'));
+const AdminNotificationsPage = lazy(() => import('../pages/admin/AdminNotificationsPage'));
+const AdminProfilePage = lazy(() => import('../pages/admin/AdminProfilePage'));
 
 const LoadingFallback = () => (
   <div className="flex items-center justify-center min-h-[50vh]">
@@ -72,10 +76,12 @@ export const AppRoutes = () => {
         <Route path="/admin/dashboard" element={<ProtectedRoute><AppLayout><AdminDashboardPage /></AppLayout></ProtectedRoute>} />
         <Route path="/admin/students" element={<ProtectedRoute><AppLayout><AdminStudentsPage /></AppLayout></ProtectedRoute>} />
         <Route path="/admin/staff" element={<ProtectedRoute><AppLayout><AdminStaffPage /></AppLayout></ProtectedRoute>} />
+        <Route path="/admin/sections" element={<ProtectedRoute><AppLayout><AdminSectionsPage /></AppLayout></ProtectedRoute>} />
         <Route path="/admin/devices" element={<ProtectedRoute><AppLayout><AdminDevicesPage /></AppLayout></ProtectedRoute>} />
+        <Route path="/admin/applications" element={<ProtectedRoute><AppLayout><AdminApplicationsPage /></AppLayout></ProtectedRoute>} />
         <Route path="/admin/settings" element={<ProtectedRoute><AppLayout><AdminSettingsPage /></AppLayout></ProtectedRoute>} />
-        <Route path="/admin/profile" element={<ProtectedRoute><AppLayout><AdminSettingsPage /></AppLayout></ProtectedRoute>} />
-        <Route path="/admin/notifications" element={<ProtectedRoute><AppLayout><AdminSettingsPage /></AppLayout></ProtectedRoute>} />
+        <Route path="/admin/profile" element={<ProtectedRoute><AppLayout><AdminProfilePage /></AppLayout></ProtectedRoute>} />
+        <Route path="/admin/notifications" element={<ProtectedRoute><AppLayout><AdminNotificationsPage /></AppLayout></ProtectedRoute>} />
 
         {/* 404 Catch-all */}
         <Route path="*" element={<NotFoundPage />} />

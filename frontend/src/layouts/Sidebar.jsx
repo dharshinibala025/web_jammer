@@ -13,7 +13,9 @@ import {
   FiRefreshCw,
   FiHelpCircle,
   FiLogOut,
-  FiHome
+  FiHome,
+  FiLayers,
+  FiShield
 } from 'react-icons/fi';
 
 export const Sidebar = ({ isOpen, onClose }) => {
@@ -44,7 +46,9 @@ export const Sidebar = ({ isOpen, onClose }) => {
     { to: '/admin/dashboard', label: 'Dashboard', icon: FiGrid },
     { to: '/admin/students', label: 'Students', icon: FiUsers },
     { to: '/admin/staff', label: 'Faculty', icon: FiBookOpen },
+    { to: '/admin/sections', label: 'Sections', icon: FiLayers },
     { to: '/admin/devices', label: 'Devices', icon: FiSmartphone },
+    { to: '/admin/applications', label: 'Applications', icon: FiShield },
     { to: '/admin/settings', label: 'Settings', icon: FiSettings },
   ];
 
