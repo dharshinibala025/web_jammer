@@ -673,55 +673,7 @@ export const GetStartedPage = () => {
         </div>
       </section>
 
-      {/* ====================================================
-          DEPARTMENT METRICS & LIVE TELEMETRY STRIP
-         ==================================================== */}
-      <section className="relative z-10 mb-12">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <SectionReveal>
-            <div className="bg-white rounded-3xl border border-slate-200/90 shadow-lg shadow-slate-200/40 p-5 sm:p-7">
-              
-              {/* Telemetry Header */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-5 border-b border-slate-100 gap-2">
-                <div className="flex items-center space-x-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                  <span className="text-xs font-bold text-slate-900 uppercase tracking-wider font-heading">
-                    Live Department Telemetry Stream
-                  </span>
-                  <span className="text-[10px] font-medium text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-full">
-                    K.S.R. College of Engineering
-                  </span>
-                </div>
-                <span className="text-xs text-slate-400 font-normal">
-                  Last Bell Sync: 09:00:00 AM • Next Sync: 10:00:00 AM
-                </span>
-              </div>
 
-              {/* 4 Impact Counters */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-5 pt-5 text-center">
-                {[
-                  { value: 480, suffix: '+', label: 'Active Student Devices', sub: 'Autonomous Enforced', icon: <FiUsers />, color: 'text-blue-600 bg-blue-50' },
-                  { value: 50, suffix: '+', label: 'Distracting Apps Filtered', sub: 'Gaming & Social Media', icon: <FiSlash />, color: 'text-rose-600 bg-rose-50' },
-                  { value: 100, suffix: '%', label: 'Timetable Precision', sub: 'Zero Faculty Overhead', icon: <FiClock />, color: 'text-emerald-600 bg-emerald-50' },
-                  { value: 99, suffix: '.8%', label: 'Classroom Engagement', sub: 'Department Verified', icon: <FiShield />, color: 'text-purple-600 bg-purple-50' },
-                ].map((stat) => (
-                  <div key={stat.label} className="flex flex-col items-center space-y-1">
-                    <div className={`w-10 h-10 rounded-2xl ${stat.color} flex items-center justify-center text-lg`}>
-                      {stat.icon}
-                    </div>
-                    <p className="text-2xl sm:text-3xl font-bold text-slate-900 font-heading tracking-tight">
-                      <AnimatedCounter target={stat.value} suffix={stat.suffix} />
-                    </p>
-                    <p className="text-xs text-slate-700 font-medium max-w-[150px] leading-tight">{stat.label}</p>
-                    <p className="text-[10px] text-slate-400 font-normal">{stat.sub}</p>
-                  </div>
-                ))}
-              </div>
-
-            </div>
-          </SectionReveal>
-        </div>
-      </section>
 
       {/* ====================================================
           MULTI-ROLE INSTITUTIONAL PORTALS
